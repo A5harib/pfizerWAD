@@ -1,0 +1,26 @@
+<h2>Delete User</h2>
+<form method="post" action="/api/user/delete">
+  <input type="email" id="deleteEmail" name="email" placeholder="Enter User Email" required>
+  <button type="submit">Delete User</button>
+</form>
+<!-- 
+<script>
+document.getElementById("deleteForm").addEventListener("submit", function(e) {
+  e.preventDefault(); // Stop normal form submit
+
+  const email = document.getElementById("deleteEmail").value;
+
+  fetch(`/api/user/delete/${email}`, {
+    method: 'DELETE',
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    alert("User deleted successfully!");
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error deleting user.");
+  });
+});
+</script> -->

@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Education Portal</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(
+          to bottom right,
+          #e0f2fe,
+          #e9d5ff
+        ); /* Light blue to light purple gradient */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align to top */
+        padding: 2.5rem 1.5rem; /* Equivalent to p-6 */
+        box-sizing: border-box;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 48rem; /* Equivalent to max-w-3xl */
+        background-color: rgba(255, 255, 255, 0.8); /* bg-white/80 */
+        backdrop-filter: blur(8px); /* backdrop-blur */
+        border-radius: 1.5rem; /* rounded-3xl */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+        padding: 2rem; /* p-8 */
+        margin-top: 2rem; /* mt-8 */
+      }
+
+      h1 {
+        font-size: 2.25rem; /* text-4xl */
+        font-weight: 800; /* font-extrabold */
+        color: #4338ca; /* text-indigo-800 */
+        margin-bottom: 0.5rem; /* mb-2 */
+        text-align: center;
+        letter-spacing: -0.025em; /* tracking-tight */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* drop-shadow */
+      }
+
+      .subtitle {
+        margin-top: 0.5rem; /* mt-2 */
+        margin-bottom: 1.5rem; /* mb-6 */
+        text-align: center;
+        font-size: 1.125rem; /* text-lg */
+        color: #4b5563; /* text-gray-700 */
+      }
+
+      /* Tabs Outer */
+      .tabs-container {
+        width: 100%;
+      }
+
+      .tabs-list {
+        display: flex;
+        justify-content: center;
+        gap: 1rem; /* gap-4 */
+        margin-bottom: 1.5rem; /* mb-6 */
+        background-color: #eef2ff; /* bg-indigo-50 */
+        border-radius: 0.75rem; /* rounded-xl */
+        padding: 0.5rem; /* p-2 */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+      }
+
+      .tab-trigger {
+        padding: 0.5rem 1.5rem; /* px-6 py-2 */
+        border-radius: 0.5rem; /* rounded-lg */
+        font-weight: 600; /* font-semibold */
+        color: #4f46e5; /* text-indigo-700 */
+        cursor: pointer;
+        transition: all 0.2s ease-in-out; /* transition */
+        border: none;
+        background: none;
+      }
+
+      .tab-trigger.active {
+        background-color: #4f46e5; /* bg-indigo-600 */
+        color: white;
+      }
+
+      .tab-content {
+        border-radius: 1rem; /* rounded-2xl */
+        padding: 1rem; /* p-4 */
+        background-color: #eef2ff; /* bg-indigo-50 */
+        box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* shadow-inner */
+      }
+
+      /* Inner Tabs */
+      .inner-tabs-list {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem; /* gap-2 */
+        margin-bottom: 1rem; /* mb-4 */
+        background-color: white;
+        border-radius: 0.5rem; /* rounded-lg */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        padding: 0.25rem;
+      }
+
+      .inner-tab-trigger {
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        border-radius: 0.25rem; /* rounded */
+        font-weight: 500; /* font-medium */
+        color: #4f46e5; /* text-indigo-700 */
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        background: none;
+      }
+
+      .inner-tab-trigger.active {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+      }
+
+      /* My Courses Grid */
+      .course-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* grid-cols-1 */
+        gap: 1.5rem; /* gap-6 */
+      }
+
+      @media (min-width: 640px) {
+        /* sm breakpoint */
+        .course-grid {
+          grid-template-columns: repeat(2, 1fr); /* sm:grid-cols-2 */
+        }
+      }
+
+      .course-card {
+        padding: 1.25rem; /* p-5 */
+        border: 1px solid #e0e7ff; /* border border-indigo-100 */
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow-md */
+        background-color: white;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .course-card:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -4px rgba(0, 0, 0, 0.1); /* hover:shadow-xl */
+      }
+
+      .course-title {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 700; /* font-bold */
+        color: #4f46e5; /* text-indigo-700 */
+        margin-bottom: 0.25rem; /* mb-1 */
+      }
+
+      .course-description {
+        color: #4b5563; /* text-gray-600 */
+        font-size: 0.875rem; /* text-sm */
+      }
+
+      /* Upcoming Events */
+      .events-section {
+        padding: 1rem; /* p-4 */
+        background-color: white;
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow */
+        margin-bottom: 1rem; /* space-y-4 for content inside */
+      }
+
+      .events-section h3 {
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 600; /* font-semibold */
+        color: #4f46e5; /* text-indigo-700 */
+        border-bottom: 1px solid #e5e7eb; /* border-b */
+        padding-bottom: 0.5rem; /* pb-2 */
+        margin-bottom: 1rem;
+      }
+
+      .event-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem; /* gap-4 */
+        margin-bottom: 1rem; /* space-y-4 on ul */
+      }
+
+      .event-bullet {
+        margin-top: 0.25rem; /* mt-1 */
+        width: 0.75rem; /* w-3 */
+        height: 0.75rem; /* h-3 */
+        background-color: #6366f1; /* bg-indigo-500 */
+        border-radius: 9999px; /* rounded-full */
+        flex-shrink: 0;
+      }
+
+      .event-title {
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 500; /* font-medium */
+        color: #374151; /* text-gray-800 */
+      }
+
+      .event-date {
+        font-size: 0.875rem; /* text-sm */
+        color: #6b7280; /* text-gray-500 */
+      }
+
+      /* Discussion Forum */
+      .forum-container {
+        max-width: 32rem; /* max-w-lg */
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1rem; /* p-4 */
+        background-color: white;
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow */
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+      }
+
+      .messages-display {
+        flex: 1; /* flex-1 */
+        overflow-y: auto;
+        margin-bottom: 1rem; /* mb-4 */
+        padding-right: 0.5rem; /* px-2 */
+        padding-left: 0.5rem; /* px-2 */
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: #a78bfa transparent; /* Firefox */
+      }
+
+      .messages-display::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .messages-display::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .messages-display::-webkit-scrollbar-thumb {
+        background-color: #a78bfa;
+        border-radius: 4px;
+        border: 2px solid transparent;
+      }
+
+      .message-bubble {
+        background-color: #e0e7ff; /* bg-indigo-100 */
+        color: #312e81; /* text-indigo-900 */
+        padding: 0.5rem; /* p-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        width: fit-content; /* w-fit */
+        max-width: 80%; /* max-w-[80%] */
+        margin-bottom: 0.5rem; /* space-y-2 */
+      }
+
+      .message-input-area {
+        display: flex;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .message-input {
+        flex: 1; /* flex-1 */
+        border: 1px solid #c7d2fe; /* border border-indigo-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        padding: 0.5rem 0.75rem; /* px-3 py-2 */
+        outline: none;
+      }
+
+      .message-input:focus {
+        ring-width: 2px; /* focus:ring-2 */
+        ring-color: #818cf8; /* focus:ring-indigo-400 */
+        border-color: #818cf8;
+      }
+
+      .post-button {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border: none;
+      }
+
+      .post-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
+
+      /* Admin Access / Login */
+      .admin-login-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem; /* gap-3 */
+        background-color: white;
+        padding: 1.5rem; /* p-6 */
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1); /* shadow */
+        width: 100%;
+        max-width: 28rem; /* max-w-md */
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .admin-login-container p {
+        color: #4b5563; /* text-gray-700 */
+        text-align: center;
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 500; /* font-medium */
+      }
+
+      .admin-code-input {
+        padding: 0.5rem; /* p-2 */
+        border: 1px solid #c7d2fe; /* border border-indigo-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        outline: none;
+      }
+
+      .admin-code-input:focus {
+        ring-width: 2px; /* focus:ring-2 */
+        ring-color: #818cf8; /* focus:ring-indigo-400 */
+        border-color: #818cf8;
+      }
+
+      .admin-submit-button {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem; /* py-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border: none;
+      }
+
+      .admin-submit-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
+
+      /* Admin Management Tabs */
+      .admin-management-section {
+        padding: 1rem;
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      }
+
+      .admin-management-section h3 {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 600; /* font-semibold */
+        color: #4f46e5; /* text-indigo-700 */
+        margin-bottom: 1rem;
+      }
+
+      .admin-course-item {
+        padding: 0.75rem; /* p-3 */
+        border: 1px solid #e5e7eb; /* border */
+        border-radius: 0.375rem; /* rounded-md */
+        background-color: #f9fafb; /* bg-gray-50 */
+        margin-bottom: 0.75rem; /* space-y-1 on parent, so margin-bottom for children */
+      }
+
+      .admin-course-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .admin-course-item input,
+      .admin-course-item textarea {
+        width: 100%;
+        padding: 0.5rem; /* p-2 */
+        border: 1px solid #c7d2fe; /* border border-indigo-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        outline: none;
+        margin-bottom: 0.5rem; /* space between input/textarea */
+      }
+
+      .admin-course-item textarea {
+        resize: vertical;
+        min-height: 40px;
+      }
+
+      .admin-user-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #e5e7eb; /* border-b */
+        padding-top: 0.5rem; /* py-2 */
+        padding-bottom: 0.5rem; /* py-2 */
+      }
+
+      .admin-user-item:last-child {
+        border-bottom: none;
+      }
+
+      .user-name {
+        font-weight: 500; /* font-medium */
+        color: #374151; /* text-gray-800 */
+      }
+
+      .user-role {
+        font-size: 0.875rem; /* text-sm */
+        color: #6b7280; /* text-gray-500 */
+      }
+
+      .user-role span {
+        font-weight: 600; /* font-semibold */
+      }
+
+      .toggle-role-button {
+        font-size: 0.875rem; /* text-sm */
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding: 0.25rem 0.75rem; /* px-3 py-1 */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border: none;
+      }
+
+      .toggle-role-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
+
+      .settings-section label {
+        display: block;
+        font-size: 0.875rem; /* text-sm */
+        font-weight: 500; /* font-medium */
+        color: #4b5563; /* text-gray-700 */
+        margin-bottom: 0.25rem;
+      }
+
+      .settings-section input[type="password"] {
+        width: 100%;
+        padding: 0.5rem; /* p-2 */
+        border: 1px solid #c7d2fe; /* border border-indigo-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        outline: none;
+      }
+
+      .change-password-button {
+        margin-top: 0.5rem; /* mt-2 */
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding: 0.5rem 1rem; /* px-4 py-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        border: none;
+      }
+
+      .change-password-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Education Portal</h1>
+      <p class="subtitle">
+        Empower yourself with knowledge and skills. Choose your role to get
+        started!
+      </p>
+
+      <div class="tabs-container">
+        <div class="tabs-list">
+          <button class="tab-trigger active" onclick="showTab('Student')">
+            Student
+          </button>
+          <button class="tab-trigger" onclick="showTab('Admin')">Admin</button>
+        </div>
+
+        <div id="Student" class="tab-content">
+          <div class="inner-tabs-list">
+            <button
+              class="inner-tab-trigger active"
+              onclick="showInnerTab('My Courses')">
+              My Courses
+            </button>
+            <button
+              class="inner-tab-trigger"
+              onclick="showInnerTab('Upcoming Events')">
+              Upcoming Events
+            </button>
+            <button
+              class="inner-tab-trigger"
+              onclick="showInnerTab('Discussion Forum')">
+              Discussion Forum
+            </button>
+          </div>
+
+          <div id="My Courses" class="course-grid">
+            <div class="course-card">
+              <h3 class="course-title">Cardiology</h3>
+              <p class="course-description">
+                Learn about the heart and its functions.
+              </p>
+            </div>
+            <div class="course-card">
+              <h3 class="course-title">Neurology</h3>
+              <p class="course-description">
+                Explore the nervous system and its disorders.
+              </p>
+            </div>
+            <div class="course-card">
+              <h3 class="course-title">Pediatrics</h3>
+              <p class="course-description">
+                Study the medical care of infants, children, and adolescents.
+              </p>
+            </div>
+            <div class="course-card">
+              <h3 class="course-title">Oncology</h3>
+              <p class="course-description">
+                Understand cancer biology and treatment options.
+              </p>
+            </div>
+            <div class="course-card">
+              <h3 class="course-title">Psychiatry</h3>
+              <p class="course-description">
+                Delve into mental health and psychiatric disorders.
+              </p>
+            </div>
+            <div class="course-card">
+              <h3 class="course-title">Radiology</h3>
+              <p class="course-description">
+                Learn about medical imaging techniques and their applications.
+              </p>
+            </div>
+          </div>
+
+          <div
+            id="Upcoming Events"
+            class="events-section"
+            style="display: none">
+            <h3>Upcoming Medical Events</h3>
+            <ul class="space-y-4">
+              <li class="event-item">
+                <div class="event-bullet"></div>
+                <div>
+                  <p class="event-title">
+                    Webinar on Advanced Cardiology Techniques
+                  </p>
+                  <p class="event-date">📅 March 15, 2024</p>
+                </div>
+              </li>
+              <li class="event-item">
+                <div class="event-bullet"></div>
+                <div>
+                  <p class="event-title">
+                    Workshop on Pediatric Care Best Practices
+                  </p>
+                  <p class="event-date">📅 April 10, 2024</p>
+                </div>
+              </li>
+              <li class="event-item">
+                <div class="event-bullet"></div>
+                <div>
+                  <p class="event-title">
+                    Conference on Innovations in Oncology
+                  </p>
+                  <p class="event-date">📅 May 20–22, 2024</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div
+            id="Discussion Forum"
+            class="forum-container"
+            style="display: none">
+            <div class="messages-display">
+              <div class="message-bubble">
+                I have been studying this new course for a while now, and I find
+                it very interesting.
+              </div>
+              <div class="message-bubble">
+                I have a question about the recent lecture on cardiology.
+              </div>
+              <div class="message-bubble">
+                Can anyone recommend additional resources for learning about
+                oncology?
+              </div>
+              <div class="message-bubble">
+                I just completed the pediatrics module and found it very
+                insightful.
+              </div>
+              <div class="message-bubble">
+                The discussion on mental health in our last class was very
+                enlightening.
+              </div>
+            </div>
+            <div class="message-input-area">
+              <input
+                type="text"
+                class="message-input"
+                placeholder="Type a message..." />
+              <button class="post-button">Post</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="Admin" class="tab-content" style="display: none">
+          <div class="admin-login-container" id="adminLoginForm">
+            <p>Enter admin access code to proceed:</p>
+            <input
+              type="password"
+              class="admin-code-input"
+              placeholder="Enter admin code"
+              id="adminCodeInput" />
+            <button class="admin-submit-button" onclick="checkAdminCode()">
+              Submit
+            </button>
+          </div>
+
+          <div id="adminManagement" style="display: none">
+            <div class="inner-tabs-list">
+              <button
+                class="inner-tab-trigger active"
+                onclick="showAdminInnerTab('course-management')">
+                Manage Courses
+              </button>
+              <button
+                class="inner-tab-trigger"
+                onclick="showAdminInnerTab('user-roles')">
+                User Roles
+              </button>
+              <button
+                class="inner-tab-trigger"
+                onclick="showAdminInnerTab('settings')">
+                Settings
+              </button>
+            </div>
+
+            <div id="course-management" class="admin-management-section">
+              <h3>Edit Courses</h3>
+              <div class="admin-course-item">
+                <input type="text" value="Cardiology" />
+                <textarea>Learn about the heart and its functions.</textarea>
+              </div>
+              <div class="admin-course-item">
+                <input type="text" value="Neurology" />
+                <textarea>
+Explore the nervous system and its disorders.</textarea
+                >
+              </div>
+              <div class="admin-course-item">
+                <input type="text" value="Pediatrics" />
+                <textarea>
+Study the medical care of infants, children, and adolescents.</textarea
+                >
+              </div>
+              <div class="admin-course-item">
+                <input type="text" value="Oncology" />
+                <textarea>
+Understand cancer biology and treatment options.</textarea
+                >
+              </div>
+              <div class="admin-course-item">
+                <input type="text" value="Psychiatry" />
+                <textarea>
+Delve into mental health and psychiatric disorders.</textarea
+                >
+              </div>
+              <div class="admin-course-item">
+                <input type="text" value="Radiology" />
+                <textarea>
+Learn about medical imaging techniques and their applications.</textarea
+                >
+              </div>
+            </div>
+
+            <div
+              id="user-roles"
+              class="admin-management-section"
+              style="display: none">
+              <h3>User Roles</h3>
+              <p class="text-gray-700 text-sm">
+                Assign or revoke admin access for users.
+              </p>
+              <div class="admin-user-item">
+                <div>
+                  <p class="user-name">Ali Raza</p>
+                  <p class="user-role">
+                    Role: <span class="font-semibold">Student</span>
+                  </p>
+                </div>
+                <button class="toggle-role-button">Make Admin</button>
+              </div>
+              <div class="admin-user-item">
+                <div>
+                  <p class="user-name">Dr. Sara Khan</p>
+                  <p class="user-role">
+                    Role: <span class="font-semibold">Admin</span>
+                  </p>
+                </div>
+                <button class="toggle-role-button">Make Student</button>
+              </div>
+              <div class="admin-user-item">
+                <div>
+                  <p class="user-name">Zainab Malik</p>
+                  <p class="user-role">
+                    Role: <span class="font-semibold">Student</span>
+                  </p>
+                </div>
+                <button class="toggle-role-button">Make Admin</button>
+              </div>
+            </div>
+
+            <div
+              id="settings"
+              class="admin-management-section"
+              style="display: none">
+              <h3>Account Settings</h3>
+              <label>New Password</label>
+              <input type="password" placeholder="Enter new password" />
+              <button class="change-password-button">Change Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showTab(tabName) {
+        var i, tabcontent, tabtriggers;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tabtriggers = document.getElementsByClassName("tab-trigger");
+        for (i = 0; i < tabtriggers.length; i++) {
+          tabtriggers[i].classList.remove("active");
+        }
+        document.getElementById(tabName).style.display = "block";
+        event.currentTarget.classList.add("active");
+
+        // Reset inner tabs when main tab changes
+        if (tabName === "Student") {
+          showInnerTab("My Courses");
+        } else if (tabName === "Admin") {
+          // Ensure admin login form is shown/hidden correctly
+          if (
+            !document.getElementById("adminManagement").style.display ||
+            document.getElementById("adminManagement").style.display === "none"
+          ) {
+            document.getElementById("adminLoginForm").style.display = "flex";
+            document.getElementById("adminManagement").style.display = "none";
+          }
+          showAdminInnerTab("course-management"); // Default to course management if logged in
+        }
+      }
+
+      function showInnerTab(innerTabName) {
+        var i, innerTabContent, innerTabTriggers;
+        innerTabContent = document.querySelectorAll(
+          "#Student .tab-content > div:not(.inner-tabs-list)"
+        );
+        for (i = 0; i < innerTabContent.length; i++) {
+          innerTabContent[i].style.display = "none";
+        }
+        innerTabTriggers = document.querySelectorAll(
+          "#Student .inner-tab-trigger"
+        );
+        for (i = 0; i < innerTabTriggers.length; i++) {
+          innerTabTriggers[i].classList.remove("active");
+        }
+        document.getElementById(innerTabName).style.display = "block";
+        event.currentTarget.classList.add("active");
+      }
+
+      function showAdminInnerTab(innerTabName) {
+        var i, adminInnerTabContent, adminInnerTabTriggers;
+        adminInnerTabContent = document.querySelectorAll(
+          "#Admin .tab-content > div:not(.inner-tabs-list, #adminLoginForm)"
+        );
+        for (i = 0; i < adminInnerTabContent.length; i++) {
+          adminInnerTabContent[i].style.display = "none";
+        }
+        adminInnerTabTriggers = document.querySelectorAll(
+          "#Admin .inner-tab-trigger"
+        );
+        for (i = 0; i < adminInnerTabTriggers.length; i++) {
+          adminInnerTabTriggers[i].classList.remove("active");
+        }
+        document.getElementById(innerTabName).style.display = "block";
+        event.currentTarget.classList.add("active");
+      }
+
+      function checkAdminCode() {
+        const adminCodeInput = document.getElementById("adminCodeInput");
+        const adminLoginForm = document.getElementById("adminLoginForm");
+        const adminManagement = document.getElementById("adminManagement");
+
+        if (adminCodeInput.value === "admin505") {
+          adminLoginForm.style.display = "none";
+          adminManagement.style.display = "block";
+          showAdminInnerTab("course-management"); // Show default admin tab
+          adminCodeInput.value = ""; // Clear input
+        } else {
+          alert("Access Denied. Incorrect code.");
+          adminCodeInput.value = ""; // Clear input on incorrect attempt
+        }
+      }
+
+      // Initial load: show Student tab and My Courses sub-tab
+      document.addEventListener("DOMContentLoaded", () => {
+        showTab("Student");
+      });
+    </script>
+  </body>
+</html>

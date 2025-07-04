@@ -1,0 +1,39 @@
+<h2>Update User</h2>
+
+<form id="updateForm">
+  <input type="email" id="updateEmail" placeholder="Enter User Email" required>
+  <input type="text" id="updateName" placeholder="New Name">
+  <input type="password" id="updatePassword" placeholder="New Password">
+  <button type="submit">Update User</button>
+</form>
+
+<script>
+document.getElementById("updateForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const email = document.getElementById("updateEmail").value.trim();
+  const name = document.getElementById("updateName").value.trim();
+  const password = document.getElementById("updatePassword").value.trim();
+
+  if (!email) {
+    alert("Email is required!");
+    return;
+  }
+
+  fetch(`/api/user/update/${encodeURIComponent(email)}`, {   <!-- FIXED here -->
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, password })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    alert("User updated successfully!");
+    document.getElementById("updateForm").reset(); // optional: clear form
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error updating user.");
+  });
+});
+</script>

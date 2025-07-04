@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Promotional Strategies & Sales Growth</title>
+    <!-- Google Font - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #e0f2fe, #e9d5ff); /* Light blue to light purple gradient */
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem; /* Responsive padding */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 2.5rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            color: #4338ca; /* text-indigo-800 */
+            text-align: center;
+            margin-bottom: 2rem; /* mb-8 */
+            letter-spacing: -0.025em; /* tracking-tight */
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1); /* drop-shadow */
+        }
+
+        /* Admin Access Container */
+        .admin-access-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* gap-3 */
+            background-color: white;
+            padding: 1.5rem; /* p-6 */
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
+            width: 100%;
+            max-width: 28rem; /* max-w-md */
+            margin: auto; /* Center vertically and horizontally */
+        }
+
+        .admin-access-container p {
+            color: #4b5563; /* text-gray-700 */
+            text-align: center;
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500; /* font-medium */
+        }
+
+        .admin-access-container input {
+            padding: 0.5rem; /* p-2 */
+            border: 1px solid #c7d2fe; /* border border-indigo-200 */
+            border-radius: 0.375rem; /* rounded-md */
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .admin-access-container input:focus {
+            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
+        }
+
+        .admin-access-container button {
+            background-color: #6366f1; /* bg-indigo-500 */
+            color: white;
+            padding: 0.5rem 1rem; /* py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+            font-weight: 600;
+        }
+
+        .admin-access-container button:hover {
+            background-color: #4f46e5; /* hover:bg-indigo-600 */
+        }
+
+        /* Main Content Layout */
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            gap: 2rem; /* gap-8 */
+        }
+
+        @media (min-width: 1024px) { /* lg breakpoint */
+            .main-content-wrapper {
+                flex-direction: row;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
+            border-radius: 1.5rem; /* rounded-3xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+            padding: 2rem; /* p-8 */
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .card h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #4f46e5; /* text-indigo-700 */
+            margin-bottom: 1rem; /* mb-4 */
+        }
+
+        /* Promotional Strategies List */
+        .strategy-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+
+        .strategy-list li {
+            border-bottom: 1px solid #e5e7eb; /* border-b pb-2 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem; /* space-y-4 */
+        }
+
+        .strategy-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .strategy-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .strategy-item-header span.title {
+            font-weight: 700; /* font-bold */
+            font-size: 1.125rem; /* text-lg */
+            color: #3730a3; /* text-indigo-800 */
+        }
+
+        .effectiveness-badge {
+            font-size: 0.75rem; /* text-xs */
+            padding: 0.25rem 0.5rem; /* px-2 py-1 */
+            border-radius: 0.25rem; /* rounded */
+        }
+
+        .effectiveness-badge.high {
+            background-color: #dcfce7; /* bg-green-200 */
+            color: #16a34a; /* text-green-800 */
+        }
+
+        .effectiveness-badge.medium {
+            background-color: #fef9c3; /* bg-yellow-200 */
+            color: #854d09; /* text-yellow-800 */
+        }
+
+        .effectiveness-badge.low {
+            background-color: #fee2e2; /* bg-red-200 */
+            color: #dc2626; /* text-red-800 */
+        }
+
+        .strategy-description {
+            color: #374151; /* text-gray-700 */
+            font-size: 0.875rem; /* text-sm */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+
+        /* Add New Strategy Form */
+        .add-strategy-form {
+            background-color: #e0e7ff; /* bg-indigo-50 */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1rem; /* p-4 */
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* shadow-inner */
+        }
+
+        .add-strategy-form h3 {
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 0.5rem; /* mb-2 */
+            color: #4f46e5; /* text-indigo-700 */
+        }
+
+        .add-strategy-form input,
+        .add-strategy-form textarea,
+        .add-strategy-form select {
+            width: 100%;
+            margin-bottom: 0.5rem; /* mb-2 */
+            padding: 0.5rem; /* p-2 */
+            border: 1px solid #d1d5db; /* border-neutral-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .add-strategy-form input:focus,
+        .add-strategy-form textarea:focus,
+        .add-strategy-form select:focus {
+            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+        }
+
+        .add-strategy-form button {
+            width: 100%;
+            background-color: #6366f1; /* bg-indigo-500 */
+            color: white;
+            padding: 0.5rem 1rem; /* py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-strategy-form button:hover {
+            background-color: #4f46e5; /* hover:bg-indigo-600 */
+        }
+
+        /* Sales Growth Chart Styles */
+        .sales-bar-chart {
+            width: 100%;
+            height: 300px; /* Fixed height for the chart area */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end; /* Align bars to the bottom */
+            padding: 1rem;
+            box-sizing: border-box;
+            background-color: #f8fafc; /* light background for chart */
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0; /* subtle border */
+            position: relative; /* For absolute positioning of values */
+            overflow: hidden; /* Ensure bars don't overflow */
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem; /* spacing between bars */
+            height: calc((100% - (6 * 0.5rem)) / 6); /* Distribute height evenly for 6 months */
+        }
+
+        .chart-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .chart-label {
+            width: 3rem; /* Fixed width for month label */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600;
+            color: #4f46e5; /* text-indigo-700 */
+            text-align: right;
+            padding-right: 0.5rem;
+            flex-shrink: 0; /* Prevent label from shrinking */
+        }
+
+        .chart-bar-container {
+            flex-grow: 1; /* Allow bar to take remaining space */
+            height: 100%;
+            background-color: #e0e7ff; /* light background for bar area */
+            border-radius: 0.25rem;
+            position: relative;
+            overflow: hidden; /* Hide overflow of the bar itself */
+        }
+
+        .chart-bar {
+            height: 100%;
+            background-color: #6366f1; /* Main bar color */
+            border-radius: 0.25rem;
+            transition: width 0.5s ease-out; /* Smooth transition for width */
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Align value to the right */
+            padding-right: 0.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1; /* Ensure value is above background */
+        }
+
+        /* Adjust Monthly Sales */
+        .adjust-sales-section {
+            margin-top: 1.5rem; /* mt-6 */
+        }
+
+        .adjust-sales-section h3 {
+            font-weight: 600; /* font-semibold */
+            color: #4f46e5; /* text-indigo-700 */
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+
+        .sales-controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+            gap: 0.75rem; /* gap-3 */
+        }
+
+        .sales-control-item {
+            display: flex;
+            align-items: center;
+            background-color: #e0e7ff; /* bg-indigo-50 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.75rem 1rem; /* px-3 py-2 */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        }
+
+        .sales-control-item span.month {
+            width: 3rem; /* w-12 */
+            font-weight: 700; /* font-bold */
+            color: #4f46e5; /* text-indigo-700 */
+        }
+
+        .sales-control-item button {
+            padding: 0.25rem 0.5rem; /* px-2 py-1 */
+            border-radius: 0.25rem; /* rounded */
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .sales-control-item button.minus {
+            background-color: #fee2e2; /* bg-red-200 */
+            color: #dc2626; /* text-red-700 */
+            margin-left: 0.5rem; /* ml-2 */
+        }
+
+        .sales-control-item button.minus:hover {
+            background-color: #fecaca; /* hover:bg-red-300 */
+        }
+
+        .sales-control-item button.plus {
+            background-color: #dcfce7; /* bg-green-200 */
+            color: #16a34a; /* text-green-700 */
+        }
+
+        .sales-control-item button.plus:hover {
+            background-color: #bbf7d0; /* hover:bg-green-300 */
+        }
+
+        .sales-control-item input {
+            margin: 0 0.5rem; /* mx-2 */
+            width: 5rem; /* w-20 */
+            padding: 0.25rem; /* p-1 */
+            border: 1px solid #c7d2fe; /* border border-indigo-200 */
+            border-radius: 0.25rem; /* rounded */
+            text-align: center;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .sales-control-item input:focus {
+            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+        }
+
+        /* Note Section */
+        .note-section {
+            margin-top: 1.5rem; /* mt-6 */
+            color: #4b5563; /* text-gray-600 */
+            font-size: 0.875rem; /* text-sm */
+            background-color: #e0e7ff; /* bg-indigo-50 */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1rem; /* p-4 */
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); /* shadow-inner */
+        }
+
+        .note-section strong {
+            font-weight: 700;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .w-full { width: 100%; }
+        .text-white { color: white; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Promotional Strategies & Sales Growth</h1>
+
+    <!-- Admin Access Section -->
+    <div id="admin-access-section" class="admin-access-container">
+        <p>Enter admin access code to proceed:</p>
+        <input type="password" id="admin-code-input" placeholder="Enter admin code" />
+        <button id="submit-admin-code">Submit</button>
+    </div>
+
+    <!-- Main Content (Hidden by default) -->
+    <div id="main-content" class="main-content-wrapper hidden">
+        <!-- Promotional Strategies Card -->
+        <div class="card">
+            <h2>Promotional Strategies</h2>
+            <ul id="strategies-list" class="strategy-list">
+                <!-- Strategies will be rendered here by JavaScript -->
+            </ul>
+
+            <!-- Add New Strategy Form (Admin Only) -->
+            <div id="add-strategy-form" class="add-strategy-form hidden">
+                <h3>Add New Strategy</h3>
+                <input type="text" id="new-strategy-title" placeholder="Strategy Title" />
+                <textarea id="new-strategy-description" placeholder="Description"></textarea>
+                <select id="new-strategy-effectiveness">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <button id="add-strategy-button">Add Strategy</button>
+            </div>
+        </div>
+
+        <!-- Sales Growth Card -->
+        <div class="card">
+            <h2>Sales Growth</h2>
+            <div id="sales-bar-chart" class="sales-bar-chart">
+                <!-- Sales bars will be rendered here by JavaScript -->
+            </div>
+
+            <!-- Adjust Monthly Sales (Admin Only) -->
+            <div id="adjust-sales-section" class="adjust-sales-section hidden">
+                <h3>Adjust Monthly Sales</h3>
+                <div id="sales-controls-grid" class="sales-controls-grid">
+                    <!-- Sales controls will be rendered here by JavaScript -->
+                </div>
+            </div>
+
+            <div class="note-section">
+                <strong>Note:</strong> Sales growth is tracked monthly and reflects the impact of implemented promotional strategies.
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div id="custom-toast" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 1002;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    "></div>
+
+    <script>
+        // --- Global State (using localStorage for persistence) ---
+        const LS_PREFIX = 'sales_app_';
+
+        function useLocalStorage(key, initialValue) {
+            const storedItem = localStorage.getItem(LS_PREFIX + key);
+            let value;
+            try {
+                value = storedItem ? JSON.parse(storedItem) : initialValue;
+            } catch (error) {
+                console.error("Error parsing localStorage item:", error);
+                value = initialValue;
+            }
+
+            const setValue = (newValue) => {
+                const valueToStore = typeof newValue === 'function' ? newValue(value) : newValue;
+                value = valueToStore; // Update the 'value' local to this specific call of useLocalStorage
+                localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
+                return valueToStore;
+            };
+
+            return [value, setValue];
+        }
+
+        let [adminAccess, setAdminAccess] = useLocalStorage("adminAccess", false);
+        let [strategies, setStrategies] = useLocalStorage("strategies", [
+            { title: "Social Media Campaign", description: "Leverage platforms like Instagram and Facebook to reach a wider audience with targeted ads.", effectiveness: "High" },
+            { title: "Doctor Outreach", description: "Engage healthcare professionals through webinars and sample distribution.", effectiveness: "Medium" },
+            { title: "Pharmacy Partnerships", description: "Collaborate with pharmacies for in-store promotions and bundled offers.", effectiveness: "Medium" },
+            { title: "Patient Education", description: "Host online seminars and distribute informative brochures to educate patients.", effectiveness: "High" },
+        ]);
+        let [salesData, setSalesData] = useLocalStorage("salesData", [
+            { month: "Jan", sales: 120 },
+            { month: "Feb", sales: 180 },
+            { month: "Mar", sales: 250 },
+            { month: "Apr", sales: 300 },
+            { month: "May", sales: 400 },
+            { month: "Jun", sales: 420 },
+        ]);
+
+        // --- DOM Element References ---
+        const adminAccessSection = document.getElementById('admin-access-section');
+        const adminCodeInput = document.getElementById('admin-code-input');
+        const submitAdminCodeButton = document.getElementById('submit-admin-code');
+        const mainContent = document.getElementById('main-content');
+
+        const strategiesList = document.getElementById('strategies-list');
+        const addStrategyForm = document.getElementById('add-strategy-form');
+        const newStrategyTitleInput = document.getElementById('new-strategy-title');
+        const newStrategyDescriptionTextarea = document.getElementById('new-strategy-description');
+        const newStrategyEffectivenessSelect = document.getElementById('new-strategy-effectiveness');
+        const addStrategyButton = document.getElementById('add-strategy-button');
+
+        const salesBarChart = document.getElementById('sales-bar-chart'); // New chart container
+        const adjustSalesSection = document.getElementById('adjust-sales-section');
+        const salesControlsGrid = document.getElementById('sales-controls-grid');
+
+        const customToast = document.getElementById('custom-toast');
+
+        // --- Helper Functions ---
+        function showToast(message, type = 'success') {
+            customToast.textContent = message;
+            customToast.style.opacity = '1';
+            customToast.style.visibility = 'visible';
+            customToast.style.backgroundColor = {
+                'success': '#22c55e',
+                'error': '#ef4444',
+                'warning': '#f59e0b',
+                'info': '#3b82f6'
+            }[type] || '#333';
+
+            setTimeout(() => {
+                customToast.style.opacity = '0';
+                customToast.style.visibility = 'hidden';
+            }, 3000);
+        }
+
+        // --- Render Functions ---
+        function renderStrategies() {
+            strategiesList.innerHTML = ''; // Clear existing
+            strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.className = 'border-b pb-2';
+                const effectivenessClass = strategy.effectiveness === "High" ? "high" : strategy.effectiveness === "Medium" ? "medium" : "low";
+                li.innerHTML = `
+                    <div class="strategy-item-header">
+                        <span class="title">${strategy.title}</span>
+                        <span class="effectiveness-badge ${effectivenessClass}">${strategy.effectiveness}</span>
+                    </div>
+                    <div class="strategy-description">${strategy.description}</div>
+                `;
+                strategiesList.appendChild(li);
+            });
+        }
+
+        function renderSalesData() {
+            salesControlsGrid.innerHTML = ''; // Clear existing
+            salesData.forEach((entry, idx) => {
+                const div = document.createElement('div');
+                div.className = 'sales-control-item';
+                div.innerHTML = `
+                    <span class="month">${entry.month}</span>
+                    <button class="minus" data-idx="${idx}">-</button>
+                    <input type="number" min="0" value="${entry.sales}" data-idx="${idx}" class="sales-input" />
+                    <button class="plus" data-idx="${idx}">+</button>
+                `;
+                salesControlsGrid.appendChild(div);
+            });
+
+            // Add event listeners for the new buttons and inputs
+            salesControlsGrid.querySelectorAll('.minus').forEach(button => {
+                button.addEventListener('click', (e) => handleSalesChange(parseInt(e.target.dataset.idx), -10));
+            });
+            salesControlsGrid.querySelectorAll('.plus').forEach(button => {
+                button.addEventListener('click', (e) => handleSalesChange(parseInt(e.target.dataset.idx), 10));
+            });
+            salesControlsGrid.querySelectorAll('.sales-input').forEach(input => {
+                input.addEventListener('change', (e) => handleSalesInput(parseInt(e.target.dataset.idx), e.target.value));
+            });
+
+            renderBarChart(); // Call chart rendering after sales data is updated
+        }
+
+        function renderBarChart() {
+            salesBarChart.innerHTML = ''; // Clear existing chart
+            const maxSales = Math.max(...salesData.map(d => d.sales));
+            const chartScale = maxSales > 0 ? 100 / maxSales : 0; // Scale to 100% of container width
+
+            salesData.forEach(entry => {
+                const chartRow = document.createElement('div');
+                chartRow.className = 'chart-row';
+
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = entry.month;
+                chartRow.appendChild(label);
+
+                const barContainer = document.createElement('div');
+                barContainer.className = 'chart-bar-container';
+
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                // Calculate bar width based on sales relative to maxSales
+                bar.style.width = `${entry.sales * chartScale}%`;
+                bar.textContent = entry.sales; // Display sales value inside the bar
+
+                barContainer.appendChild(bar);
+                chartRow.appendChild(barContainer);
+                salesBarChart.appendChild(chartRow);
+            });
+        }
+
+        // --- Event Handlers ---
+
+        // Admin Login
+        submitAdminCodeButton.addEventListener('click', () => {
+            if (adminCodeInput.value === "admin505") {
+                // Correctly update the adminAccess variable with the new value from setAdminAccess
+                adminAccess = setAdminAccess(true);
+                adminAccessSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                addStrategyForm.classList.remove('hidden'); // Show admin-only forms
+                adjustSalesSection.classList.remove('hidden');
+                renderStrategies();
+                renderSalesData(); // This will also call renderBarChart
+                showToast("Admin access granted!", "success");
+            } else {
+                showToast("Access Denied. Incorrect code.", "error");
+            }
+            adminCodeInput.value = "";
+        });
+
+        // Add Strategy
+        addStrategyButton.addEventListener('click', () => {
+            const title = newStrategyTitleInput.value.trim();
+            const description = newStrategyDescriptionTextarea.value.trim();
+            const effectiveness = newStrategyEffectivenessSelect.value;
+
+            if (!title || !description) {
+                showToast("Strategy title and description are required.", "error");
+                return;
+            }
+
+            // Correctly update the strategies variable with the new value from setStrategies
+            strategies = setStrategies(prev => [...prev, { title, description, effectiveness }]);
+            newStrategyTitleInput.value = "";
+            newStrategyDescriptionTextarea.value = "";
+            newStrategyEffectivenessSelect.value = "Medium";
+            renderStrategies();
+            showToast("Strategy added successfully!", "success");
+        });
+
+        // Sales Adjustment Handlers
+        function handleSalesChange(idx, delta) {
+            // Correctly update the salesData variable with the new value from setSalesData
+            salesData = setSalesData(prevSalesData =>
+                prevSalesData.map((entry, i) =>
+                    i === idx
+                        ? { ...entry, sales: Math.max(0, entry.sales + delta) }
+                        : entry
+                )
+            );
+            renderSalesData(); // Re-render to reflect changes and update chart
+        }
+
+        function handleSalesInput(idx, value) {
+            const num = parseInt(value, 10);
+            if (isNaN(num) || num < 0) {
+                showToast("Please enter a valid positive number for sales.", "warning");
+                return;
+            }
+            // Correctly update the salesData variable with the new value from setSalesData
+            salesData = setSalesData(prevSalesData =>
+                prevSalesData.map((entry, i) =>
+                    i === idx
+                        ? { ...entry, sales: num }
+                        : entry
+                )
+            );
+            renderSalesData(); // Re-render to reflect changes and update chart
+        }
+
+        // --- Initial Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check admin access on load
+            if (adminAccess) {
+                adminAccessSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                addStrategyForm.classList.remove('hidden');
+                adjustSalesSection.classList.remove('hidden');
+                renderStrategies();
+                renderSalesData(); // This will also call renderBarChart
+            } else {
+                adminAccessSection.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+                addStrategyForm.classList.add('hidden'); // Ensure hidden if no admin access
+                adjustSalesSection.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

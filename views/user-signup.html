@@ -1,0 +1,20 @@
+<html>
+    <body>
+        <h1>New User Form</h1>
+        <form method="post" action="/api/user/new" enctype="multipart/form-data, application/x-www-form-urlencoded">
+            <label>Name: </label><input type="text" name="name"><br>
+            <label>Email: </label><input type="email" name="email"><br>
+            <label>Password: </label><input type="password" name="password"><br>
+            <label>Role: </label>
+            <select name="role">
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+                <option value="guest">Guest</option>
+            </select>
+            <br>
+            <label>Picture</label><input type="file" name="picture"><br>
+            <br>
+            <input   type="submit" value="Signup">
+        </form>
+    </body>
+</html>

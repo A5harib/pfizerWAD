@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supply Chain Dashboard</title>
+    <!-- Google Font - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #e0f2fe, #e9d5ff); /* Light blue to light purple gradient */
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem; /* Responsive padding */
+            box-sizing: border-box;
+        }
+
+        .dashboard-container {
+            margin: 1.5rem; /* m-6 */
+            padding: 1.5rem; /* p-6 */
+            background: linear-gradient(to bottom right, #f3e8ff, #e0f2fe); /* from-purple-50 to-indigo-100 */
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-xl */
+            max-width: 72rem; /* max-w-6xl */
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1 {
+            font-size: 3rem; /* text-5xl */
+            font-weight: 800; /* font-extrabold */
+            text-align: center;
+            margin-bottom: 2.5rem; /* mb-10 */
+            letter-spacing: -0.025em; /* tracking-tight */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #9333ea, #4f46e5); /* from-purple-600 to-indigo-600 */
+        }
+
+        /* Admin Access Container */
+        .admin-access-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* gap-3 */
+            background-color: white;
+            padding: 1.5rem; /* p-6 */
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
+            width: 100%;
+            max-width: 28rem; /* max-w-md */
+            margin: auto; /* Center vertically and horizontally */
+        }
+
+        .admin-access-container p {
+            color: #4b5563; /* text-gray-700 */
+            text-align: center;
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 500; /* font-medium */
+        }
+
+        .admin-access-container input {
+            padding: 0.5rem; /* p-2 */
+            border: 1px solid #c7d2fe; /* border border-indigo-200 */
+            border-radius: 0.375rem; /* rounded-md */
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .admin-access-container input:focus {
+            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
+        }
+
+        .admin-access-container button {
+            background-color: #6366f1; /* bg-indigo-500 */
+            color: white;
+            padding: 0.5rem 1rem; /* py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+            font-weight: 600;
+        }
+
+        .admin-access-container button:hover {
+            background-color: #4f46e5; /* hover:bg-indigo-600 */
+        }
+
+        /* Tabs */
+        .tabs-container {
+            margin-top: 1.5rem; /* space-y-6 */
+        }
+
+        .tabs-list {
+            display: flex;
+            justify-content: center;
+            background-color: #e9d5ff; /* bg-purple-200 */
+            border-radius: 9999px; /* rounded-full */
+            padding: 0.5rem; /* p-2 */
+            margin-bottom: 2rem; /* mb-8 */
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06); /* shadow-inner */
+            flex-wrap: wrap;
+            gap: 0.75rem; /* gap-3 */
+        }
+
+        .tab-trigger {
+            background-color: transparent;
+            color: #6d28d9; /* text-purple-600 */
+            border-radius: 9999px; /* rounded-full */
+            padding: 0.5rem 1.25rem; /* px-5 py-2 */
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .tab-trigger.active {
+            background-color: #7c3aed; /* bg-purple-600 */
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-trigger:hover:not(.active) {
+            background-color: #d8b4fe; /* hover:bg-purple-300 */
+        }
+
+        .tab-trigger i {
+            margin-right: 0.5rem; /* mr-2 */
+            font-size: 1rem; /* h-4 w-4 */
+        }
+
+        .tab-content {
+            display: none; /* hidden by default */
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards for Overview */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+            gap: 1.5rem; /* gap-6 */
+        }
+
+        .card-item {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            border: 1px solid #d8b4fe; /* border-purple-300 */
+            padding: 1rem; /* p-4 */
+        }
+
+        .card-header-flex {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 0.5rem; /* pb-2 */
+            margin-bottom: 0.5rem; /* space-y-0 */
+        }
+
+        .card-title {
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+        }
+
+        .card-icon {
+            font-size: 1.5rem; /* h-6 w-6 */
+            color: #8b5cf6; /* text-purple-500 */
+        }
+
+        .card-content .value {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #6b21a8; /* text-purple-800 */
+        }
+
+        .card-content .description {
+            font-size: 0.75rem; /* text-xs */
+            color: #6b7280; /* text-muted-foreground */
+        }
+
+        /* Chart Containers */
+        .chart-card {
+            height: 350px; /* h-[300px] + padding */
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .chart-container {
+            width: 100%;
+       
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background-color: #f8fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            height: calc((100% - (6 * 0.5rem)) / 6); /* Adjust height based on number of bars */
+        }
+
+        .chart-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4f46e5;
+            text-align: right;
+            padding-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .chart-bar-area {
+            flex-grow: 1;
+            height: 100%;
+            background-color: #e0e7ff;
+            border-radius: 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            background-color: #8884d8; /* Default bar color */
+            border-radius: 0.25rem;
+            transition: width 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            box-sizing: border-box;
+            padding: 1rem;
+        }
+
+        /* Specific bar colors */
+        .chart-bar.inventory { background-color: #8884d8; }
+        .chart-bar.shipment { background-color: #82ca9d; }
+
+        /* Table Styles */
+        .table-container {
+            background-color: white;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow-lg */
+            border: 1px solid #d8b4fe; /* border-purple-300 */
+            overflow-x: auto; /* For responsive tables */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem; /* px-4 py-2 */
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb; /* border-gray-200 */
+            white-space: nowrap; /* Prevent content from wrapping */
+        }
+
+        th {
+            background-color: #f3f4f6; /* bg-gray-50 */
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #4b5563;
+            text-transform: uppercase;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+
+        /* Form Styles (inside modals) */
+        .form-grid {
+            display: grid;
+            gap: 1rem; /* gap-4 */
+            padding-top: 1rem; /* py-4 */
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 3fr; /* grid-cols-4 items-center gap-4 */
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .form-row label {
+            text-align: right;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-row input,
+        .form-row textarea,
+        .custom-select-trigger {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-row input:focus,
+        .form-row textarea:focus,
+        .custom-select-trigger:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+
+        .form-row textarea {
+            resize: vertical;
+            min-height: 3rem;
+        }
+
+        /* Custom Select Styling */
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .custom-select-trigger::after {
+            content: '▼';
+            font-size: 0.75em;
+            color: #6b7280;
+            margin-left: 0.5rem;
+        }
+
+        .custom-select-content {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
+            z-index: 1001;
+            margin-top: 0.25rem;
+        }
+
+        .custom-select-content.show {
+            display: block;
+        }
+
+        .custom-select-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #374151;
+        }
+
+        .custom-select-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .custom-select-item.selected {
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+
+        /* Buttons */
+        .btn {
+            background-color: #7c3aed; /* bg-purple-600 */
+            color: white;
+            padding: 0.75rem 1.5rem; /* px-4 py-2 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-weight: 600; /* font-semibold */
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: #6d28d9; /* hover:bg-purple-700 */
+        }
+
+        .btn-full-width {
+            width: 100%;
+        }
+
+        /* Modals (Dialogs) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 425px; /* sm:max-w-[425px] */
+            position: relative;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .modal-close-btn:hover {
+            color: #6b7280;
+        }
+
+        .modal-header {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .modal-footer {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .w-full { width: 100%; }
+        .text-white { color: white; }
+        .text-center { text-align: center; }
+        .mt-4 { margin-top: 1rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mr-2 { margin-right: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Supply Chain Dashboard</h1>
+
+        <!-- Admin Access Section -->
+        <div id="admin-access-section" class="admin-access-container">
+            <p>Enter admin access code to proceed:</p>
+            <input type="password" id="admin-code-input" placeholder="Enter admin code" />
+            <button id="submit-admin-code">Submit</button>
+        </div>
+
+        <!-- Main Content (Hidden by default) -->
+        <div id="main-content" class="hidden">
+            <div class="tabs-container">
+                <div class="tabs-list">
+                    <button class="tab-trigger active" data-tab="overview">Overview</button>
+                    <button class="tab-trigger" data-tab="shipment"><i class="fas fa-truck"></i> Shipments</button>
+                    <button class="tab-trigger" data-tab="inventory"><i class="fas fa-box"></i> Inventory</button>
+                    <button class="tab-trigger" data-tab="management"><i class="fas fa-building"></i> Supply Management</button>
+                    <button class="tab-trigger" data-tab="warehouses"><i class="fas fa-warehouse"></i> Warehouses</button>
+                    <button class="tab-trigger" data-tab="reports"><i class="fas fa-clipboard"></i> Reports</button>
+                </div>
+
+                <div id="overview" class="tab-content active">
+                    <div class="overview-grid">
+                        <div class="card-item">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Total Shipments</h3>
+                                <i class="fas fa-truck card-icon"></i>
+                            </div>
+                            <div class="card-content">
+                                <div id="total-shipments-count" class="value">0</div>
+                                <p class="description">Currently tracking</p>
+                            </div>
+                        </div>
+                        <div class="card-item">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Total Inventory Items</h3>
+                                <i class="fas fa-box card-icon"></i>
+                            </div>
+                            <div class="card-content">
+                                <div id="total-inventory-count" class="value">0</div>
+                                <p class="description">Unique items across warehouses</p>
+                            </div>
+                        </div>
+                        <div class="card-item">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Active Suppliers</h3>
+                                <i class="fas fa-building card-icon"></i>
+                            </div>
+                            <div class="card-content">
+                                <div id="active-suppliers-count" class="value">0</div>
+                                <p class="description">Partners in supply</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-grid" style="margin-top: 1.5rem;">
+                        <div class="card-item chart-card">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Inventory by Location</h3>
+                            </div>
+                            <div id="inventory-chart-container" class="chart-container">
+                                <!-- Inventory chart will be rendered here -->
+                            </div>
+                        </div>
+                        <div class="card-item chart-card">
+                            <div class="card-header-flex">
+                                <h3 class="card-title">Shipment Status Distribution</h3>
+                            </div>
+                            <div id="shipment-chart-container" class="chart-container">
+                                <!-- Shipment chart will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="shipment" class="tab-content">
+                    <button id="add-shipment-btn" class="btn mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Shipment
+                    </button>
+                    <div class="table-container">
+                        <div class="card-header-flex" style="padding: 1rem;">
+                            <h3 class="card-title" style="font-size: 1.25rem;">Shipment Details</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shipment-table-body">
+                                <!-- Shipment data will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="inventory" class="tab-content">
+                    <button id="add-inventory-btn" class="btn mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Inventory
+                    </button>
+                    <div class="table-container">
+                        <div class="card-header-flex" style="padding: 1rem;">
+                            <h3 class="card-title" style="font-size: 1.25rem;">Inventory Details</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-table-body">
+                                <!-- Inventory data will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="management" class="tab-content">
+                    <button id="add-supplier-btn" class="btn mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Supplier
+                    </button>
+                    <div class="table-container">
+                        <div class="card-header-flex" style="padding: 1rem;">
+                            <h3 class="card-title" style="font-size: 1.25rem;">Supply Management Details</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Supplier</th>
+                                    <th>Product</th>
+                                    <th>Contact</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supply-management-table-body">
+                                <!-- Supply management data will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="warehouses" class="tab-content">
+                    <button id="add-warehouse-btn" class="btn mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Warehouse
+                    </button>
+                    <div class="table-container">
+                        <div class="card-header-flex" style="padding: 1rem;">
+                            <h3 class="card-title" style="font-size: 1.25rem;">Warehouse Locations</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>City</th>
+                                    <th>Capacity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warehouse-locations-table-body">
+                                <!-- Warehouse locations data will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="reports" class="tab-content">
+                    <button id="add-report-btn" class="btn mb-4">
+                        <i class="fas fa-plus-circle mr-2"></i> Add Report
+                    </button>
+                    <div class="table-container">
+                        <div class="card-header-flex" style="padding: 1rem;">
+                            <h3 class="card-title" style="font-size: 1.25rem;">Supply Reports</h3>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody id="supply-reports-table-body">
+                                <!-- Supply reports data will be rendered here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Shipment Modal -->
+    <div id="addShipmentModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addShipmentModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Shipment</h2>
+            </div>
+            <form id="add-shipment-form" class="form-grid">
+                <div class="form-row">
+                    <label for="shipment-id">ID</label>
+                    <input type="text" id="shipment-id" name="id" placeholder="SHP00X" required />
+                </div>
+                <div class="form-row">
+                    <label for="shipment-origin">Origin</label>
+                    <input type="text" id="shipment-origin" name="origin" placeholder="City A" required />
+                </div>
+                <div class="form-row">
+                    <label for="shipment-destination">Destination</label>
+                    <input type="text" id="shipment-destination" name="destination" placeholder="City B" required />
+                </div>
+                <div class="form-row">
+                    <label for="shipment-status-select-trigger">Status</label>
+                    <div class="custom-select-wrapper">
+                        <div class="custom-select-trigger" id="shipment-status-select-trigger">Select Status</div>
+                        <div class="custom-select-content" id="shipment-status-select-content">
+                            <div class="custom-select-item" data-value="In Transit">In Transit</div>
+                            <div class="custom-select-item" data-value="Delivered">Delivered</div>
+                            <div class="custom-select-item" data-value="Pending">Pending</div>
+                            <div class="custom-select-item" data-value="Delayed">Delayed</div>
+                        </div>
+                        <input type="hidden" id="shipment-status-hidden-input" name="status" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-full-width mt-4">Save Shipment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Inventory Modal -->
+    <div id="addInventoryModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addInventoryModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Inventory</h2>
+            </div>
+            <form id="add-inventory-form" class="form-grid">
+                <div class="form-row">
+                    <label for="inventory-item">Item Name</label>
+                    <input type="text" id="inventory-item" name="item" placeholder="Item Name" required />
+                </div>
+                <div class="form-row">
+                    <label for="inventory-quantity">Quantity</label>
+                    <input type="number" id="inventory-quantity" name="quantity" placeholder="Quantity" required />
+                </div>
+                <div class="form-row">
+                    <label for="inventory-location">Location</label>
+                    <input type="text" id="inventory-location" name="location" placeholder="Warehouse X" required />
+                </div>
+                <button type="submit" class="btn btn-full-width mt-4">Save Inventory</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Supplier Modal -->
+    <div id="addSupplierModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addSupplierModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Supplier</h2>
+            </div>
+            <form id="add-supplier-form" class="form-grid">
+                <div class="form-row">
+                    <label for="supplier-name">Supplier Name</label>
+                    <input type="text" id="supplier-name" name="supplier" placeholder="Supplier Name" required />
+                </div>
+                <div class="form-row">
+                    <label for="supplier-product">Product</label>
+                    <input type="text" id="supplier-product" name="product" placeholder="Product" required />
+                </div>
+                <div class="form-row">
+                    <label for="supplier-contact">Contact</label>
+                    <input type="text" id="supplier-contact" name="contact" placeholder="Contact Number" required />
+                </div>
+                <button type="submit" class="btn btn-full-width mt-4">Save Supplier</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Warehouse Modal -->
+    <div id="addWarehouseModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addWarehouseModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Warehouse</h2>
+            </div>
+            <form id="add-warehouse-form" class="form-grid">
+                <div class="form-row">
+                    <label for="warehouse-name">Warehouse Name</label>
+                    <input type="text" id="warehouse-name" name="name" placeholder="Warehouse Name" required />
+                </div>
+                <div class="form-row">
+                    <label for="warehouse-city">City</label>
+                    <input type="text" id="warehouse-city" name="city" placeholder="City" required />
+                </div>
+                <div class="form-row">
+                    <label for="warehouse-capacity">Capacity</label>
+                    <input type="text" id="warehouse-capacity" name="capacity" placeholder="e.g., 75%" required />
+                </div>
+                <button type="submit" class="btn btn-full-width mt-4">Save Warehouse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Report Modal -->
+    <div id="addReportModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addReportModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Report</h2>
+            </div>
+            <form id="add-report-form" class="form-grid">
+                <div class="form-row">
+                    <label for="report-date">Date</label>
+                    <input type="date" id="report-date" name="date" required />
+                </div>
+                <div class="form-row">
+                    <label for="report-summary">Summary</label>
+                    <textarea id="report-summary" name="summary" placeholder="Summary of the report" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-full-width mt-4">Save Report</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div id="custom-toast" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 1002;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    "></div>
+
+    <script>
+        // --- Global State (using localStorage for persistence) ---
+        const LS_PREFIX = 'supply_chain_app_';
+
+        function useLocalStorage(key, initialValue) {
+            const storedItem = localStorage.getItem(LS_PREFIX + key);
+            let value;
+            try {
+                value = storedItem ? JSON.parse(storedItem) : initialValue;
+            } catch (error) {
+                console.error("Error parsing localStorage item:", error);
+                value = initialValue;
+            }
+
+            const setValue = (newValue) => {
+                const valueToStore = typeof newValue === 'function' ? newValue(value) : newValue;
+                value = valueToStore; // Update the 'value' local to this specific call of useLocalStorage
+                localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
+                return valueToStore;
+            };
+
+            return [value, setValue];
+        }
+
+        let [adminAccess, setAdminAccess] = useLocalStorage("adminAccess", false);
+        let [shipmentData, setShipmentData] = useLocalStorage("shipmentData", [
+            { id: "SHP001", origin: "Lahore", destination: "Karachi", status: "In Transit" },
+            { id: "SHP002", origin: "Islamabad", destination: "Lahore", status: "Delivered" },
+            { id: "SHP003", origin: "Quetta", destination: "Peshawar", status: "Pending" },
+        ]);
+        let [inventory, setInventory] = useLocalStorage("inventory", [
+            { item: "Paracetamol", quantity: 1200, location: "Warehouse A" },
+            { item: "Ibuprofen", quantity: 800, location: "Warehouse B" },
+            { item: "Amoxicillin", quantity: 1500, location: "Warehouse A" },
+            { item: "Cough Syrup", quantity: 500, location: "Warehouse C" },
+        ]);
+        let [supplyManagement, setSupplyManagement] = useLocalStorage("supplyManagement", [
+            { supplier: "PharmaLink", product: "Prozac", contact: "0300-1234567" },
+            { supplier: "MediPlus", product: "Zoloft", contact: "0321-7654321" },
+            { supplier: "HealthSupply Co.", product: "Lipitor", contact: "0333-9876543" },
+        ]);
+        let [warehouseLocations, setWarehouseLocations] = useLocalStorage("warehouseLocations", [
+            { name: "Warehouse A", city: "Lahore", capacity: "80%" },
+            { name: "Warehouse B", city: "Karachi", capacity: "65%" },
+            { name: "Warehouse C", city: "Multan", capacity: "90%" },
+        ]);
+        let [supplyReports, setSupplyReports] = useLocalStorage("supplyReports", [
+            { date: "2025-06-01", summary: "Monthly supply chain review completed." },
+            { date: "2025-05-15", summary: "Inventory restocked for Q2." },
+            { date: "2025-04-20", summary: "New supplier 'HealthSupply Co.' onboarded." },
+        ]);
+
+        // --- DOM Element References ---
+        const adminAccessSection = document.getElementById('admin-access-section');
+        const adminCodeInput = document.getElementById('admin-code-input');
+        const submitAdminCodeButton = document.getElementById('submit-admin-code');
+        const mainContent = document.getElementById('main-content');
+
+        const tabsList = document.querySelector('.tabs-list');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Overview Tab Elements
+        const totalShipmentsCount = document.getElementById('total-shipments-count');
+        const totalInventoryCount = document.getElementById('total-inventory-count');
+        const activeSuppliersCount = document.getElementById('active-suppliers-count');
+        const inventoryChartContainer = document.getElementById('inventory-chart-container');
+        const shipmentChartContainer = document.getElementById('shipment-chart-container');
+
+        // Shipment Tab Elements
+        const addShipmentBtn = document.getElementById('add-shipment-btn');
+        const addShipmentModal = document.getElementById('addShipmentModal');
+        const addShipmentForm = document.getElementById('add-shipment-form');
+        const shipmentTableBody = document.getElementById('shipment-table-body');
+        const shipmentStatusSelectTrigger = document.getElementById('shipment-status-select-trigger');
+        const shipmentStatusSelectContent = document.getElementById('shipment-status-select-content');
+        const shipmentStatusHiddenInput = document.getElementById('shipment-status-hidden-input');
+
+        // Inventory Tab Elements
+        const addInventoryBtn = document.getElementById('add-inventory-btn');
+        const addInventoryModal = document.getElementById('addInventoryModal');
+        const addInventoryForm = document.getElementById('add-inventory-form');
+        const inventoryTableBody = document.getElementById('inventory-table-body');
+
+        // Supply Management Tab Elements
+        const addSupplierBtn = document.getElementById('add-supplier-btn');
+        const addSupplierModal = document.getElementById('addSupplierModal');
+        const addSupplierForm = document.getElementById('add-supplier-form');
+        const supplyManagementTableBody = document.getElementById('supply-management-table-body');
+
+        // Warehouses Tab Elements
+        const addWarehouseBtn = document.getElementById('add-warehouse-btn');
+        const addWarehouseModal = document.getElementById('addWarehouseModal');
+        const addWarehouseForm = document.getElementById('add-warehouse-form');
+        const warehouseLocationsTableBody = document.getElementById('warehouse-locations-table-body');
+
+        // Reports Tab Elements
+        const addReportBtn = document.getElementById('add-report-btn');
+        const addReportModal = document.getElementById('addReportModal');
+        const addReportForm = document.getElementById('add-report-form');
+        const supplyReportsTableBody = document.getElementById('supply-reports-table-body');
+
+        const customToast = document.getElementById('custom-toast');
+
+        // --- Helper Functions ---
+        function showToast(message, type = 'success') {
+            customToast.textContent = message;
+            customToast.style.opacity = '1';
+            customToast.style.visibility = 'visible';
+            customToast.style.backgroundColor = {
+                'success': '#22c55e',
+                'error': '#ef4444',
+                'warning': '#f59e0b',
+                'info': '#3b82f6'
+            }[type] || '#333';
+
+            setTimeout(() => {
+                customToast.style.opacity = '0';
+                customToast.style.visibility = 'hidden';
+            }, 3000);
+        }
+
+        function openModal(modalElement) {
+            modalElement.style.display = 'flex';
+        }
+
+        function closeModal(modalElement) {
+            modalElement.style.display = 'none';
+            // Reset form fields when modal is closed
+            const form = modalElement.querySelector('form');
+            if (form) {
+                form.reset();
+                // Reset custom select triggers
+                const selectTriggers = form.querySelectorAll('.custom-select-trigger');
+                selectTriggers.forEach(trigger => {
+                    if (trigger.id === 'shipment-status-select-trigger') {
+                        trigger.textContent = 'Select Status';
+                        shipmentStatusHiddenInput.value = '';
+                    }
+                });
+                const selectContents = form.querySelectorAll('.custom-select-content');
+                selectContents.forEach(content => {
+                    Array.from(content.children).forEach(item => item.classList.remove('selected'));
+                });
+            }
+        }
+
+        // Custom Select Logic
+        function setupCustomSelect(trigger, content, hiddenInput) {
+            trigger.addEventListener('click', (event) => {
+                event.stopPropagation(); // Prevent document click from closing immediately
+                // Close other open selects
+                document.querySelectorAll('.custom-select-content.show').forEach(openContent => {
+                    if (openContent !== content) {
+                        openContent.classList.remove('show');
+                    }
+                });
+                content.classList.toggle('show');
+            });
+
+            content.addEventListener('click', (event) => {
+                const selectedItem = event.target.closest('.custom-select-item');
+                if (selectedItem) {
+                    const value = selectedItem.dataset.value;
+                    const text = selectedItem.textContent;
+
+                    trigger.textContent = text;
+                    hiddenInput.value = value;
+                    content.classList.remove('show');
+
+                    // Remove 'selected' class from all items and add to the clicked one
+                    Array.from(content.children).forEach(item => item.classList.remove('selected'));
+                    selectedItem.classList.add('selected');
+                }
+            });
+
+            // Close select if clicking outside
+            document.addEventListener('click', (event) => {
+                if (!trigger.contains(event.target) && !content.contains(event.target)) {
+                    content.classList.remove('show');
+                }
+            });
+        }
+
+        // --- Render Functions ---
+
+        function renderOverviewCounts() {
+            totalShipmentsCount.textContent = shipmentData.length;
+            totalInventoryCount.textContent = inventory.length;
+            activeSuppliersCount.textContent = supplyManagement.length;
+        }
+
+        function renderInventoryChart() {
+            inventoryChartContainer.innerHTML = '';
+            const inventoryChartData = inventory.reduce((acc, curr) => {
+                const existing = acc.find((item) => item.location === curr.location);
+                if (existing) {
+                    existing.quantity += curr.quantity;
+                } else {
+                    acc.push({ location: curr.location, quantity: curr.quantity });
+                }
+                return acc;
+            }, []);
+
+            const maxQuantity = Math.max(...inventoryChartData.map(d => d.quantity), 0);
+            const chartScale = maxQuantity > 0 ? 100 / maxQuantity : 0;
+
+            inventoryChartData.forEach(entry => {
+                const chartRow = document.createElement('div');
+                chartRow.className = 'chart-row';
+
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = entry.location;
+                chartRow.appendChild(label);
+
+                const barArea = document.createElement('div');
+                barArea.className = 'chart-bar-area';
+
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar inventory';
+                bar.style.width = `${entry.quantity * chartScale}%`;
+                bar.textContent = entry.quantity;
+                barArea.appendChild(bar);
+                chartRow.appendChild(barArea);
+                inventoryChartContainer.appendChild(chartRow);
+            });
+        }
+
+        function renderShipmentChart() {
+            shipmentChartContainer.innerHTML = '';
+            const shipmentStatusData = shipmentData.reduce((acc, curr) => {
+                const existing = acc.find((item) => item.status === curr.status);
+                if (existing) {
+                    existing.count += 1;
+                } else {
+                    acc.push({ status: curr.status, count: 1 });
+                }
+                return acc;
+            }, []);
+
+            const maxCount = Math.max(...shipmentStatusData.map(d => d.count), 0);
+            const chartScale = maxCount > 0 ? 100 / maxCount : 0;
+
+            shipmentStatusData.forEach(entry => {
+                const chartRow = document.createElement('div');
+                chartRow.className = 'chart-row';
+
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = entry.status;
+                chartRow.appendChild(label);
+
+                const barArea = document.createElement('div');
+                barArea.className = 'chart-bar-area';
+
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar shipment';
+                bar.style.width = `${entry.count * chartScale}%`;
+                bar.textContent = entry.count;
+                barArea.appendChild(bar);
+                chartRow.appendChild(barArea);
+                shipmentChartContainer.appendChild(chartRow);
+            });
+        }
+
+        function renderShipmentTable() {
+            shipmentTableBody.innerHTML = '';
+            shipmentData.forEach(s => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium">${s.id}</td>
+                    <td>${s.origin}</td>
+                    <td>${s.destination}</td>
+                    <td>${s.status}</td>
+                `;
+                shipmentTableBody.appendChild(row);
+            });
+        }
+
+        function renderInventoryTable() {
+            inventoryTableBody.innerHTML = '';
+            inventory.forEach((item, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium">${item.item}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.location}</td>
+                `;
+                inventoryTableBody.appendChild(row);
+            });
+        }
+
+        function renderSupplyManagementTable() {
+            supplyManagementTableBody.innerHTML = '';
+            supplyManagement.forEach((entry, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium">${entry.supplier}</td>
+                    <td>${entry.product}</td>
+                    <td>${entry.contact}</td>
+                `;
+                supplyManagementTableBody.appendChild(row);
+            });
+        }
+
+        function renderWarehouseTable() {
+            warehouseLocationsTableBody.innerHTML = '';
+            warehouseLocations.forEach((loc, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium">${loc.name}</td>
+                    <td>${loc.city}</td>
+                    <td>${loc.capacity}</td>
+                `;
+                warehouseLocationsTableBody.appendChild(row);
+            });
+        }
+
+        function renderReportsTable() {
+            supplyReportsTableBody.innerHTML = '';
+            supplyReports.forEach((report, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="font-medium">${report.date}</td>
+                    <td>${report.summary}</td>
+                `;
+                supplyReportsTableBody.appendChild(row);
+            });
+        }
+
+        // --- Event Handlers ---
+
+        // Admin Login
+        submitAdminCodeButton.addEventListener('click', () => {
+            if (adminCodeInput.value === "admin505") {
+                adminAccess = setAdminAccess(true); // Update state and localStorage
+                adminAccessSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                // Initial render for all visible components after login
+                renderOverviewCounts();
+                renderInventoryChart();
+                renderShipmentChart();
+                renderShipmentTable();
+                renderInventoryTable();
+                renderSupplyManagementTable();
+                renderWarehouseTable();
+                renderReportsTable();
+                showToast("Admin access granted!", "success");
+            } else {
+                showToast("Access Denied. Incorrect code.", "error");
+            }
+            adminCodeInput.value = "";
+        });
+
+        // Tab Switching
+        tabsList.querySelectorAll('.tab-trigger').forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Remove 'active' from all triggers and contents
+                tabsList.querySelectorAll('.tab-trigger').forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add 'active' to clicked trigger and corresponding content
+                event.currentTarget.classList.add('active');
+                const targetTabId = event.currentTarget.dataset.tab;
+                document.getElementById(targetTabId).classList.add('active');
+
+                // Re-render specific sections if needed when tab changes
+                if (targetTabId === 'overview') {
+                    renderOverviewCounts();
+                    renderInventoryChart();
+                    renderShipmentChart();
+                } else if (targetTabId === 'shipment') {
+                    renderShipmentTable();
+                } else if (targetTabId === 'inventory') {
+                    renderInventoryTable();
+                } else if (targetTabId === 'management') {
+                    renderSupplyManagementTable();
+                } else if (targetTabId === 'warehouses') {
+                    renderWarehouseTable();
+                } else if (targetTabId === 'reports') {
+                    renderReportsTable();
+                }
+            });
+        });
+
+        // Add Shipment
+        addShipmentBtn.addEventListener('click', () => openModal(addShipmentModal));
+        addShipmentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newShipment = {
+                id: document.getElementById('shipment-id').value,
+                origin: document.getElementById('shipment-origin').value,
+                destination: document.getElementById('shipment-destination').value,
+                status: document.getElementById('shipment-status-hidden-input').value, // Get from hidden input
+            };
+            shipmentData = setShipmentData(prev => [...prev, newShipment]); // Update state and localStorage
+            showToast("New shipment added!", "success");
+            closeModal(addShipmentModal);
+            renderShipmentTable(); // Re-render table
+            renderOverviewCounts(); // Update overview counts
+            renderShipmentChart(); // Update chart
+        });
+
+        // Add Inventory
+        addInventoryBtn.addEventListener('click', () => openModal(addInventoryModal));
+        addInventoryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newItem = {
+                item: document.getElementById('inventory-item').value,
+                quantity: parseInt(document.getElementById('inventory-quantity').value),
+                location: document.getElementById('inventory-location').value,
+            };
+            inventory = setInventory(prev => [...prev, newItem]); // Update state and localStorage
+            showToast("New inventory item added!", "success");
+            closeModal(addInventoryModal);
+            renderInventoryTable(); // Re-render table
+            renderOverviewCounts(); // Update overview counts
+            renderInventoryChart(); // Update chart
+        });
+
+        // Add Supplier
+        addSupplierBtn.addEventListener('click', () => openModal(addSupplierModal));
+        addSupplierForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newSupplier = {
+                supplier: document.getElementById('supplier-name').value,
+                product: document.getElementById('supplier-product').value,
+                contact: document.getElementById('supplier-contact').value,
+            };
+            supplyManagement = setSupplyManagement(prev => [...prev, newSupplier]); // Update state and localStorage
+            showToast("New supplier added!", "success");
+            closeModal(addSupplierModal);
+            renderSupplyManagementTable(); // Re-render table
+            renderOverviewCounts(); // Update overview counts
+        });
+
+        // Add Warehouse
+        addWarehouseBtn.addEventListener('click', () => openModal(addWarehouseModal));
+        addWarehouseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newWarehouse = {
+                name: document.getElementById('warehouse-name').value,
+                city: document.getElementById('warehouse-city').value,
+                capacity: document.getElementById('warehouse-capacity').value,
+            };
+            warehouseLocations = setWarehouseLocations(prev => [...prev, newWarehouse]); // Update state and localStorage
+            showToast("New warehouse added!", "success");
+            closeModal(addWarehouseModal);
+            renderWarehouseTable(); // Re-render table
+        });
+
+        // Add Report
+        addReportBtn.addEventListener('click', () => openModal(addReportModal));
+        addReportForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newReport = {
+                date: document.getElementById('report-date').value,
+                summary: document.getElementById('report-summary').value,
+            };
+            supplyReports = setSupplyReports(prev => [...prev, newReport]); // Update state and localStorage
+            showToast("New report added!", "success");
+            closeModal(addReportModal);
+            renderReportsTable(); // Re-render table
+        });
+
+        // Close Modal Buttons (General)
+        document.querySelectorAll('.modal-close-btn').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const modalId = event.target.dataset.modal;
+                closeModal(document.getElementById(modalId));
+            });
+        });
+
+        // Close modal if clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target);
+            }
+        });
+
+        // --- Initial Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup custom selects
+            setupCustomSelect(shipmentStatusSelectTrigger, shipmentStatusSelectContent, shipmentStatusHiddenInput);
+
+            // Check admin access on load
+            if (adminAccess) {
+                adminAccessSection.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                // Initial render for all visible components after login
+                renderOverviewCounts();
+                renderInventoryChart();
+                renderShipmentChart();
+                renderShipmentTable();
+                renderInventoryTable();
+                renderSupplyManagementTable();
+                renderWarehouseTable();
+                renderReportsTable();
+            } else {
+                adminAccessSection.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

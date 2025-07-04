@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surveillance Reporting</title>
+    <!-- Google Font - Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet" />
+    <style>
+      /* Base Styles */
+      .admin-login-input{
+        padding: 0.5rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.375rem;
+        width: 100%;
+        box-sizing: border-box;
+        outline: none;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          to bottom right,
+          #f0f4f8,
+          #e0e7ff
+        ); /* Soft blue-gray gradient */
+        color: #1a202c; /* Darker text for better contrast */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem; /* More generous padding */
+        box-sizing: border-box;
+      }
+
+      .container {
+        max-width: 38rem; /* Slightly wider max-width */
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #ffffff; /* White background for the main content area */
+        border-radius: 1rem; /* Rounded corners for the main container */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08),
+          0 3px 6px rgba(0, 0, 0, 0.05); /* Enhanced shadow */
+        padding: 2rem; /* More padding inside the container */
+        box-sizing: border-box;
+      }
+
+      .header-text-center {
+        text-align: center;
+        margin-bottom: 1.5rem; /* Increased margin */
+      }
+
+      .header-text-center h2 {
+        font-size: 1.75rem; /* Larger heading */
+        font-weight: 700; /* Bold */
+        color: #312e81; /* Darker indigo */
+        margin-bottom: 0.5rem;
+      }
+
+      .header-text-center p {
+        font-size: 0.95rem; /* Slightly larger text */
+        color: #4a5568; /* Medium gray */
+      }
+
+      /* Tabs */
+      .tabs-root {
+        width: 100%;
+      }
+
+      .tabs-list {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1.5rem; /* Increased margin */
+        background-color: #eef2ff; /* Lighter indigo background */
+        border-radius: 0.75rem; /* More rounded */
+        padding: 0.35rem; /* Slightly more padding */
+        box-sizing: border-box;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+      }
+
+      .tabs-trigger {
+        flex: 1;
+        padding: 0.75rem 1.25rem; /* More padding for a larger touch area */
+        font-weight: 600; /* Semi-bold */
+        color: #6366f1; /* Indigo color */
+        background-color: transparent;
+        border: none;
+        border-radius: 0.625rem; /* More rounded */
+        cursor: pointer;
+        transition: all 0.3s ease; /* Smoother transition */
+        text-align: center;
+        white-space: nowrap; /* Prevent wrapping */
+      }
+
+      .tabs-trigger.active {
+        background-color: #6366f1; /* Active indigo background */
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* More prominent shadow for active tab */
+      }
+
+      .tabs-trigger:hover:not(.active) {
+        background-color: #e0e7ff; /* Lighter hover background */
+        color: #4f46e5; /* Darker indigo on hover */
+      }
+
+      .tabs-content {
+        padding: 1.5rem; /* More padding inside content */
+        background-color: #ffffff;
+        border-radius: 0.75rem; /* Consistent rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06); /* Soft shadow */
+      }
+
+      /* Issue Report Form */
+      .form-spacing {
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Consistent spacing */
+      }
+
+      .form-grid-2col {
+        display: grid;
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(150px, 1fr)
+        ); /* Adjusted min-width for better responsiveness */
+        gap: 1rem;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      input[type="date"],
+      textarea,
+      .custom-select-trigger {
+        width: 100%;
+        padding: 0.75rem; /* More padding for inputs */
+        border: 1px solid #cbd5e1; /* Lighter border */
+        border-radius: 0.5rem; /* More rounded */
+        box-sizing: border-box;
+        outline: none;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus,
+      input[type="date"]:focus,
+      textarea:focus,
+      .custom-select-trigger:focus {
+        border-color: #6366f1; /* Indigo focus border */
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25); /* Larger, softer focus ring */
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 5rem; /* Taller textarea */
+      }
+
+      .btn-primary {
+        background-color: #6366f1; /* Primary indigo button */
+        color: white;
+        padding: 0.75rem 1.5rem; /* More padding */
+        border-radius: 0.5rem; /* Rounded */
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        border: none;
+        font-weight: 600; /* Semi-bold */
+        width: 100%;
+        text-align: center;
+        font-size: 1rem;
+      }
+
+      .btn-primary:hover {
+        background-color: #4f46e5; /* Darker indigo on hover */
+        transform: translateY(-1px); /* Slight lift effect */
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      /* My Reports / Admin Reports List */
+      .reports-list-container {
+        background-color: #f8fafc; /* Light background for report list */
+        padding: 1.5rem; /* More padding */
+        border-radius: 0.75rem; /* Consistent rounded corners */
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Consistent spacing */
+      }
+
+      .reports-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem; /* Space below header */
+      }
+
+      .reports-list-header h2 {
+        font-size: 1.4rem; /* Larger heading */
+        font-weight: 700;
+        color: #4f46e5; /* Indigo */
+      }
+
+      .reports-list-empty {
+        color: #718096; /* Medium gray */
+        font-style: italic;
+        text-align: center;
+        padding: 1rem 0;
+      }
+
+      .report-item {
+        border: 1px solid hsl(214, 32%, 91%); /* Lighter border */
+        border-radius: 0.625rem; /* More rounded */
+        padding: 1.25rem; /* More padding */
+        background-color: #ffffff; /* White background for individual reports */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04); /* Subtle shadow */
+        display: flex;
+        flex-direction: column;
+      }
+
+      .report-item p {
+        font-size: 0.9rem; /* Slightly smaller text for details */
+        color: #2d3748; /* Darker text */
+      }
+
+      .report-item p strong {
+        font-weight: 600;
+        color: #1a202c; /* Stronger color for labels */
+      }
+
+      .report-actions {
+        display: flex;
+        gap: 0.75rem; /* More space between buttons */
+        padding-top: 0.75rem; /* More padding above actions */
+        border-top: 1px solid #edf2f7; /* Separator line */
+        margin-top: 0.75rem;
+      }
+
+      .report-action-btn {
+        font-size: 0.85rem; /* Slightly smaller font */
+        padding: 0.4rem 0.9rem; /* Adjusted padding */
+        border-radius: 0.4rem; /* More rounded */
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        border: none;
+        font-weight: 500;
+        white-space: nowrap; /* Prevent text wrapping */
+      }
+
+      .report-action-btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .report-action-btn.delete {
+        background-color: #fee2e2; /* Light red */
+        color: #c53030; /* Darker red */
+      }
+      .report-action-btn.delete:hover {
+        background-color: #fbd38d; /* Slightly darker red on hover */
+      }
+
+      .report-action-btn.submit {
+        background-color: #dcfce7; /* Light green */
+        color: #2f855a; /* Darker green */
+      }
+      .report-action-btn.submit:hover {
+        background-color: #a7f3d0; /* Slightly darker green on hover */
+      }
+
+      /* Admin Panel Specifics */
+      .admin-password-section {
+        background-color: #f0f4f8; /* Light blue-gray for admin login */
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+        width: 100%;
+        max-width: 28rem;
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        box-sizing: border-box; /* Ensure padding is included in width */
+      }
+
+      .admin-password-section h2 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #4f46e5;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Modals (Dialogs) */
+      .modal {
+        /* IMPORTANT: display: none; is critical for initial state */
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Darker overlay */
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        box-sizing: border-box;
+      }
+
+      .modal.show {
+        display: flex; /* Only show when 'show' class is added by JS */
+      }
+
+      .modal-content {
+        background-color: #ffffff;
+        padding: 2rem; /* More padding */
+        border-radius: 1rem; /* More rounded */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2),
+          0 5px 10px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+        width: 100%;
+        max-width: 450px; /* Slightly wider modal */
+        position: relative;
+        animation: fadeInScale 0.3s ease-out;
+      }
+
+      .modal-close-btn {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.8rem; /* Larger close button */
+        font-weight: bold;
+        color: #a0aec0; /* Lighter gray */
+        cursor: pointer;
+        transition: color 0.2s ease;
+        background: none;
+        border: none;
+        padding: 0;
+        line-height: 1; /* Align 'x' properly */
+      }
+
+      .modal-close-btn:hover {
+        color: #718096; /* Darker gray on hover */
+      }
+
+      .modal-header {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #edf2f7; /* Lighter border */
+        margin-bottom: 1.5rem; /* More space */
+      }
+
+      .modal-title {
+        font-size: 1.5rem; /* Larger title */
+        font-weight: 700;
+        color: #2d3748; /* Darker color */
+      }
+
+      /* Custom Select Styling */
+      .custom-select-wrapper {
+        position: relative;
+        width: 100%;
+      }
+
+      .custom-select-trigger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        background-color: white;
+        padding: 0.75rem; /* Consistent padding with inputs */
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        color: #2d3748; /* Consistent text color */
+      }
+
+      .custom-select-trigger::after {
+        content: "▼";
+        font-size: 0.7em; /* Smaller arrow */
+        color: #718096; /* Lighter arrow color */
+        margin-left: 0.75rem; /* More space */
+        transition: transform 0.2s ease;
+      }
+
+      .custom-select-trigger.active::after {
+        transform: rotate(180deg); /* Rotate arrow when open */
+      }
+
+      .custom-select-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #e2e8f0; /* Lighter border */
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        max-height: 220px; /* Slightly taller */
+        overflow-y: auto;
+        width: 100%;
+        z-index: 1001;
+        margin-top: 0.5rem; /* More space below trigger */
+      }
+
+      .custom-select-content.show {
+        display: block;
+      }
+
+      .custom-select-item {
+        padding: 0.75rem 1rem; /* More padding */
+        cursor: pointer;
+        font-size: 0.95rem; /* Consistent font size */
+        color: #2d3748;
+        transition: background-color 0.15s ease;
+      }
+
+      .custom-select-item:hover {
+        background-color: #f0f4f8; /* Light hover background */
+      }
+
+      .custom-select-item.selected {
+        background-color: #e0e7ff; /* Light indigo selected background */
+        color: #4f46e5; /* Darker indigo selected text */
+        font-weight: 600;
+      }
+
+      /* Utility Classes (ensure they are consistent or removed if replaced by custom CSS) */
+      .hidden {
+        display: none !important;
+      }
+      .flex {
+        display: flex;
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .text-white {
+        color: white;
+      }
+      .text-center {
+        text-align: center;
+      }
+      /* Removed redundant mt-6, mb-4, px-4, py-2, rounded, hover:bg-indigo-600 as they are now in custom styles */
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header-text-center">
+        <h2>Surveillance Reporting</h2>
+        <p>Please fill out the form below to report an issue.</p>
+      </div>
+
+      <div class="tabs-root">
+        <div class="tabs-list">
+          <button class="tabs-trigger active" data-tab="user-tab">User</button>
+          <button class="tabs-trigger" data-tab="admin-tab">Admin</button>
+        </div>
+
+        <!-- USER TAB CONTENT -->
+        <div id="user-tab" class="tabs-content active">
+          <div class="tabs-root">
+            <div class="tabs-list">
+              <button
+                class="tabs-trigger active"
+                data-tab="issue-report-subtab">
+                Issue Report
+              </button>
+              <button class="tabs-trigger" data-tab="my-reports-subtab">
+                My Reports
+              </button>
+            </div>
+
+            <!-- ISSUE REPORT SUB-TAB -->
+            <div id="issue-report-subtab" class="tabs-content active">
+              <button id="fill-report-form-btn" class="btn-primary">
+                Fill Out Report Form
+              </button>
+            </div>
+
+            <!-- MY REPORTS SUB-TAB -->
+            <div id="my-reports-subtab" class="tabs-content hidden">
+              <div class="reports-list-container">
+                <div class="reports-list-header">
+                  <h2>My Submitted Reports</h2>
+                  <button
+                    id="add-mock-data-btn"
+                    class="report-action-btn submit"
+                    style="background-color: #e0e7ff; color: #4f46e5">
+                    + Add Mock Data
+                  </button>
+                </div>
+                <div id="my-reports-list">
+                  <!-- Reports will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB CONTENT -->
+        <div id="admin-tab" class="tabs-content hidden">
+          <div id="admin-login-section" class="admin-password-section">
+            <h2>Admin Access</h2>
+            <input
+              type="password"
+              id="admin-code-input"
+              placeholder="Enter Admin Password"
+              class="admin-login-input" />
+            <button id="unlock-admin-btn" class="btn-primary">
+              Unlock Admin Panel
+            </button>
+          </div>
+
+          <div id="admin-panel-content" class="tabs-root hidden">
+            <div class="tabs-list">
+              <button
+                class="tabs-trigger active"
+                data-tab="view-reports-admin-subtab">
+                User Reports
+              </button>
+              <button
+                class="tabs-trigger"
+                data-tab="submitted-reports-admin-subtab">
+                Submitted Reports
+              </button>
+              <button
+                class="tabs-trigger"
+                data-tab="change-password-admin-subtab">
+                Change Password
+              </button>
+            </div>
+
+            <!-- ADMIN: CHANGE PASSWORD SUB-TAB -->
+            <div id="change-password-admin-subtab" class="tabs-content hidden">
+              <div class="reports-list-container">
+                <!-- Re-using reports-list-container for consistent styling -->
+                <h2>Change your password</h2>
+                <input
+                  type="password"
+                  id="new-admin-password"
+                  placeholder="New password" />
+                <button id="update-password-btn" class="btn-primary">
+                  Update Password
+                </button>
+              </div>
+            </div>
+
+            <!-- ADMIN: USER REPORTS SUB-TAB -->
+            <div id="view-reports-admin-subtab" class="tabs-content active">
+              <div class="reports-list-container">
+                <h2>Submitted Reports</h2>
+                <div id="admin-user-reports-list">
+                  <!-- User reports for admin will be rendered here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- ADMIN: SUBMITTED REPORTS SUB-TAB -->
+            <div
+              id="submitted-reports-admin-subtab"
+              class="tabs-content hidden">
+              <div class="reports-list-container">
+                <h2>Submitted to Authority</h2>
+                <div id="admin-approved-reports-list">
+                  <!-- Approved reports for admin will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="reportFormModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title">What issues are you facing?</h2>
+        </div>
+        <form id="report-form" class="form-spacing">
+          <!-- Patient Info -->
+          <div class="form-grid-2col">
+            <input type="number" id="report-age" placeholder="Age" required />
+            <div class="custom-select-wrapper">
+              <div class="custom-select-trigger" id="gender-select-trigger">
+                Gender
+              </div>
+              <div class="custom-select-content" id="gender-select-content">
+                <div class="custom-select-item" data-value="male">Male</div>
+                <div class="custom-select-item" data-value="female">Female</div>
+                <div class="custom-select-item" data-value="other">Other</div>
+              </div>
+              <input type="hidden" id="gender-hidden-input" required />
+            </div>
+          </div>
+
+          <!-- Drug Info -->
+          <div class="form-grid-2col">
+            <input
+              type="text"
+              id="report-drugName"
+              placeholder="Drug Name"
+              required />
+            <input
+              type="text"
+              id="report-dose"
+              placeholder="Dose (e.g., 500mg)"
+              required />
+          </div>
+
+          <!-- Side Effect -->
+          <input
+            type="text"
+            id="report-sideEffect"
+            placeholder="Side Effect Observed"
+            required />
+
+          <!-- Severity -->
+          <div class="custom-select-wrapper">
+            <div class="custom-select-trigger" id="severity-select-trigger">
+              Severity
+            </div>
+            <div class="custom-select-content" id="severity-select-content">
+              <div class="custom-select-item" data-value="mild">Mild</div>
+              <div class="custom-select-item" data-value="moderate">
+                Moderate
+              </div>
+              <div class="custom-select-item" data-value="severe">Severe</div>
+            </div>
+            <input type="hidden" id="severity-hidden-input" required />
+          </div>
+
+          <!-- Risk Type -->
+          <div class="custom-select-wrapper">
+            <div class="custom-select-trigger" id="riskType-select-trigger">
+              Risk Type
+            </div>
+            <div class="custom-select-content" id="riskType-select-content">
+              <div class="custom-select-item" data-value="allergic">
+                Allergic Reaction
+              </div>
+              <div class="custom-select-item" data-value="toxic">
+                Toxic Effect
+              </div>
+              <div class="custom-select-item" data-value="interaction">
+                Drug Interaction
+              </div>
+              <div class="custom-select-item" data-value="unknown">
+                Unknown Risk
+              </div>
+            </div>
+            <input type="hidden" id="riskType-hidden-input" required />
+          </div>
+
+          <!-- Date -->
+          <input type="date" id="report-date" required />
+
+          <!-- Notes -->
+          <textarea
+            id="report-notes"
+            placeholder="Additional details (optional)"
+            rows="3"></textarea>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-primary">Submit Report</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div
+      id="custom-toast"
+      style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        z-index: 1002;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      "></div>
+
+    <script>
+      // --- Global State (using localStorage for persistence) ---
+      const LS_PREFIX = "surveillance_app_";
+
+      function useLocalStorage(key, initialValue) {
+        const storedItem = localStorage.getItem(LS_PREFIX + key);
+        let value;
+        try {
+          value = storedItem ? JSON.parse(storedItem) : initialValue;
+        } catch (error) {
+          console.error("Error parsing localStorage item:", error);
+          value = initialValue;
+        }
+
+        const setValue = (newValue) => {
+          const valueToStore =
+            typeof newValue === "function" ? newValue(value) : newValue;
+          value = valueToStore; // Update the 'value' local to this specific call of useLocalStorage
+          localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
+          return valueToStore;
+        };
+
+        return [value, setValue];
+      }
+
+      let [adminUnlocked, setAdminUnlocked] = useLocalStorage(
+        "adminUnlocked",
+        false
+      );
+      let [submittedReports, setSubmittedReports] = useLocalStorage(
+        "submittedReports",
+        []
+      );
+      let [approvedReports, setApprovedReports] = useLocalStorage(
+        "approvedReports",
+        []
+      );
+
+      // --- DOM Element References ---
+      const userTabTrigger = document.querySelector(
+        '.tabs-trigger[data-tab="user-tab"]'
+      );
+      const adminTabTrigger = document.querySelector(
+        '.tabs-trigger[data-tab="admin-tab"]'
+      );
+      const userTabContent = document.getElementById("user-tab");
+      const adminTabContent = document.getElementById("admin-tab");
+
+      const issueReportSubTabTrigger = document.querySelector(
+        '.tabs-root:not(#admin-panel-content) .tabs-list .tabs-trigger[data-tab="issue-report-subtab"]'
+      );
+      const myReportsSubTabTrigger = document.querySelector(
+        '.tabs-root:not(#admin-panel-content) .tabs-list .tabs-trigger[data-tab="my-reports-subtab"]'
+      );
+      const issueReportSubTabContent = document.getElementById(
+        "issue-report-subtab"
+      );
+      const myReportsSubTabContent =
+        document.getElementById("my-reports-subtab");
+
+      const adminLoginSection = document.getElementById("admin-login-section");
+      const adminCodeInput = document.getElementById("admin-code-input");
+      const unlockAdminBtn = document.getElementById("unlock-admin-btn");
+      const adminPanelContent = document.getElementById("admin-panel-content");
+
+      const viewReportsAdminSubTabTrigger = document.querySelector(
+        '#admin-panel-content .tabs-list .tabs-trigger[data-tab="view-reports-admin-subtab"]'
+      );
+      const submittedReportsAdminSubTabTrigger = document.querySelector(
+        '#admin-panel-content .tabs-list .tabs-trigger[data-tab="submitted-reports-admin-subtab"]'
+      );
+      const changePasswordAdminSubTabTrigger = document.querySelector(
+        '#admin-panel-content .tabs-list .tabs-trigger[data-tab="change-password-admin-subtab"]'
+      );
+      const viewReportsAdminSubTabContent = document.getElementById(
+        "view-reports-admin-subtab"
+      );
+      const submittedReportsAdminSubTabContent = document.getElementById(
+        "submitted-reports-admin-subtab"
+      );
+      const changePasswordAdminSubTabContent = document.getElementById(
+        "change-password-admin-subtab"
+      );
+
+      const fillReportFormBtn = document.getElementById("fill-report-form-btn");
+      const reportFormModal = document.getElementById("reportFormModal");
+      const reportForm = document.getElementById("report-form");
+      const modalCloseBtns = document.querySelectorAll(".modal-close-btn");
+
+      const genderSelectTrigger = document.getElementById(
+        "gender-select-trigger"
+      );
+      const genderSelectContent = document.getElementById(
+        "gender-select-content"
+      );
+      const genderHiddenInput = document.getElementById("gender-hidden-input");
+
+      const severitySelectTrigger = document.getElementById(
+        "severity-select-trigger"
+      );
+      const severitySelectContent = document.getElementById(
+        "severity-select-content"
+      );
+      const severityHiddenInput = document.getElementById(
+        "severity-hidden-input"
+      );
+
+      const riskTypeSelectTrigger = document.getElementById(
+        "riskType-select-trigger"
+      );
+      const riskTypeSelectContent = document.getElementById(
+        "riskType-select-content"
+      );
+      const riskTypeHiddenInput = document.getElementById(
+        "riskType-hidden-input"
+      );
+
+      const myReportsList = document.getElementById("my-reports-list");
+      const addMockDataBtn = document.getElementById("add-mock-data-btn");
+      const adminUserReportsList = document.getElementById(
+        "admin-user-reports-list"
+      );
+      const adminApprovedReportsList = document.getElementById(
+        "admin-approved-reports-list"
+      );
+
+      const customToast = document.getElementById("custom-toast");
+
+      // --- Helper Functions ---
+      function showToast(message, type = "success") {
+        customToast.textContent = message;
+        customToast.style.opacity = "1";
+        customToast.style.visibility = "visible";
+        customToast.style.backgroundColor =
+          {
+            success: "#22c55e",
+            error: "#ef4444",
+            warning: "#f59e0b",
+            info: "#3b82f6",
+          }[type] || "#333";
+
+        setTimeout(() => {
+          customToast.style.opacity = "0";
+          customToast.style.visibility = "hidden";
+        }, 3000);
+      }
+
+      function openModal(modalElement) {
+        modalElement.classList.add("show"); // Add 'show' class to display modal
+      }
+
+      function closeModal(modalElement) {
+        modalElement.classList.remove("show"); // Remove 'show' class to hide modal
+        // Reset form fields
+        const form = modalElement.querySelector("form");
+        if (form) {
+          form.reset();
+          // Reset custom select triggers
+          const selectTriggers = form.querySelectorAll(
+            ".custom-select-trigger"
+          );
+          selectTriggers.forEach((trigger) => {
+            const hiddenInput = document.getElementById(
+              trigger.id.replace("-select-trigger", "-hidden-input")
+            );
+            if (hiddenInput) {
+              trigger.textContent = trigger.id.includes("gender")
+                ? "Gender"
+                : trigger.id.includes("severity")
+                ? "Severity"
+                : "Risk Type";
+              hiddenInput.value = "";
+              trigger.classList.remove("active"); // Deactivate trigger
+            }
+          });
+          const selectContents = form.querySelectorAll(
+            ".custom-select-content"
+          );
+          selectContents.forEach((content) => {
+            Array.from(content.children).forEach((item) =>
+              item.classList.remove("selected")
+            );
+            content.classList.remove("show"); // Hide select content
+          });
+        }
+      }
+
+      function setupCustomSelect(trigger, content, hiddenInput) {
+        trigger.addEventListener("click", (event) => {
+          event.stopPropagation();
+          // Close other open selects
+          document
+            .querySelectorAll(".custom-select-content.show")
+            .forEach((openContent) => {
+              if (openContent !== content) {
+                openContent.classList.remove("show");
+                document
+                  .querySelector(
+                    `[data-tab="${openContent.id.replace(
+                      "-select-content",
+                      "-select-trigger"
+                    )}"]`
+                  )
+                  .classList.remove("active");
+              }
+            });
+          content.classList.toggle("show");
+          trigger.classList.toggle("active"); // Toggle active class for trigger
+        });
+
+        content.addEventListener("click", (event) => {
+          const selectedItem = event.target.closest(".custom-select-item");
+          if (selectedItem) {
+            const value = selectedItem.dataset.value;
+            const text = selectedItem.textContent;
+
+            trigger.textContent = text;
+            hiddenInput.value = value;
+            content.classList.remove("show");
+            trigger.classList.remove("active"); // Deactivate trigger after selection
+
+            Array.from(content.children).forEach((item) =>
+              item.classList.remove("selected")
+            );
+            selectedItem.classList.add("selected");
+          }
+        });
+
+        document.addEventListener("click", (event) => {
+          if (
+            !trigger.contains(event.target) &&
+            !content.contains(event.target)
+          ) {
+            content.classList.remove("show");
+            trigger.classList.remove("active"); // Deactivate trigger when clicking outside
+          }
+        });
+      }
+
+      function renderReports(reports, containerElement, isAdminView = false) {
+        containerElement.innerHTML = "";
+        if (reports.length === 0) {
+          containerElement.innerHTML = `<p class="reports-list-empty">${
+            isAdminView
+              ? "No reports submitted yet."
+              : "You haven't submitted any reports yet."
+          }</p>`;
+          return;
+        }
+
+        reports.forEach((report, index) => {
+          const div = document.createElement("div");
+          div.className = "report-item";
+          div.innerHTML = `
+                    <p><strong>Age:</strong> ${report.age}</p>
+                    <p><strong>Gender:</strong> ${report.gender}</p>
+                    <p><strong>Drug:</strong> ${report.drugName} (${
+            report.dose
+          })</p>
+                    <p><strong>Side Effect:</strong> ${report.sideEffect}</p>
+                    <p><strong>Severity:</strong> ${report.severity}</p>
+                    <p><strong>Risk Type:</strong> ${report.riskType}</p>
+                    <p><strong>Date:</strong> ${report.date}</p>
+                    ${
+                      report.notes
+                        ? `<p><strong>Notes:</strong> ${report.notes}</p>`
+                        : ""
+                    }
+                    ${
+                      isAdminView
+                        ? `
+                        <div class="report-actions">
+                            <button class="report-action-btn delete" data-index="${index}">Delete</button>
+                            <button class="report-action-btn submit" data-index="${index}">Submit to Authority</button>
+                        </div>
+                    `
+                        : ""
+                    }
+                `;
+          containerElement.appendChild(div);
+        });
+
+        if (isAdminView) {
+          containerElement
+            .querySelectorAll(".report-action-btn.delete")
+            .forEach((button) => {
+              button.addEventListener("click", (e) => {
+                const index = parseInt(e.target.dataset.index);
+                const reportName = reports[index].drugName;
+                submittedReports = setSubmittedReports((prev) =>
+                  prev.filter((_, i) => i !== index)
+                );
+                showToast(`Report on ${reportName} was removed.`, "success");
+                renderReports(submittedReports, adminUserReportsList, true);
+              });
+            });
+
+          containerElement
+            .querySelectorAll(".report-action-btn.submit")
+            .forEach((button) => {
+              button.addEventListener("click", (e) => {
+                const index = parseInt(e.target.dataset.index);
+                const reportToApprove = reports[index];
+                submittedReports = setSubmittedReports((prev) =>
+                  prev.filter((_, i) => i !== index)
+                );
+                approvedReports = setApprovedReports((prev) => [
+                  ...prev,
+                  reportToApprove,
+                ]);
+                showToast(
+                  `Forwarded report on ${reportToApprove.drugName} to relevant authority.`,
+                  "success"
+                );
+                renderReports(submittedReports, adminUserReportsList, true);
+                renderReports(approvedReports, adminApprovedReportsList, false); // Render approved reports
+              });
+            });
+        }
+      }
+
+      // --- Event Listeners ---
+
+      // Main Tabs (User/Admin)
+      userTabTrigger.addEventListener("click", () => {
+        userTabTrigger.classList.add("active");
+        adminTabTrigger.classList.remove("active");
+        userTabContent.classList.remove("hidden");
+        adminTabContent.classList.add("hidden");
+        // Ensure correct sub-tab is active when switching back to User
+        issueReportSubTabTrigger.click();
+      });
+
+      adminTabTrigger.addEventListener("click", () => {
+        adminTabTrigger.classList.add("active");
+        userTabTrigger.classList.remove("active");
+        adminTabContent.classList.remove("hidden");
+        userTabContent.classList.add("hidden");
+        // If admin is unlocked, ensure the correct admin sub-tab is active
+        if (adminUnlocked) {
+          viewReportsAdminSubTabTrigger.click();
+        }
+      });
+
+      // User Sub-Tabs
+      issueReportSubTabTrigger.addEventListener("click", () => {
+        issueReportSubTabTrigger.classList.add("active");
+        myReportsSubTabTrigger.classList.remove("active");
+        issueReportSubTabContent.classList.remove("hidden");
+        myReportsSubTabContent.classList.add("hidden");
+      });
+
+      myReportsSubTabTrigger.addEventListener("click", () => {
+        myReportsSubTabTrigger.classList.add("active");
+        issueReportSubTabTrigger.classList.remove("active");
+        myReportsSubTabContent.classList.remove("hidden");
+        issueReportSubTabContent.classList.add("hidden");
+        renderReports(submittedReports, myReportsList);
+      });
+
+      // Admin Login
+      unlockAdminBtn.addEventListener("click", () => {
+        if (adminCodeInput.value === "admin505") {
+          adminUnlocked = setAdminUnlocked(true);
+          adminLoginSection.classList.add("hidden");
+          adminPanelContent.classList.remove("hidden");
+          showToast("Admin panel unlocked!", "success");
+          // Initial render for admin reports
+          renderReports(submittedReports, adminUserReportsList, true);
+          renderReports(approvedReports, adminApprovedReportsList, false);
+          // Activate default admin tab
+          viewReportsAdminSubTabTrigger.click();
+        } else {
+          showToast("Access denied. Incorrect password.", "error");
+        }
+        adminCodeInput.value = "";
+      });
+
+      // Admin Sub-Tabs
+      viewReportsAdminSubTabTrigger.addEventListener("click", () => {
+        viewReportsAdminSubTabTrigger.classList.add("active");
+        submittedReportsAdminSubTabTrigger.classList.remove("active");
+        changePasswordAdminSubTabTrigger.classList.remove("active");
+        viewReportsAdminSubTabContent.classList.remove("hidden");
+        submittedReportsAdminSubTabContent.classList.add("hidden");
+        changePasswordAdminSubTabContent.classList.add("hidden");
+        renderReports(submittedReports, adminUserReportsList, true);
+      });
+
+      submittedReportsAdminSubTabTrigger.addEventListener("click", () => {
+        submittedReportsAdminSubTabTrigger.classList.add("active");
+        viewReportsAdminSubTabTrigger.classList.remove("active");
+        changePasswordAdminSubTabTrigger.classList.remove("active");
+        submittedReportsAdminSubTabContent.classList.remove("hidden");
+        viewReportsAdminSubTabContent.classList.add("hidden");
+        changePasswordAdminSubTabContent.classList.add("hidden");
+        renderReports(approvedReports, adminApprovedReportsList, false);
+      });
+
+      changePasswordAdminSubTabTrigger.addEventListener("click", () => {
+        changePasswordAdminSubTabTrigger.classList.add("active");
+        viewReportsAdminSubTabTrigger.classList.remove("active");
+        submittedReportsAdminSubTabTrigger.classList.remove("active");
+        changePasswordAdminSubTabContent.classList.remove("hidden");
+        viewReportsAdminSubTabContent.classList.add("hidden");
+        submittedReportsAdminSubTabContent.classList.add("hidden");
+      });
+
+      // Report Form Modal Trigger
+      fillReportFormBtn.addEventListener("click", () =>
+        openModal(reportFormModal)
+      );
+
+      // Close Modals (general)
+      modalCloseBtns.forEach((btn) => {
+        btn.addEventListener("click", () => closeModal(reportFormModal));
+      });
+      window.addEventListener("click", (event) => {
+        if (event.target === reportFormModal) {
+          closeModal(reportFormModal);
+        }
+      });
+
+      // Report Form Submission
+      reportForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const newReport = {
+          age: document.getElementById("report-age").value,
+          gender: genderHiddenInput.value,
+          drugName: document.getElementById("report-drugName").value,
+          dose: document.getElementById("report-dose").value,
+          sideEffect: document.getElementById("report-sideEffect").value,
+          severity: severityHiddenInput.value,
+          riskType: riskTypeHiddenInput.value,
+          date: document.getElementById("report-date").value,
+          notes: document.getElementById("report-notes").value,
+        };
+        submittedReports = setSubmittedReports((prev) => [...prev, newReport]);
+        showToast("Report submitted successfully!", "success");
+        closeModal(reportFormModal);
+        renderReports(submittedReports, myReportsList); // Re-render 'My Reports'
+        // If admin is unlocked and on user reports tab, re-render it too
+        if (
+          adminUnlocked &&
+          viewReportsAdminSubTabContent.classList.contains("active")
+        ) {
+          renderReports(submittedReports, adminUserReportsList, true);
+        }
+      });
+
+      // Add Mock Data
+      addMockDataBtn.addEventListener("click", () => {
+        const mockReport = {
+          age: 42,
+          gender: "male",
+          drugName: "Ibuprofen",
+          dose: "400mg",
+          sideEffect: "Stomach pain",
+          severity: "moderate",
+          riskType: "toxic",
+          date: new Date().toISOString().slice(0, 10),
+          notes: "Patient reported symptoms after 2 days of use.",
+        };
+        submittedReports = setSubmittedReports((prev) => [...prev, mockReport]);
+        showToast("Mock data added!", "info");
+        renderReports(submittedReports, myReportsList);
+        if (
+          adminUnlocked &&
+          viewReportsAdminSubTabContent.classList.contains("active")
+        ) {
+          renderReports(submittedReports, adminUserReportsList, true);
+        }
+      });
+
+      // Update Password (Admin)
+      document
+        .getElementById("update-password-btn")
+        .addEventListener("click", () => {
+          const newPassword =
+            document.getElementById("new-admin-password").value;
+          if (newPassword) {
+            // In a real app, you'd send this to a backend for secure update.
+            // For this demo, we'll just acknowledge.
+            showToast("Password updated (demo only).", "success");
+            document.getElementById("new-admin-password").value = "";
+          } else {
+            showToast("Please enter a new password.", "warning");
+          }
+        });
+
+      // --- Initial Setup on DOMContentLoaded ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Setup custom selects
+        setupCustomSelect(
+          genderSelectTrigger,
+          genderSelectContent,
+          genderHiddenInput
+        );
+        setupCustomSelect(
+          severitySelectTrigger,
+          severitySelectContent,
+          severityHiddenInput
+        );
+        setupCustomSelect(
+          riskTypeSelectTrigger,
+          riskTypeSelectContent,
+          riskTypeHiddenInput
+        );
+
+        // Set initial state based on localStorage
+        if (adminUnlocked) {
+          adminLoginSection.classList.add("hidden");
+          adminPanelContent.classList.remove("hidden");
+          // Ensure the correct admin sub-tab is active on load
+          viewReportsAdminSubTabTrigger.click(); // Default to User Reports
+        } else {
+          adminLoginSection.classList.remove("hidden");
+          adminPanelContent.classList.add("hidden");
+        }
+
+        // Render initial reports for the "My Reports" tab if it's the default active tab
+        // This is handled by the tab click simulation below, ensuring correct initial view
+        // Default to User tab and its default sub-tab (Issue Report)
+        userTabTrigger.click();
+      });
+    </script>
+  </body>
+</html>

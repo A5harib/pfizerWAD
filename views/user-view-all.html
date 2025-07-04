@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Users</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f9f9f9;
+    }
+    
+    h1 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media (max-width: 600px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        text-align: right;
+      }
+
+      td {
+        text-align: right;
+        border: none;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 1rem;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>All Registered Users</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Password</th>
+      </tr>
+    </thead>
+
+    <tbody id="userTableBody">
+      <!-- Dynamic User Rows will be injected here -->
+    </tbody>
+  </table>
+
+  <script>
+    // Fetch user data from the API and populate table
+    fetch('/api/user/all/')
+      .then(response => response.json())
+      .then(users => {
+        const tableBody = document.getElementById('userTableBody');
+        users.forEach((user, index) => {
+          const row = `
+            <tr>
+              <td data-label="#">${index + 1}</td>
+              <td data-label="Name">${user.name}</td>
+              <td data-label="Email">${user.email}</td>
+              <td data-label="Password">${user.password}</td>
+            </tr>
+          `;
+          tableBody.innerHTML += row;
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
+      });
+  </script>
+
+</body>
+</html>
