@@ -29,7 +29,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // Home Page Route
 // This route serves the index.html file located in the views directory
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/index.html"));
+  res.sendFile(path.join(__dirname, "./views/index.html"));
 });
 
 app.get("/secure-route", IsSecureUrl, (req, res) => {
