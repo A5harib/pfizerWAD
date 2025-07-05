@@ -3,38 +3,38 @@ const BPERouter = express.Router();
 const path = require("path");
 
 //serve static files for uploaded images
-BPERouter.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+BPERouter.use("/uploads.html", express.static(path.join(__dirname, "../uploads")));
 
-BPERouter.get("/discovery", (req, res) => {
+BPERouter.get("/discovery.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/discovery.html"));
 });
-BPERouter.get("/education", (req, res) => {
+BPERouter.get("/education.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/education.html"));
 });
 //introduction
-BPERouter.get("/introduction", (req, res) => {
+BPERouter.get("/introduction.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/introduction.html"));
 });
 //oversight
-BPERouter.get("/oversight", (req, res) => {
+BPERouter.get("/oversight.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/oversight.html"));
 });
 
 //quality
-BPERouter.get("/quality", (req, res) => {
+BPERouter.get("/quality.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/quality.html"));
 });
 //sales
-BPERouter.get("/sales", (req, res) => {
+BPERouter.get("/sales.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/sales.html"));
 });
 
 //supply
-BPERouter.get("/supply", (req, res) => {
+BPERouter.get("/supply.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/supply.html"));
 });
 //surveillance
-BPERouter.get("/surveillance", (req, res) => {
+BPERouter.get("/surveillance.html", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/surveillance.html"));
 });
 
