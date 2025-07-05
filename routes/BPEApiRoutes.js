@@ -256,4 +256,4 @@ router.put(
   surveillanceController.updateAdminPassword
 );
 
-module.exports = router;
+module.exports = { router };

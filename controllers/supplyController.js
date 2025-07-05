@@ -214,4 +214,12 @@ exports.updateSupplyReport = async (req, res) => {
   }
 };
 
-exports.deleteSupplyReport = async(req, res);
+exports.deleteSupplyReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await SupplyReport.findByIdAndDelete(id);
+    res.json({ message: "Supply report deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};

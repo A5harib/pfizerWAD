@@ -1,804 +1,1341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Innovative Drug Research - Discovery</title>
     <style>
-        /* Improved CSS for discovery.html */
+      /* Improved CSS for discovery.html */
 
-body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    margin: 0;
-    background: linear-gradient(120deg, #f0f4ff 0%, #f7fafc 100%);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    padding: 1.25rem;
-    box-sizing: border-box;
-}
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        background: linear-gradient(120deg, #f0f4ff 0%, #f7fafc 100%);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 1.25rem;
+        box-sizing: border-box;
+      }
 
-.container {
-    max-width: 1200px;
-    width: 100%;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 24px rgba(60, 72, 88, 0.10);
-    transition: box-shadow 0.2s;
-}
+      .container {
+        max-width: 1200px;
+        width: 100%;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 24px rgba(60, 72, 88, 0.1);
+        transition: box-shadow 0.2s;
+      }
 
-.admin-access-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1.25rem;
-    box-shadow: 0 4px 16px rgba(60, 72, 88, 0.10);
-    width: 100%;
-    max-width: 400px;
-    margin: 3rem auto;
-}
-
-.flex-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    margin-top: 2rem;
-    justify-content: center;
-}
-
-.card {
-    flex: 1 1 320px;
-    min-width: 300px;
-    max-width: 350px;
-    border: 1px solid #e5e7eb;
-    border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.07);
-    background: #fafbfc;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    max-height: 80vh;
-    transition: box-shadow 0.2s;
-}
-
-.card:hover {
-    box-shadow: 0 6px 24px rgba(60, 72, 88, 0.13);
-}
-
-.card-header {
-    background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
-    color: #fff;
-    padding: 1.25rem;
-    text-align: center;
-    font-weight: 700;
-    font-size: 1.15rem;
-    letter-spacing: 0.02em;
-}
-
-.card-content {
-    padding: 1rem;
-    flex-grow: 1;
-    overflow-y: auto;
-    background: #fff;
-}
-
-.card-footer {
-    border-top: 1px solid #e5e7eb;
-    padding: 0.75rem;
-    text-align: center;
-    background: #f3f4f6;
-}
-
-.list-item {
-    padding: 0.75rem 0.5rem;
-    border-bottom: 1px solid #f1f1f1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-}
-
-.list-item:last-child {
-    border-bottom: none;
-}
-
-button, input[type="submit"] {
-    background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
-    color: #fff;
-    padding: 0.5rem 1.25rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: background 0.2s, box-shadow 0.2s;
-    box-shadow: 0 1px 3px rgba(60, 72, 88, 0.08);
-    outline: none;
-}
-
-button:hover, input[type="submit"]:hover, button:focus, input[type="submit"]:focus {
-    background: linear-gradient(90deg, #4f46e5 60%, #6366f1 100%);
-    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.13);
-}
-
-input[type="text"], input[type="password"], select {
-    padding: 0.5rem;
-    border: 1px solid #c7d2fe;
-    border-radius: 0.5rem;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 1rem;
-    background: #f9fafb;
-    transition: border 0.2s;
-}
-
-input[type="text"]:focus, input[type="password"]:focus, select:focus {
-    border-color: #6366f1;
-    outline: none;
-    background: #fff;
-}
-
-.btn-red {
-    background: #fca5a5;
-    color: #b91c1c;
-}
-
-.btn-red:hover, .btn-red:focus {
-    background: #ef4444;
-    color: #fff;
-}
-
-.btn-blue {
-    background: #93c5fd;
-    color: #1e40af;
-}
-
-.btn-blue:hover, .btn-blue:focus {
-    background: #3b82f6;
-    color: #fff;
-}
-
-.btn-green {
-    background: #86efad;
-    color: #166534;
-}
-
-.btn-green:hover, .btn-green:focus {
-    background: #22c55e;
-    color: #fff;
-}
-
-.text-underline { text-decoration: underline; }
-.text-center { text-align: center; }
-.text-3xl { font-size: 2.1rem; }
-.font-bold { font-weight: 700; }
-.p-2 { padding: 0.5rem; }
-.p-4 { padding: 1rem; }
-.m-4 { margin: 1rem; }
-.mt-2 { margin-top: 0.5rem; }
-.w-full { width: 100%; }
-.flex { display: flex; }
-.flex-col { flex-direction: column; }
-.justify-between { justify-content: space-between; }
-.items-center { align-items: center; }
-.gap-2 { gap: 0.5rem; }
-.gap-3 { gap: 0.75rem; }
-.gap-4 { gap: 1rem; }
-.text-sm { font-size: 0.95rem; }
-.text-neutral-500 { color: #737373; }
-.rounded-md { border-radius: 0.5rem; }
-.rounded-sm { border-radius: 0.25rem; }
-.grid { display: grid; }
-.place-items-center { place-items: center; }
-
-@media (max-width: 900px) {
-    .flex-container {
+      .admin-access-container {
+        display: flex;
         flex-direction: column;
-        align-items: stretch;
-    }
-    .card {
-        max-width: 100%;
-        min-width: 0;
-    }
-}
+        gap: 1rem;
+        background: #fff;
+        padding: 2rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 16px rgba(60, 72, 88, 0.1);
+        width: 100%;
+        max-width: 400px;
+        margin: 3rem auto;
+      }
 
-/* Modal/Dialog Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
-    overflow: auto;
-    background: rgba(60, 72, 88, 0.18);
-    align-items: center;
-    justify-content: center;
-}
+      .flex-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        justify-content: center;
+      }
 
-.modal-content {
-    background: #fff;
-    margin: auto;
-    padding: 2rem 1.5rem;
-    border: 1px solid #e5e7eb;
-    width: 90%;
-    max-width: 480px;
-    border-radius: 1rem;
-    box-shadow: 0 8px 32px rgba(60, 72, 88, 0.18);
-    position: relative;
-    animation: modalFadeIn 0.2s;
-}
+      .card {
+        flex: 1 1 320px;
+        min-width: 300px;
+        max-width: 350px;
+        border: 1px solid #e5e7eb;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px rgba(60, 72, 88, 0.07);
+        background: #fafbfc;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        max-height: 80vh;
+        transition: box-shadow 0.2s;
+      }
 
-@keyframes modalFadeIn {
-    from { opacity: 0; transform: translateY(40px);}
-    to { opacity: 1; transform: translateY(0);}
-}
+      .card:hover {
+        box-shadow: 0 6px 24px rgba(60, 72, 88, 0.13);
+      }
 
-.modal-header {
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #f1f1f1;
-    margin-bottom: 1rem;
-}
+      .card-header {
+        background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+        color: #fff;
+        padding: 1.25rem;
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: 0.02em;
+      }
 
-.modal-header h2 {
-    margin: 0;
-    font-size: 1.35rem;
-    font-weight: 600;
-}
+      .card-content {
+        padding: 1rem;
+        flex-grow: 1;
+        overflow-y: auto;
+        background: #fff;
+      }
 
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    position: absolute;
-    right: 1.25rem;
-    top: 1rem;
-    transition: color 0.2s;
-}
+      .card-footer {
+        border-top: 1px solid #e5e7eb;
+        padding: 0.75rem;
+        text-align: center;
+        background: #f3f4f6;
+      }
 
-.close-button:hover, .close-button:focus {
-    color: #6366f1;
-    text-decoration: none;
-}
+      .list-item {
+        padding: 0.75rem 0.5rem;
+        border-bottom: 1px solid #f1f1f1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+      }
 
-.modal-description {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
+      .list-item:last-child {
+        border-bottom: none;
+      }
 
-/* Custom Select Styling */
-.custom-select-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
+      button,
+      input[type="submit"] {
+        background: linear-gradient(90deg, #6366f1 60%, #818cf8 100%);
+        color: #fff;
+        padding: 0.5rem 1.25rem;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: background 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 3px rgba(60, 72, 88, 0.08);
+        outline: none;
+      }
 
-.custom-select-trigger {
-    padding: 0.5rem;
-    border: 1px solid #c7d2fe;
-    border-radius: 0.5rem;
-    background: #f9fafb;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1rem;
-    transition: border 0.2s;
-}
+      button:hover,
+      input[type="submit"]:hover,
+      button:focus,
+      input[type="submit"]:focus {
+        background: linear-gradient(90deg, #4f46e5 60%, #6366f1 100%);
+        box-shadow: 0 2px 8px rgba(60, 72, 88, 0.13);
+      }
 
-.custom-select-trigger:focus, .custom-select-trigger:hover {
-    border-color: #6366f1;
-    background: #fff;
-}
+      input[type="text"],
+      input[type="password"],
+      select {
+        padding: 0.5rem;
+        border: 1px solid #c7d2fe;
+        border-radius: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
+        font-size: 1rem;
+        background: #f9fafb;
+        transition: border 0.2s;
+      }
 
-.custom-select-options {
-    display: none;
-    position: absolute;
-    width: 100%;
-    border: 1px solid #c7d2fe;
-    border-radius: 0.5rem;
-    background: #fff;
-    z-index: 10;
-    max-height: 220px;
-    overflow-y: auto;
-    box-shadow: 0 2px 8px rgba(60, 72, 88, 0.10);
-    margin-top: 0.25rem;
-}
+      input[type="text"]:focus,
+      input[type="password"]:focus,
+      select:focus {
+        border-color: #6366f1;
+        outline: none;
+        background: #fff;
+      }
 
-.custom-select-options.show {
-    display: block;
-}
+      .btn-red {
+        background: #fca5a5;
+        color: #b91c1c;
+      }
 
-.custom-select-option {
-    padding: 0.5rem;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background 0.15s;
-}
+      .btn-red:hover,
+      .btn-red:focus {
+        background: #ef4444;
+        color: #fff;
+      }
 
-.custom-select-option:hover, .custom-select-option:focus {
-    background: #e0e7ff;
-    color: #3730a3;
-}
+      .btn-blue {
+        background: #93c5fd;
+        color: #1e40af;
+      }
+
+      .btn-blue:hover,
+      .btn-blue:focus {
+        background: #3b82f6;
+        color: #fff;
+      }
+
+      .btn-green {
+        background: #86efad;
+        color: #166534;
+      }
+
+      .btn-green:hover,
+      .btn-green:focus {
+        background: #22c55e;
+        color: #fff;
+      }
+
+      .text-underline {
+        text-decoration: underline;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .text-3xl {
+        font-size: 2.1rem;
+      }
+
+      .font-bold {
+        font-weight: 700;
+      }
+
+      .p-2 {
+        padding: 0.5rem;
+      }
+
+      .p-4 {
+        padding: 1rem;
+      }
+
+      .m-4 {
+        margin: 1rem;
+      }
+
+      .mt-2 {
+        margin-top: 0.5rem;
+      }
+
+      .w-full {
+        width: 100%;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .flex-col {
+        flex-direction: column;
+      }
+
+      .justify-between {
+        justify-content: space-between;
+      }
+
+      .items-center {
+        align-items: center;
+      }
+
+      .gap-2 {
+        gap: 0.5rem;
+      }
+
+      .gap-3 {
+        gap: 0.75rem;
+      }
+
+      .gap-4 {
+        gap: 1rem;
+      }
+
+      .text-sm {
+        font-size: 0.95rem;
+      }
+
+      .text-neutral-500 {
+        color: #737373;
+      }
+
+      .rounded-md {
+        border-radius: 0.5rem;
+      }
+
+      .rounded-sm {
+        border-radius: 0.25rem;
+      }
+
+      .grid {
+        display: grid;
+      }
+
+      .place-items-center {
+        place-items: center;
+      }
+
+      @media (max-width: 900px) {
+        .flex-container {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .card {
+          max-width: 100%;
+          min-width: 0;
+        }
+      }
+
+      /* Modal/Dialog Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+        background: rgba(60, 72, 88, 0.18);
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background: #fff;
+        margin: auto;
+        padding: 2rem 1.5rem;
+        border: 1px solid #e5e7eb;
+        width: 90%;
+        max-width: 480px;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(60, 72, 88, 0.18);
+        position: relative;
+        animation: modalFadeIn 0.2s;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #f1f1f1;
+        margin-bottom: 1rem;
+      }
+
+      .modal-header h2 {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 600;
+      }
+
+      .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        right: 1.25rem;
+        top: 1rem;
+        transition: color 0.2s;
+      }
+
+      .close-button:hover,
+      .close-button:focus {
+        color: #6366f1;
+        text-decoration: none;
+      }
+
+      .modal-description {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      /* Custom Select Styling */
+      .custom-select-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .custom-select-trigger {
+        padding: 0.5rem;
+        border: 1px solid #c7d2fe;
+        border-radius: 0.5rem;
+        background: #f9fafb;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        transition: border 0.2s;
+      }
+
+      .custom-select-trigger:focus,
+      .custom-select-trigger:hover {
+        border-color: #6366f1;
+        background: #fff;
+      }
+
+      .custom-select-options {
+        display: none;
+        position: absolute;
+        width: 100%;
+        border: 1px solid #c7d2fe;
+        border-radius: 0.5rem;
+        background: #fff;
+        z-index: 10;
+        max-height: 220px;
+        overflow-y: auto;
+        box-shadow: 0 2px 8px rgba(60, 72, 88, 0.1);
+        margin-top: 0.25rem;
+      }
+
+      .custom-select-options.show {
+        display: block;
+      }
+
+      .custom-select-option {
+        padding: 0.5rem;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.15s;
+      }
+
+      .custom-select-option:hover,
+      .custom-select-option:focus {
+        background: #e0e7ff;
+        color: #3730a3;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app">
-        <div id="admin-access-section" class="admin-access-container">
-            <p class="text-gray-700 text-center text-lg font-medium">Enter admin access code to proceed:</p>
-            <input type="password" id="adminCodeInput" placeholder="Enter admin code" class="p-2 border border-indigo-200 rounded-md" />
-            <button id="submitAdminCode" class="bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 shadow">
-                Submit
-            </button>
-        </div>
+      <div id="admin-access-section" class="admin-access-container">
+        <p class="text-gray-700 text-center text-lg font-medium">
+          Enter admin access code to proceed:
+        </p>
+        <input
+          type="password"
+          id="adminCodeInput"
+          placeholder="Enter admin code"
+          class="p-2 border border-indigo-200 rounded-md" />
+        <button
+          id="submitAdminCode"
+          class="bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 shadow">
+          Submit
+        </button>
+      </div>
 
-        <div id="main-content" style="display: none;" class="container">
-            <div class="m-4">
-                <h1 class="text-3xl font-bold text-underline">Innovative Drug Research</h1>
+      <div id="main-content" style="display: none" class="container">
+        <div class="m-4">
+          <h1 class="text-3xl font-bold text-underline">
+            Innovative Drug Research
+          </h1>
 
-                <div class="flex-container">
-                    <div class="card">
-                        <div class="card-header">Disease Targets</div>
-                        <div class="card-content" id="diseaseTargetsList">
-                            </div>
-                        <div class="card-footer">
-                            <button id="addDiseaseTargetTrigger" class="w-full p-2 border-t border-neutral-300 text-neutral-500 hover:bg-neutral-100">Add Disease Target</button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">Submitted Targets</div>
-                        <div class="card-content" id="selectedDiseaseTargetList">
-                            </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">Candidate Molecule Design</div>
-                        <div class="card-content">
-                            <div class="p-4 border-b border-neutral-300 text-center" id="candidateDisplay">
-                                No candidate selected
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button id="addCandidateTrigger" class="w-full p-2 border-t border-neutral-300 text-neutral-500 hover:bg-neutral-100">Add Candidate</button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">Leads</div>
-                        <div class="card-content" id="leadsList">
-                            </div>
-                    </div>
-                </div>
+          <div class="flex-container">
+            <div class="card">
+              <div class="card-header">Disease Targets</div>
+              <div class="card-content" id="diseaseTargetsList"></div>
+              <div class="card-footer">
+                <button
+                  id="addDiseaseTargetTrigger"
+                  class="w-full p-2 border-t border-neutral-300 text-neutral-500 hover:bg-neutral-100">
+                  Add Disease Target
+                </button>
+              </div>
             </div>
+
+            <div class="card">
+              <div class="card-header">Submitted Targets</div>
+              <div class="card-content" id="selectedDiseaseTargetList"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">Candidate Molecule Design</div>
+              <div class="card-content">
+                <div
+                  class="p-4 border-b border-neutral-300 text-center"
+                  id="candidateDisplay">
+                  No candidate selected
+                </div>
+              </div>
+              <div class="card-footer">
+                <button
+                  id="addCandidateTrigger"
+                  class="w-full p-2 border-t border-neutral-300 text-neutral-500 hover:bg-neutral-100">
+                  Add Candidate
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">Leads</div>
+              <div class="card-content" id="leadsList"></div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <div id="addDiseaseTargetModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" data-modal="addDiseaseTargetModal">&times;</span>
-            <div class="modal-header">
-                <h2>Add new Disease Target</h2>
-            </div>
-            <div class="modal-description">
-                <input type="text" id="diseaseTargetInput" placeholder="Enter disease target name" class="w-full p-2 border border-neutral-300 rounded-md" />
-                <button id="addDiseaseTargetButton" class="mt-2 w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600">Add Target</button>
-            </div>
+      <div class="modal-content">
+        <span class="close-button" data-modal="addDiseaseTargetModal"
+          >&times;</span
+        >
+        <div class="modal-header">
+          <h2>Add new Disease Target</h2>
         </div>
+        <form class="modal-description" method="post" action="/api/discovery/disease-targets">
+          <input
+            type="text"
+            id="diseaseTargetInput"
+            name="name"
+            placeholder="Enter disease target name"
+            class="w-full p-2 border border-neutral-300 rounded-md" />
+          <button
+            id="addDiseaseTargetButton"
+            type="button"
+            class="mt-2 w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600">
+            Add Target
+          </button>
+        </form>
+      </div>
     </div>
 
     <div id="addCandidateModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" data-modal="addCandidateModal">&times;</span>
-            <div class="modal-header">
-                <h2>Add new Candidate</h2>
-            </div>
-            <div class="modal-description">
-                <input type="text" id="candidateNameInput" placeholder="Enter candidate name" class="w-full p-2 border border-neutral-300 rounded-md m-2" />
-                <div class="custom-select-wrapper" id="candidateTargetSelectWrapper">
-                    <div class="custom-select-trigger" id="candidateTargetSelectTrigger">
-                        <span id="candidateTargetSelectValue">Target</span>
-                        <span>&#9662;</span> </div>
-                    <div class="custom-select-options" id="candidateTargetSelectOptions">
-                        </div>
-                </div>
-                <button id="addCandidateButton" class="mt-2 w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600">Add Candidate</button>
-            </div>
+      <div class="modal-content">
+        <span class="close-button" data-modal="addCandidateModal">&times;</span>
+        <div class="modal-header">
+          <h2>Add new Candidate</h2>
         </div>
+        <div class="modal-description">
+          <input
+            type="text"
+            id="candidateNameInput"
+            placeholder="Enter candidate name"
+            class="w-full p-2 border border-neutral-300 rounded-md m-2" />
+          <div class="custom-select-wrapper" id="candidateTargetSelectWrapper">
+            <div
+              class="custom-select-trigger"
+              id="candidateTargetSelectTrigger">
+              <span id="candidateTargetSelectValue">Target</span>
+              <span>&#9662;</span>
+            </div>
+            <div
+              class="custom-select-options"
+              id="candidateTargetSelectOptions"></div>
+          </div>
+          <button
+            id="addCandidateButton"
+            class="mt-2 w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600">
+            Add Candidate
+          </button>
+        </div>
+      </div>
     </div>
 
     <div id="testOutcomeModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" data-modal="testOutcomeModal">&times;</span>
-            <div class="modal-header">
-                <h2>Enter Test details</h2>
-            </div>
-            <div class="modal-description">
-                <input class="border border-neutral-300 p-2 rounded-md w-full" type="text" id="testIdInput" placeholder="Test ID" />
-                <input class="border border-neutral-300 p-2 rounded-md w-full" type="text" id="testResultInput" placeholder="Test Result" />
-                <input class="border border-neutral-300 p-2 rounded-md w-full" type="text" id="performedByInput" placeholder="Performed By" />
-                <button id="saveTestOutcomeButton" class="bg-indigo-500 text-white p-2 rounded">Save</button>
-            </div>
+      <div class="modal-content">
+        <span class="close-button" data-modal="testOutcomeModal">&times;</span>
+        <div class="modal-header">
+          <h2>Enter Test details</h2>
         </div>
+        <div class="modal-description">
+          <input
+            class="border border-neutral-300 p-2 rounded-md w-full"
+            type="text"
+            id="testIdInput"
+            placeholder="Test ID" />
+          <input
+            class="border border-neutral-300 p-2 rounded-md w-full"
+            type="text"
+            id="testResultInput"
+            placeholder="Test Result" />
+          <input
+            class="border border-neutral-300 p-2 rounded-md w-full"
+            type="text"
+            id="performedByInput"
+            placeholder="Performed By" />
+          <button
+            id="saveTestOutcomeButton"
+            class="bg-indigo-500 text-white p-2 rounded">
+            Save
+          </button>
+        </div>
+      </div>
     </div>
 
     <div id="labFindingsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" data-modal="labFindingsModal">&times;</span>
-            <div class="modal-header">
-                <h2>Edit Lab Findings</h2>
-            </div>
-            <div class="modal-description">
-                <div class="custom-select-wrapper" id="findingTypeSelectWrapper">
-                    <div class="custom-select-trigger" id="findingTypeSelectTrigger">
-                        <span id="findingTypeSelectValue">Finding Type</span>
-                        <span>&#9662;</span>
-                    </div>
-                    <div class="custom-select-options" id="findingTypeSelectOptions">
-                        <div class="custom-select-option" data-value="Molecular interaction">Molecular interaction</div>
-                        <div class="custom-select-option" data-value="Toxicity">Toxicity</div>
-                        <div class="custom-select-option" data-value="Binding Affinity">Binding Affinity</div>
-                        <div class="custom-select-option" data-value="Side Effect">Side Effect</div>
-                        <div class="custom-select-option" data-value="Structure Variation">Structure Variation</div>
-                    </div>
-                </div>
-                <input class="border border-neutral-300 p-2 rounded-md w-full m-2" type="text" id="findingDetailsInput" placeholder="Finding details" />
-                <button id="saveLabFindingsButton" class="bg-indigo-500 text-white p-2 rounded">Save</button>
-            </div>
+      <div class="modal-content">
+        <span class="close-button" data-modal="labFindingsModal">&times;</span>
+        <div class="modal-header">
+          <h2>Edit Lab Findings</h2>
         </div>
+        <div class="modal-description">
+          <div class="custom-select-wrapper" id="findingTypeSelectWrapper">
+            <div class="custom-select-trigger" id="findingTypeSelectTrigger">
+              <span id="findingTypeSelectValue">Finding Type</span>
+              <span>&#9662;</span>
+            </div>
+            <div class="custom-select-options" id="findingTypeSelectOptions">
+              <div
+                class="custom-select-option"
+                data-value="Molecular interaction">
+                Molecular interaction
+              </div>
+              <div class="custom-select-option" data-value="Toxicity">
+                Toxicity
+              </div>
+              <div class="custom-select-option" data-value="Binding Affinity">
+                Binding Affinity
+              </div>
+              <div class="custom-select-option" data-value="Side Effect">
+                Side Effect
+              </div>
+              <div
+                class="custom-select-option"
+                data-value="Structure Variation">
+                Structure Variation
+              </div>
+            </div>
+          </div>
+          <input
+            class="border border-neutral-300 p-2 rounded-md w-full m-2"
+            type="text"
+            id="findingDetailsInput"
+            placeholder="Finding details" />
+          <button
+            id="saveLabFindingsButton"
+            class="bg-indigo-500 text-white p-2 rounded">
+            Save
+          </button>
+        </div>
+      </div>
     </div>
 
-
     <script>
-        // Global state (equivalent to React's useState)
-        let adminCode = "";
-        let adminAccess = false;
-        let diseaseTargets = ["Covid-19", "Cancer", "Diabetes", "Alzheimer's", "Asthma", "Influenza", "Tuberculosis", "HIV/AIDS", "Malaria"];
-        let selectedDiseaseTarget = [];
-        let candidates = { name: "", target: "" };
-        let leads = [];
-        let selectedTargetForCandidate = ""; // To store the selected target for adding a new candidate
-        let currentLeadIndexForModal = -1; // To track which lead is being edited in modals
+      // API Base URL
+      const API_BASE_URL = "/api/discovery"; // Adjust if your server runs on a different port
 
+      // Global state (now fetched from API)
+      let adminAccess = false;
+      let diseaseTargets = [];
+      let selectedDiseaseTarget = []; // This will hold objects { _id, name }
+      let candidates = { name: "", target: "", _id: "" }; // Add _id for candidate
+      let leads = []; // This will hold objects { _id, name, target, ... }
+      let selectedTargetForCandidate = ""; // To store the selected target name for adding a new candidate
+      let currentLeadIdForModal = null; // To track the ID of the lead being edited
 
-        // DOM Elements
-        const adminAccessSection = document.getElementById('admin-access-section');
-        const mainContent = document.getElementById('main-content');
-        const adminCodeInput = document.getElementById('adminCodeInput');
-        const submitAdminCodeButton = document.getElementById('submitAdminCode');
+      // DOM Elements (same as before)
+      const adminAccessSection = document.getElementById(
+        "admin-access-section"
+      );
+      const mainContent = document.getElementById("main-content");
+      const adminCodeInput = document.getElementById("adminCodeInput");
+      const submitAdminCodeButton = document.getElementById("submitAdminCode");
 
-        const diseaseTargetsList = document.getElementById('diseaseTargetsList');
-        const selectedDiseaseTargetList = document.getElementById('selectedDiseaseTargetList');
-        const candidateDisplay = document.getElementById('candidateDisplay');
-        const leadsList = document.getElementById('leadsList');
+      const diseaseTargetsList = document.getElementById("diseaseTargetsList");
+      const selectedDiseaseTargetList = document.getElementById(
+        "selectedDiseaseTargetList"
+      );
+      const candidateDisplay = document.getElementById("candidateDisplay");
+      const leadsList = document.getElementById("leadsList");
 
-        const addDiseaseTargetModal = document.getElementById('addDiseaseTargetModal');
-        const addDiseaseTargetTrigger = document.getElementById('addDiseaseTargetTrigger');
-        const diseaseTargetInput = document.getElementById('diseaseTargetInput');
-        const addDiseaseTargetButton = document.getElementById('addDiseaseTargetButton');
+      const addDiseaseTargetModal = document.getElementById(
+        "addDiseaseTargetModal"
+      );
+      const addDiseaseTargetTrigger = document.getElementById(
+        "addDiseaseTargetTrigger"
+      );
+      const diseaseTargetInput = document.getElementById("diseaseTargetInput");
+      const addDiseaseTargetButton = document.getElementById(
+        "addDiseaseTargetButton"
+      );
 
-        const addCandidateModal = document.getElementById('addCandidateModal');
-        const addCandidateTrigger = document.getElementById('addCandidateTrigger');
-        const candidateNameInput = document.getElementById('candidateNameInput');
-        const candidateTargetSelectTrigger = document.getElementById('candidateTargetSelectTrigger');
-        const candidateTargetSelectValue = document.getElementById('candidateTargetSelectValue');
-        const candidateTargetSelectOptions = document.getElementById('candidateTargetSelectOptions');
-        const addCandidateButton = document.getElementById('addCandidateButton');
+      const addCandidateModal = document.getElementById("addCandidateModal");
+      const addCandidateTrigger = document.getElementById(
+        "addCandidateTrigger"
+      );
+      const candidateNameInput = document.getElementById("candidateNameInput");
+      const candidateTargetSelectTrigger = document.getElementById(
+        "candidateTargetSelectTrigger"
+      );
+      const candidateTargetSelectValue = document.getElementById(
+        "candidateTargetSelectValue"
+      );
+      const candidateTargetSelectOptions = document.getElementById(
+        "candidateTargetSelectOptions"
+      );
+      const addCandidateButton = document.getElementById("addCandidateButton");
 
-        const testOutcomeModal = document.getElementById('testOutcomeModal');
-        const testIdInput = document.getElementById('testIdInput');
-        const testResultInput = document.getElementById('testResultInput');
-        const performedByInput = document.getElementById('performedByInput');
-        const saveTestOutcomeButton = document.getElementById('saveTestOutcomeButton');
+      const testOutcomeModal = document.getElementById("testOutcomeModal");
+      const testIdInput = document.getElementById("testIdInput");
+      const testResultInput = document.getElementById("testResultInput");
+      const performedByInput = document.getElementById("performedByInput");
+      const saveTestOutcomeButton = document.getElementById(
+        "saveTestOutcomeButton"
+      );
 
-        const labFindingsModal = document.getElementById('labFindingsModal');
-        const findingTypeSelectTrigger = document.getElementById('findingTypeSelectTrigger');
-        const findingTypeSelectValue = document.getElementById('findingTypeSelectValue');
-        const findingTypeSelectOptions = document.getElementById('findingTypeSelectOptions');
-        const findingDetailsInput = document.getElementById('findingDetailsInput');
-        const saveLabFindingsButton = document.getElementById('saveLabFindingsButton');
+      const labFindingsModal = document.getElementById("labFindingsModal");
+      const findingTypeSelectTrigger = document.getElementById(
+        "findingTypeSelectTrigger"
+      );
+      const findingTypeSelectValue = document.getElementById(
+        "findingTypeSelectValue"
+      );
+      const findingTypeSelectOptions = document.getElementById(
+        "findingTypeSelectOptions"
+      );
+      const findingDetailsInput = document.getElementById(
+        "findingDetailsInput"
+      );
+      const saveLabFindingsButton = document.getElementById(
+        "saveLabFindingsButton"
+      );
 
+      // Helper to open and close modals
+      function openModal(modalElement) {
+        modalElement.style.display = "flex"; // Use flex to center
+      }
 
-        // Helper to open and close modals
-        function openModal(modalElement) {
-            modalElement.style.display = 'flex'; // Use flex to center
+      function closeModal(modalElement) {
+        modalElement.style.display = "none";
+      }
+
+      // --- Fetch Data Functions ---
+      async function fetchDiseaseTargets() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/disease-targets`);
+          if (!response.ok) throw new Error("Failed to fetch disease targets");
+          diseaseTargets = await response.json();
+          renderDiseaseTargets();
+        } catch (error) {
+          console.error("Error fetching disease targets:", error);
+          // alert("Failed to load disease targets. Check console for details.");
         }
+      }
 
-        function closeModal(modalElement) {
-            modalElement.style.display = 'none';
+      async function fetchSelectedDiseaseTargets() {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/selected-disease-targets`
+          );
+          if (!response.ok)
+            throw new Error("Failed to fetch selected disease targets");
+          selectedDiseaseTarget = await response.json();
+          renderSelectedDiseaseTargets();
+        } catch (error) {
+          console.error("Error fetching selected disease targets:", error);
+          // alert("Failed to load selected disease targets. Check console for details.");
         }
+      }
 
-        // --- Render Functions ---
-        function renderDiseaseTargets() {
-            diseaseTargetsList.innerHTML = '';
-            diseaseTargets.forEach((target, index) => {
-                const div = document.createElement('div');
-                div.className = 'list-item';
-                div.innerHTML = `
-                    <div>${target}</div>
+      async function fetchCandidate() {
+        try {
+          // Updated route to /candidates
+          const response = await fetch(`${API_BASE_URL}/candidates`);
+          if (!response.ok) throw new Error("Failed to fetch candidate");
+          const data = await response.json();
+          // The backend for /candidates will return an array. We expect 0 or 1.
+          candidates =
+            data.length > 0 ? data[0] : { name: "", target: "", _id: "" };
+          renderCandidate();
+        } catch (error) {
+          console.error("Error fetching candidate:", error);
+          // alert("Failed to load candidate data. Check console for details.");
+        }
+      }
+
+      async function fetchLeads() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/leads`);
+          if (!response.ok) throw new Error("Failed to fetch leads");
+          leads = await response.json();
+          renderLeads();
+        } catch (error) {
+          console.error("Error fetching leads:", error);
+          // alert("Failed to load leads data. Check console for details.");
+        }
+      }
+
+      // --- Render Functions (updated to use fetched data properties like _id) ---
+      function renderDiseaseTargets() {
+        diseaseTargetsList.innerHTML = "";
+        if (diseaseTargets.length === 0) {
+          diseaseTargetsList.innerHTML =
+            '<div class="list-item text-neutral-500">No disease targets available.</div>';
+        } else {
+          diseaseTargets.forEach((target) => {
+            const div = document.createElement("div");
+            div.className = "list-item";
+            div.innerHTML = `
+                    <div>${target.name}</div>
                     <div class="flex gap-2">
-                        <button class="btn-red px-3 py-1 rounded-sm grid place-items-center" data-index="${index}" data-action="remove-target">x</button>
-                        <button class="btn-blue px-3 py-1 rounded-sm grid place-items-center" data-index="${index}" data-action="select-target">Select</button>
+                        <button class="btn-red px-3 py-1 rounded-sm grid place-items-center" data-id="${target._id}" data-action="remove-target">x</button>
+                        <button class="btn-blue px-3 py-1 rounded-sm grid place-items-center" data-id="${target._id}" data-name="${target.name}" data-action="select-target">Select</button>
                     </div>
                 `;
-                diseaseTargetsList.appendChild(div);
-            });
+            diseaseTargetsList.appendChild(div);
+          });
         }
+      }
 
-        function renderSelectedDiseaseTargets() {
-            selectedDiseaseTargetList.innerHTML = '';
-            selectedDiseaseTarget.forEach((target, index) => {
-                const li = document.createElement('li');
-                li.className = 'p-2 border-b border-neutral-300';
-                li.textContent = target;
-                selectedDiseaseTargetList.appendChild(li);
-            });
-            populateCandidateTargetSelect(); // Re-populate the candidate target select whenever selected targets change
-        }
-
-        function renderCandidate() {
-            candidateDisplay.innerHTML = '';
-            if (candidates.name) {
-                candidateDisplay.innerHTML = `
-                    <h2 class="text-lg font-semibold">Candidate: ${candidates.name}</h2>
-                    <p class="text-sm text-neutral-500">Target: ${candidates.target}</p>
-                    <div class="flex flex-col items-center gap-2 mt-2">
-                        <button class="mt-2 btn-red px-3 py-1 rounded-sm" id="removeCandidateButton">Remove Candidate</button>
-                        <button class="mt-2 btn-green px-3 py-1 rounded-sm" id="submitCandidateButton">Submit Candidate</button>
-                    </div>
+      function renderSelectedDiseaseTargets() {
+        selectedDiseaseTargetList.innerHTML = "";
+        if (selectedDiseaseTarget.length === 0) {
+          selectedDiseaseTargetList.innerHTML =
+            '<div class="list-item text-neutral-500">No targets selected.</div>';
+        } else {
+          selectedDiseaseTarget.forEach((target) => {
+            const li = document.createElement("li");
+            li.className =
+              "p-2 border-b border-neutral-300 flex justify-between items-center";
+            li.innerHTML = `
+                    <span>${target.name}</span>
+                    <button class="btn-red px-2 py-1 rounded-sm text-sm" data-id="${target._id}" data-action="remove-selected-target">x</button>
                 `;
-                document.getElementById('removeCandidateButton').onclick = handleRemoveCandidate;
-                document.getElementById('submitCandidateButton').onclick = handleSubmitCandidate;
-            } else {
-                candidateDisplay.textContent = "No candidate selected";
-            }
-        }
-
-        function renderLeads() {
-            leadsList.innerHTML = '';
-            leads.forEach((lead, index) => {
-                const li = document.createElement('li');
-                li.className = 'p-2 border-b border-neutral-300';
-                li.innerHTML = `
-                    <div>${lead.name}</div>
-                    <div class="text-sm text-neutral-500">Target: ${lead.target}</div>
-                    ${lead.testId ? `<div class="text-sm text-neutral-500">Test ID: ${lead.testId}</div>` : ''}
-                    ${lead.testResult ? `<div class="text-sm text-neutral-500">Test Result: ${lead.testResult}</div>` : ''}
-                    ${lead.performedBy ? `<div class="text-sm text-neutral-500">Performed By: ${lead.performedBy}</div>` : ''}
-                    <div class="text-indigo-500 hover:text-indigo-700 cursor-pointer mt-1">
-                        <a href="#" class="test-outcome-trigger" data-index="${index}">Test Outcome for ${lead.name}</a>
-                    </div>
-                    ${lead.findingType ? `<div class="text-sm text-neutral-500">Finding Type: ${lead.findingType}</div>` : ''}
-                    ${lead.findingDetails ? `<div class="text-sm text-neutral-500">Finding Details: ${lead.findingDetails}</div>` : ''}
-                    <div class="text-sm text-blue-500 cursor-pointer mt-1">
-                        <a href="#" class="lab-findings-trigger" data-index="${index}">Lab Findings for ${lead.name}</a>
-                    </div>
-                `;
-                leadsList.appendChild(li);
-            });
-
-            // Attach event listeners after rendering leads
-            document.querySelectorAll('.test-outcome-trigger').forEach(button => {
-                button.onclick = (event) => {
-                    event.preventDefault();
-                    currentLeadIndexForModal = parseInt(event.target.dataset.index);
-                    const lead = leads[currentLeadIndexForModal];
-                    testIdInput.value = lead.testId || '';
-                    testResultInput.value = lead.testResult || '';
-                    performedByInput.value = lead.performedBy || '';
-                    openModal(testOutcomeModal);
-                };
-            });
-
-            document.querySelectorAll('.lab-findings-trigger').forEach(button => {
-                button.onclick = (event) => {
-                    event.preventDefault();
-                    currentLeadIndexForModal = parseInt(event.target.dataset.index);
-                    const lead = leads[currentLeadIndexForModal];
-                    findingDetailsInput.value = lead.findingDetails || '';
-                    // Set selected value for custom select
-                    if (lead.findingType) {
-                        findingTypeSelectValue.textContent = lead.findingType;
-                        findingTypeSelectValue.dataset.value = lead.findingType;
-                    } else {
-                        findingTypeSelectValue.textContent = 'Finding Type';
-                        findingTypeSelectValue.dataset.value = '';
+            selectedDiseaseTargetList.appendChild(li);
+          });
+          // Attach event listener for removing selected targets
+          selectedDiseaseTargetList
+            .querySelectorAll('button[data-action="remove-selected-target"]')
+            .forEach((button) => {
+              button.onclick = async (event) => {
+                const id = event.target.dataset.id;
+                try {
+                  const response = await fetch(
+                    `${API_BASE_URL}/selected-disease-targets/${id}`,
+                    {
+                      method: "DELETE",
                     }
-                    openModal(labFindingsModal);
-                };
+                  );
+                  if (!response.ok)
+                    throw new Error("Failed to delete selected disease target");
+                  await fetchSelectedDiseaseTargets(); // Refresh
+                  await fetchDiseaseTargets(); // Also refresh original list in case it's re-added (though current logic doesn't re-add)
+                } catch (error) {
+                  console.error(
+                    "Error deleting selected disease target:",
+                    error
+                  );
+                  alert("Failed to unselect target.");
+                }
+              };
             });
         }
+        populateCandidateTargetSelect();
+      }
 
-        // Initial render
-        function initializeUI() {
-            renderDiseaseTargets();
-            renderSelectedDiseaseTargets();
-            renderCandidate();
-            renderLeads();
+      function renderCandidate() {
+        candidateDisplay.innerHTML = "";
+        if (candidates.name && candidates.target) {
+          candidateDisplay.innerHTML = `
+                <h2 class="text-lg font-semibold">Candidate: ${candidates.name}</h2>
+                <p class="text-sm text-neutral-500">Target: ${candidates.target}</p>
+                <div class="flex flex-col items-center gap-2 mt-2">
+                    <button class="mt-2 btn-red px-3 py-1 rounded-sm" id="removeCandidateButton">Remove Candidate</button>
+                    <button class="mt-2 btn-green px-3 py-1 rounded-sm" id="submitCandidateButton">Submit Candidate</button>
+                </div>
+            `;
+          document.getElementById("removeCandidateButton").onclick =
+            handleRemoveCandidate;
+          document.getElementById("submitCandidateButton").onclick =
+            handleSubmitCandidate;
+        } else {
+          candidateDisplay.textContent = "No candidate selected";
+        }
+      }
+
+      function renderLeads() {
+        leadsList.innerHTML = "";
+        if (leads.length === 0) {
+          leadsList.innerHTML =
+            '<div class="list-item text-neutral-500">No leads submitted yet.</div>';
+        } else {
+          leads.forEach((lead) => {
+            const li = document.createElement("li");
+            li.className = "p-2 border-b border-neutral-300";
+            li.innerHTML = `
+                    <div><strong>${lead.name}</strong></div>
+                    <div class="text-sm text-neutral-500">Target: ${
+                      lead.target
+                    }</div>
+                    ${
+                      lead.testId
+                        ? `<div class="text-sm text-neutral-500">Test ID: ${lead.testId}</div>`
+                        : ""
+                    }
+                    ${
+                      lead.testResult
+                        ? `<div class="text-sm text-neutral-500">Test Result: ${lead.testResult}</div>`
+                        : ""
+                    }
+                    ${
+                      lead.performedBy
+                        ? `<div class="text-sm text-neutral-500">Performed By: ${lead.performedBy}</div>`
+                        : ""
+                    }
+                    <div class="text-indigo-500 hover:text-indigo-700 cursor-pointer mt-1">
+                        <a href="#" class="test-outcome-trigger" data-id="${
+                          lead._id
+                        }">Add/Edit Test Outcome</a>
+                    </div>
+                    ${
+                      lead.findingType
+                        ? `<div class="text-sm text-neutral-500">Finding Type: ${lead.findingType}</div>`
+                        : ""
+                    }
+                    ${
+                      lead.findingDetails
+                        ? `<div class="text-sm text-neutral-500">Finding Details: ${lead.findingDetails}</div>`
+                        : ""
+                    }
+                    <div class="text-blue-500 hover:text-blue-700 cursor-pointer mt-1">
+                        <a href="#" class="lab-findings-trigger" data-id="${
+                          lead._id
+                        }">Add/Edit Lab Findings</a>
+                    </div>
+                    <button class="btn-red px-3 py-1 rounded-sm text-sm mt-2" data-id="${
+                      lead._id
+                    }" data-action="delete-lead">Delete Lead</button>
+                `;
+            leadsList.appendChild(li);
+          });
         }
 
-        // --- Event Handlers ---
-        submitAdminCodeButton.onclick = () => {
-            if (adminCodeInput.value === "admin505") {
-                adminAccess = true;
-                adminAccessSection.style.display = 'none';
-                mainContent.style.display = 'block';
-                initializeUI(); // Initial render of main content
-            } else {
-                alert("Access Denied. Incorrect code.");
+        // Attach event listeners after rendering leads
+        document.querySelectorAll(".test-outcome-trigger").forEach((button) => {
+          button.onclick = (event) => {
+            event.preventDefault();
+            currentLeadIdForModal = event.target.dataset.id;
+            const lead = leads.find((l) => l._id === currentLeadIdForModal);
+            if (lead) {
+              testIdInput.value = lead.testId || "";
+              testResultInput.value = lead.testResult || "";
+              performedByInput.value = lead.performedBy || "";
+              openModal(testOutcomeModal);
             }
-            adminCodeInput.value = ""; // Clear input
-        };
-
-        diseaseTargetsList.onclick = (event) => {
-            const targetButton = event.target;
-            if (targetButton.tagName === 'BUTTON') {
-                const index = parseInt(targetButton.dataset.index);
-                const action = targetButton.dataset.action;
-
-                if (action === 'remove-target') {
-                    diseaseTargets = diseaseTargets.filter((_, i) => i !== index);
-                } else if (action === 'select-target') {
-                    const targetToSelect = diseaseTargets[index];
-                    selectedDiseaseTarget = [...selectedDiseaseTarget, targetToSelect];
-                    diseaseTargets = diseaseTargets.filter((_, i) => i !== index);
-                }
-                renderDiseaseTargets();
-                renderSelectedDiseaseTargets();
-            }
-        };
-
-        addDiseaseTargetTrigger.onclick = () => {
-            diseaseTargetInput.value = ""; // Clear input when opening
-            openModal(addDiseaseTargetModal);
-        };
-
-        addDiseaseTargetButton.onclick = () => {
-            const newTarget = diseaseTargetInput.value.trim();
-            if (newTarget) {
-                diseaseTargets = [...diseaseTargets, newTarget];
-                diseaseTargetInput.value = "";
-                renderDiseaseTargets();
-                closeModal(addDiseaseTargetModal);
-            }
-        };
-
-        function handleRemoveCandidate() {
-            candidates = { name: "", target: "" };
-            renderCandidate();
-        }
-
-        function handleSubmitCandidate() {
-            if (candidates.name && candidates.target) {
-                leads = [...leads, { ...candidates, testId: "", testResult: "", performedBy: "", findingType: "", findingDetails: "" }];
-                candidates = { name: "", target: "" }; // Reset candidate
-                renderCandidate();
-                renderLeads();
-            }
-        }
-
-        addCandidateTrigger.onclick = () => {
-            candidateNameInput.value = ""; // Clear input
-            candidateTargetSelectValue.textContent = "Target"; // Reset select display
-            candidateTargetSelectValue.dataset.value = ""; // Reset internal value
-            selectedTargetForCandidate = ""; // Reset JS variable
-            populateCandidateTargetSelect(); // Ensure options are fresh
-            openModal(addCandidateModal);
-        };
-
-        addCandidateButton.onclick = () => {
-            const name = candidateNameInput.value.trim();
-            const target = selectedTargetForCandidate;
-
-            if (name && target) {
-                candidates = { name: name, target: target };
-                candidateNameInput.value = "";
-                selectedTargetForCandidate = "";
-                selectedDiseaseTarget = selectedDiseaseTarget.filter(t => t !== target); // Remove from selected targets
-                renderCandidate();
-                renderSelectedDiseaseTargets(); // Update selected targets list
-                closeModal(addCandidateModal);
-            } else {
-                alert("Please enter both candidate name and select a target.");
-            }
-        };
-
-        saveTestOutcomeButton.onclick = () => {
-            if (currentLeadIndexForModal !== -1) {
-                leads[currentLeadIndexForModal].testId = testIdInput.value.trim();
-                leads[currentLeadIndexForModal].testResult = testResultInput.value.trim();
-                leads[currentLeadIndexForModal].performedBy = performedByInput.value.trim();
-                renderLeads();
-                closeModal(testOutcomeModal);
-            }
-        };
-
-        saveLabFindingsButton.onclick = () => {
-            if (currentLeadIndexForModal !== -1) {
-                leads[currentLeadIndexForModal].findingType = findingTypeSelectValue.dataset.value; // Get from data-value
-                leads[currentLeadIndexForModal].findingDetails = findingDetailsInput.value.trim();
-                renderLeads();
-                closeModal(labFindingsModal);
-            }
-        };
-
-        // Close buttons for modals
-        document.querySelectorAll('.close-button').forEach(button => {
-            button.onclick = (event) => {
-                const modalId = event.target.dataset.modal;
-                closeModal(document.getElementById(modalId));
-            };
+          };
         });
 
-        // Close modal if clicking outside
-        window.onclick = (event) => {
-            if (event.target === addDiseaseTargetModal) {
-                closeModal(addDiseaseTargetModal);
-            } else if (event.target === addCandidateModal) {
-                closeModal(addCandidateModal);
-            } else if (event.target === testOutcomeModal) {
-                closeModal(testOutcomeModal);
-            } else if (event.target === labFindingsModal) {
-                closeModal(labFindingsModal);
+        document.querySelectorAll(".lab-findings-trigger").forEach((button) => {
+          button.onclick = (event) => {
+            event.preventDefault();
+            currentLeadIdForModal = event.target.dataset.id;
+            const lead = leads.find((l) => l._id === currentLeadIdForModal);
+            if (lead) {
+              findingDetailsInput.value = lead.findingDetails || "";
+              if (lead.findingType) {
+                findingTypeSelectValue.textContent = lead.findingType;
+                findingTypeSelectValue.dataset.value = lead.findingType;
+              } else {
+                findingTypeSelectValue.textContent = "Finding Type";
+                findingTypeSelectValue.dataset.value = "";
+              }
+              openModal(labFindingsModal);
             }
-        };
+          };
+        });
 
+        document
+          .querySelectorAll('button[data-action="delete-lead"]')
+          .forEach((button) => {
+            button.onclick = async (event) => {
+              const id = event.target.dataset.id;
+              if (confirm("Are you sure you want to delete this lead?")) {
+                try {
+                  const response = await fetch(`${API_BASE_URL}/leads/${id}`, {
+                    method: "DELETE",
+                  });
+                  if (!response.ok) throw new Error("Failed to delete lead");
+                  await fetchLeads();
+                } catch (error) {
+                  console.error("Error deleting lead:", error);
+                  alert("Failed to delete lead.");
+                }
+              }
+            };
+          });
+      }
 
-        // --- Custom Select Logic ---
-        function populateCandidateTargetSelect() {
-            candidateTargetSelectOptions.innerHTML = '';
-            if (selectedDiseaseTarget.length === 0) {
-                const noOption = document.createElement('div');
-                noOption.className = 'custom-select-option';
-                noOption.textContent = 'No targets available';
-                candidateTargetSelectOptions.appendChild(noOption);
-            } else {
-                selectedDiseaseTarget.forEach(target => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.className = 'custom-select-option';
-                    optionDiv.dataset.value = target;
-                    optionDiv.textContent = target;
-                    candidateTargetSelectOptions.appendChild(optionDiv);
-                });
-            }
+      // Initial render (now also fetches data)
+      async function initializeUI() {
+        await Promise.all([
+          fetchDiseaseTargets(),
+          fetchSelectedDiseaseTargets(),
+          fetchCandidate(),
+          fetchLeads(),
+        ]);
+      }
+
+      // --- Event Handlers ---
+      submitAdminCodeButton.onclick = () => {
+        if (adminCodeInput.value === "admin505") {
+          adminAccess = true;
+          adminAccessSection.style.display = "none";
+          mainContent.style.display = "block";
+          initializeUI();
+        } else {
+          alert("Access Denied. Incorrect code.");
         }
+        adminCodeInput.value = "";
+      };
 
-        candidateTargetSelectTrigger.onclick = () => {
-            candidateTargetSelectOptions.classList.toggle('show');
-        };
+      diseaseTargetsList.onclick = async (event) => {
+        const targetButton = event.target;
+        if (targetButton.tagName === "BUTTON") {
+          const id = targetButton.dataset.id;
+          const name = targetButton.dataset.name; // Get name for selection
+          const action = targetButton.dataset.action;
 
-        candidateTargetSelectOptions.onclick = (event) => {
-            if (event.target.classList.contains('custom-select-option')) {
-                selectedTargetForCandidate = event.target.dataset.value;
-                candidateTargetSelectValue.textContent = event.target.textContent;
-                candidateTargetSelectOptions.classList.remove('show');
+          if (action === "remove-target") {
+            try {
+              const response = await fetch(
+                `${API_BASE_URL}/disease-targets/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                  errorData.message || "Failed to delete disease target"
+                );
+              }
+              await fetchDiseaseTargets(); // Refresh
+            } catch (error) {
+              console.error("Error deleting disease target:", error);
+              alert(error.message);
             }
-        };
+          } else if (action === "select-target") {
+            try {
+              const response = await fetch(
+                `${API_BASE_URL}/selected-disease-targets`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ name: name }), // Send the name of the target
+                }
+              );
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                  errorData.message || "Failed to select disease target"
+                );
+              }
 
-        // Lab Findings Select
-        findingTypeSelectTrigger.onclick = () => {
-            findingTypeSelectOptions.classList.toggle('show');
-        };
+              // Remove from main disease targets after selecting
+              const deleteResponse = await fetch(
+                `${API_BASE_URL}/disease-targets/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (!deleteResponse.ok) {
+                // Log warning but don't block if removal from original list fails
+                console.warn(
+                  "Failed to remove target from initial list after selection:",
+                  await deleteResponse.json()
+                );
+              }
 
-        findingTypeSelectOptions.onclick = (event) => {
-            if (event.target.classList.contains('custom-select-option')) {
-                findingTypeSelectValue.textContent = event.target.textContent;
-                findingTypeSelectValue.dataset.value = event.target.dataset.value; // Store the actual value
-                findingTypeSelectOptions.classList.remove('show');
+              await fetchDiseaseTargets();
+              await fetchSelectedDiseaseTargets();
+            } catch (error) {
+              console.error("Error selecting disease target:", error);
+              alert(error.message || "Failed to select target.");
             }
+          }
+        }
+      };
+
+      addDiseaseTargetTrigger.onclick = () => {
+        diseaseTargetInput.value = "";
+        openModal(addDiseaseTargetModal);
+      };
+
+      addDiseaseTargetButton.onclick = async () => {
+        const newTarget = diseaseTargetInput.value.trim();
+        if (newTarget) {
+          try {
+            const response = await fetch(`${API_BASE_URL}/disease-targets`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name: newTarget }),
+            });
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(
+                errorData.message || "Failed to add disease target"
+              );
+            }
+            diseaseTargetInput.value = "";
+            await fetchDiseaseTargets();
+            closeModal(addDiseaseTargetModal);
+          } catch (error) {
+            console.error("Error adding disease target:", error);
+            alert(error.message || "Failed to add target.");
+          }
+        }
+      };
+
+      async function handleRemoveCandidate() {
+        if (candidates._id) {
+          // Ensure there's a candidate to remove
+          try {
+            // Updated route for candidate deletion
+            const response = await fetch(
+              `${API_BASE_URL}/candidates/${candidates._id}`,
+              {
+                method: "DELETE",
+              }
+            );
+            if (!response.ok) throw new Error("Failed to remove candidate");
+            await fetchCandidate(); // Refresh candidate display (should now be empty)
+          } catch (error) {
+            console.error("Error removing candidate:", error);
+            alert("Failed to remove candidate.");
+          }
+        } else {
+          console.log("No candidate to remove.");
+          // Optionally, reset frontend state if it's somehow out of sync
+          candidates = { name: "", target: "", _id: "" };
+          renderCandidate();
+        }
+      }
+
+      async function handleSubmitCandidate() {
+        if (candidates.name && candidates.target) {
+          try {
+            const response = await fetch(`${API_BASE_URL}/leads`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: candidates.name,
+                target: candidates.target,
+              }),
+            });
+            if (!response.ok)
+              throw new Error("Failed to submit candidate as lead");
+
+            // Clear the candidate after submission by deleting it from the backend
+            if (candidates._id) {
+              await fetch(`${API_BASE_URL}/candidates/${candidates._id}`, {
+                method: "DELETE",
+              });
+            }
+
+            await fetchCandidate(); // Reset candidate display
+            await fetchLeads(); // Refresh leads list
+          } catch (error) {
+            console.error("Error submitting candidate:", error);
+            alert("Failed to submit candidate.");
+          }
+        }
+      }
+
+      addCandidateTrigger.onclick = () => {
+        candidateNameInput.value = "";
+        candidateTargetSelectValue.textContent = "Target";
+        selectedTargetForCandidate = "";
+        populateCandidateTargetSelect(); // Ensure options are fresh
+        openModal(addCandidateModal);
+      };
+
+      addCandidateButton.onclick = async () => {
+        const name = candidateNameInput.value.trim();
+        const target = selectedTargetForCandidate;
+
+        if (name && target) {
+          try {
+            // Before creating a new candidate, delete any existing one
+            if (candidates._id) {
+              await fetch(`${API_BASE_URL}/candidates/${candidates._id}`, {
+                method: "DELETE",
+              });
+            }
+
+            const response = await fetch(`${API_BASE_URL}/candidates`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name, target }),
+            });
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.message || "Failed to add candidate");
+            }
+            candidates = await response.json(); // Update global state with the new candidate
+
+            candidateNameInput.value = "";
+            selectedTargetForCandidate = "";
+
+            // Remove the selected target from the 'selected disease targets' list in the DB
+            const selectedTargetObj = selectedDiseaseTarget.find(
+              (t) => t.name === target
+            );
+            if (selectedTargetObj) {
+              const deleteSelectedResponse = await fetch(
+                `${API_BASE_URL}/selected-disease-targets/${selectedTargetObj._id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (!deleteSelectedResponse.ok) {
+                console.warn(
+                  "Failed to remove target from selected list after adding candidate:",
+                  await deleteSelectedResponse.json()
+                );
+              }
+            }
+
+            await fetchSelectedDiseaseTargets(); // Refresh selected targets list
+            renderCandidate(); // Update candidate display
+            closeModal(addCandidateModal);
+          } catch (error) {
+            console.error("Error adding candidate:", error);
+            alert(
+              error.message ||
+                "Please enter both candidate name and select a target."
+            );
+          }
+        } else {
+          alert("Please enter both candidate name and select a target.");
+        }
+      };
+
+      saveTestOutcomeButton.onclick = async () => {
+        if (currentLeadIdForModal) {
+          const updates = {
+            testId: testIdInput.value.trim(),
+            testResult: testResultInput.value.trim(),
+            performedBy: performedByInput.value.trim(),
+          };
+          try {
+            const response = await fetch(
+              `${API_BASE_URL}/leads/${currentLeadIdForModal}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updates),
+              }
+            );
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(
+                errorData.message || "Failed to update test outcome"
+              );
+            }
+            await fetchLeads(); // Refresh leads
+            closeModal(testOutcomeModal);
+          } catch (error) {
+            console.error("Error saving test outcome:", error);
+            alert("Failed to save test outcome: " + error.message);
+          }
+        }
+      };
+
+      saveLabFindingsButton.onclick = async () => {
+        if (currentLeadIdForModal) {
+          const updates = {
+            findingType: findingTypeSelectValue.dataset.value,
+            findingDetails: findingDetailsInput.value.trim(),
+          };
+          try {
+            const response = await fetch(
+              `${API_BASE_URL}/leads/${currentLeadIdForModal}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updates),
+              }
+            );
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(
+                errorData.message || "Failed to update lab findings"
+              );
+            }
+            await fetchLeads(); // Refresh leads
+            closeModal(labFindingsModal);
+          } catch (error) {
+            console.error("Error saving lab findings:", error);
+            alert("Failed to save lab findings: " + error.message);
+          }
+        }
+      };
+
+      // Close buttons for modals
+      document.querySelectorAll(".close-button").forEach((button) => {
+        button.onclick = (event) => {
+          const modalId = event.target.dataset.modal;
+          closeModal(document.getElementById(modalId));
         };
+      });
 
+      // Close modal if clicking outside
+      window.onclick = (event) => {
+        if (event.target === addDiseaseTargetModal) {
+          closeModal(addDiseaseTargetModal);
+        } else if (event.target === addCandidateModal) {
+          closeModal(addCandidateModal);
+        } else if (event.target === testOutcomeModal) {
+          closeModal(testOutcomeModal);
+        } else if (event.target === labFindingsModal) {
+          closeModal(labFindingsModal);
+        }
+      };
 
-        // Initial rendering when the page loads (after admin access)
-        // No initial render needed on load for main content as it's behind admin access.
-        // `initializeUI()` is called after successful admin login.
+      // --- Custom Select Logic ---
+      function populateCandidateTargetSelect() {
+        candidateTargetSelectOptions.innerHTML = "";
+        if (selectedDiseaseTarget.length === 0) {
+          const noOption = document.createElement("div");
+          noOption.className = "custom-select-option";
+          noOption.textContent = "No targets available";
+          candidateTargetSelectOptions.appendChild(noOption);
+        } else {
+          selectedDiseaseTarget.forEach((target) => {
+            const optionDiv = document.createElement("div");
+            optionDiv.className = "custom-select-option";
+            optionDiv.dataset.value = target.name; // Use target.name for the value
+            optionDiv.textContent = target.name;
+            candidateTargetSelectOptions.appendChild(optionDiv);
+          });
+        }
+      }
 
+      candidateTargetSelectTrigger.onclick = () => {
+        candidateTargetSelectOptions.classList.toggle("show");
+      };
+
+      candidateTargetSelectOptions.onclick = (event) => {
+        if (event.target.classList.contains("custom-select-option")) {
+          selectedTargetForCandidate = event.target.dataset.value;
+          candidateTargetSelectValue.textContent = event.target.textContent;
+          candidateTargetSelectOptions.classList.remove("show");
+        }
+      };
+
+      // Lab Findings Select
+      findingTypeSelectTrigger.onclick = () => {
+        findingTypeSelectOptions.classList.toggle("show");
+      };
+
+      findingTypeSelectOptions.onclick = (event) => {
+        if (event.target.classList.contains("custom-select-option")) {
+          findingTypeSelectValue.textContent = event.target.textContent;
+          findingTypeSelectValue.dataset.value = event.target.dataset.value;
+          findingTypeSelectOptions.classList.remove("show");
+        }
+      };
     </script>
-</body>
+  </body>
 </html>
