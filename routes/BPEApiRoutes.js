@@ -65,10 +65,7 @@ router.get("/api/education/messages", educationController.getAllMessages);
 router.post("/api/education/messages", educationController.createMessage);
 router.delete("/api/education/messages/:id", educationController.deleteMessage);
 
-router.get("/api/education/users", educationController.getAllUsers);
-router.post("/api/education/users", educationController.createUser);
-router.put("/api/education/users/:id", educationController.updateUser);
-router.delete("/api/education/users/:id", educationController.deleteUser);
+
 
 // --- Introduction Routes ---
 router.get("/api/introduction/ideas", introductionController.getAllIdeas);

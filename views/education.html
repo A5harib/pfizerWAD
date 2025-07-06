@@ -560,19 +560,7 @@
         </div>
 
         <div id="Admin" class="tab-content" style="display: none">
-            <div class="admin-login-container" id="adminLoginForm">
-                <p>Enter admin access code to proceed:</p>
-                <input
-                    type="password"
-                    class="admin-code-input"
-                    placeholder="Enter admin code"
-                    id="adminCodeInput" />
-                <button class="admin-submit-button" onclick="checkAdminCode()">
-                    Submit
-                </button>
-            </div>
-
-            <div id="adminManagement" style="display: none">
+            <div id="adminManagement">
                 <div class="inner-tabs-list">
                     <button
                         class="inner-tab-trigger active"
@@ -647,7 +635,7 @@
 <script>
     const API_BASE_URL = "/api/education"; // Adjust if your server runs on a different port
 
-    let currentAdminCode = "admin505"; // This should ideally come from a secure backend or environment variable
+    
 
     // --- Utility Functions ---
     async function fetchData(url) {
@@ -950,7 +938,7 @@
         const userRolesList = document.getElementById('userRolesList');
         userRolesList.innerHTML = 'Loading users...';
         try {
-            const users = await fetchData(`${API_BASE_URL}/users`);
+            const users = await fetchData(`/api/user/all`);
             userRolesList.innerHTML = '';
             if (users.length === 0) {
                 userRolesList.innerHTML = '<p class="text-gray-600">No users found.</p>';
@@ -962,10 +950,10 @@
                 item.innerHTML = `
                     <div>
                         <p class="user-name">${user.name}</p>
-                        <p class="user-role">Role: <span class="font-semibold">${user.isAdmin ? 'Admin' : 'Student'}</span></p>
+                        <p class="user-role">Role: <span class="font-semibold">${user.role}</span></p>
                     </div>
-                    <button class="toggle-role-button" onclick="toggleUserRole('${user._id}', ${user.isAdmin})">
-                        ${user.isAdmin ? 'Make Student' : 'Make Admin'}
+                    <button class="toggle-role-button" onclick="toggleUserRole('${user.name}', '${user.role}')">
+                        ${user.role === 'Admin' ? 'Make Student' : 'Make Admin'}
                     </button>
                 `;
                 userRolesList.appendChild(item);
@@ -976,10 +964,10 @@
         }
     }
 
-    async function toggleUserRole(id, currentIsAdmin) {
-        const newRole = !currentIsAdmin;
+    async function toggleUserRole(name, currentRole) {
+        const newRole = currentRole === 'Admin' ? 'Student' : 'Admin';
         try {
-            await putData(`${API_BASE_URL}/users/${id}`, { isAdmin: newRole });
+            await putData(`/api/user/${name}`, { role: newRole });
             await renderUserRoles(); // Refresh user list
         } catch (error) {
             console.error("Error toggling user role:", error);
@@ -1003,7 +991,7 @@
 
 
     // --- Tab Switching Logic ---
-    let adminLoggedIn = false; // Track admin login status
+    // Admin access will be determined by backend API calls.
 
     function showTab(tabName) {
         var i, tabcontent, tabtriggers;
@@ -1025,16 +1013,19 @@
             renderEvents();
             renderMessages();
         } else if (tabName === "Admin") {
-            if (adminLoggedIn) {
-                document.getElementById("adminLoginForm").style.display = "none";
+            try {
+                // Attempt to fetch users to check admin access
+                await fetchData('/api/user/all');
                 document.getElementById("adminManagement").style.display = "block";
                 showAdminInnerTab("course-management"); // Default to course management
                 renderAdminCourses();
                 renderAdminEvents();
                 renderUserRoles();
-            } else {
-                document.getElementById("adminLoginForm").style.display = "flex";
-                document.getElementById("adminManagement").style.display = "none";
+            } catch (error) {
+                console.error("Admin access check failed:", error);
+                alert("Access Denied. You must be an Admin to access this section.");
+                // Redirect back to student tab if not authorized
+                showTab('Student');
             }
         }
     }
@@ -1093,26 +1084,7 @@
         }
     }
 
-    function checkAdminCode() {
-        const adminCodeInput = document.getElementById("adminCodeInput");
-        const adminLoginForm = document.getElementById("adminLoginForm");
-        const adminManagement = document.getElementById("adminManagement");
-
-        if (adminCodeInput.value === currentAdminCode) { // Use the currentAdminCode variable
-            adminLoggedIn = true;
-            adminLoginForm.style.display = "none";
-            adminManagement.style.display = "block";
-            showAdminInnerTab("course-management"); // Show default admin tab
-            adminCodeInput.value = ""; // Clear input
-            // Initial load of admin data after login
-            renderAdminCourses();
-            renderAdminEvents();
-            renderUserRoles();
-        } else {
-            alert("Access Denied. Incorrect code.");
-            adminCodeInput.value = ""; // Clear input on incorrect attempt
-        }
-    }
+    
 
     // Event listener for posting messages
     document.getElementById('postMessageButton').addEventListener('click', postMessage);

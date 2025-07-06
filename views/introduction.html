@@ -704,44 +704,13 @@
     <div id="customTooltip" class="custom-tooltip"></div>
 
     <script>
-      let adminAccess = false;
-      let ideas = [
-        {
-          title: "NanoVax",
-          description:
-            "A nanoparticle-based vaccine for rapid response to emerging viral infections.",
-          source: "University Student",
-        },
-        {
-          title: "GlucoGuard",
-          description:
-            "A smart insulin patch that automatically adjusts dosage based on real-time glucose monitoring.",
-          source: "Medical Researcher",
-        },
-        {
-          title: "NeuroRelief",
-          description:
-            "A non-invasive wearable device for early detection and intervention in neurodegenerative diseases.",
-          source: "Healthcare Startup",
-        },
-        {
-          title: "CardioClean",
-          description:
-            "An oral medication that targets and dissolves arterial plaque to prevent heart attacks.",
-          source: "Pharmaceutical Company",
-        },
-        {
-          title: "OncoDetect",
-          description:
-            "A blood test kit for early cancer detection using AI-driven biomarker analysis.",
-          source: "Biotech Firm",
-        },
-      ];
+      
+      let ideas = [];
       let loadingDotIndex = 0;
       let loadingIntervalId;
       const loadingDotsArray = ["", ".", "..", "..."];
-      let selectedIdeaForManufacturing = []; // Ideas approved for manufacturing process
       let productions = []; // Ideas that have completed manufacturing and are approved for production
+      let manufacturing = [];
 
       let currentManufacturingIdeaIndex = -1; // Used to track which idea is being edited in manufacturing modal
 
@@ -797,7 +766,61 @@
       // Tooltip
       const customTooltip = document.getElementById("customTooltip");
 
+      // --- API Fetch Functions ---
+      async function fetchIdeas() {
+        try {
+          const response = await fetch("/api/introduction/ideas", {
+            headers: {
+              'Authorization': `Bearer ${getToken()}`,
+            },
+          });
+          if (!response.ok) throw new Error('Failed to fetch ideas');
+          ideas = await response.json();
+          renderIdeas();
+        } catch (error) {
+          console.error("Error fetching ideas:", error);
+        }
+      }
+
+      async function fetchProductions() {
+        try {
+          const response = await fetch("/api/introduction/productions", {
+            headers: {
+              'Authorization': `Bearer ${getToken()}`,
+            },
+          });
+          if (!response.ok) throw new Error('Failed to fetch productions');
+          productions = await response.json();
+          renderProductions();
+        } catch (error) {
+          console.error("Error fetching productions:", error);
+        }
+      }
+
+      async function fetchManufacturing() {
+        try {
+          const response = await fetch("/api/introduction/manufacturing", {
+            headers: {
+              'Authorization': `Bearer ${getToken()}`,
+            },
+          });
+          if (!response.ok) throw new Error('Failed to fetch manufacturing data');
+          manufacturing = await response.json();
+          renderManufacturingProcess();
+        } catch (error) {
+          console.error("Error fetching manufacturing data:", error);
+        }
+      }
+
       // --- Helper Functions ---
+      function getToken() {
+        return localStorage.getItem('token');
+      }
+
+      function getUserRole() {
+        return localStorage.getItem('userRole');
+      }
+
       function openModal(modalElement) {
         modalElement.style.display = "flex"; // Use flex to center
       }
@@ -827,7 +850,7 @@
           return;
         }
 
-        ideas.forEach((idea, index) => {
+        ideas.forEach((idea) => {
           const li = document.createElement("li");
           li.className = "idea-item";
           li.innerHTML = `
@@ -837,8 +860,8 @@
                     </div>
                     <p class="idea-description">${idea.description}</p>
                     <div class="idea-actions">
-                        <button class="btn-reject" data-index="${index}" data-action="reject">Reject</button>
-                        <button class="btn-approve" data-index="${index}" data-action="approve">Approve</button>
+                        <button class="btn-reject" data-id="${idea._id}" data-action="reject">Reject</button>
+                        <button class="btn-approve" data-id="${idea._id}" data-action="approve">Approve</button>
                     </div>
                 `;
           ideasList.appendChild(li);
@@ -847,7 +870,7 @@
 
       function renderManufacturingProcess() {
         manufacturingProcessGrid.innerHTML = ""; // Clear current grid
-        if (selectedIdeaForManufacturing.length === 0) {
+        if (manufacturing.length === 0) {
           noManufacturingIdeasMessage.style.display = "block";
           manufacturingProcessGrid.appendChild(noManufacturingIdeasMessage);
           return;
@@ -855,7 +878,7 @@
           noManufacturingIdeasMessage.style.display = "none";
         }
 
-        selectedIdeaForManufacturing.forEach((idea, index) => {
+        manufacturing.forEach((idea, index) => {
           const div = document.createElement("div");
           div.className = "manufacturing-item";
 
@@ -898,7 +921,7 @@
             ? `
                     <div class="status-area">
                         <div class="status-message status-ready"><strong>Status:</strong> Ready for Production</div>
-                        <button class="status-approve-button" data-index="${index}" data-action="approve-production">Approve</button>
+                        <button class="status-approve-button" data-id="${idea._id}" data-action="approve-production">Approve</button>
                     </div>
                 `
             : `
@@ -909,10 +932,10 @@
                     <strong class="text-xl text-indigo-700">${index + 1}. ${
             idea.title
           }</strong>
-                    <select class="test-results-select" data-index="${index}">${testResultsOptions}</select>
-                    <select class="regulatory-approval-select" data-index="${index}">${regulatoryApprovalOptions}</select>
+                    <select class="test-results-select" data-id="${idea._id}">${testResultsOptions}</select>
+                    <select class="regulatory-approval-select" data-id="${idea._id}">${regulatoryApprovalOptions}</select>
                     ${manufacturingDetailsHtml}
-                    <button class="add-manufacturing-details-trigger add-idea-button" data-index="${index}">Add Manufacturing Details</button>
+                    <button class="add-manufacturing-details-trigger add-idea-button" data-id="${idea._id}">Add Manufacturing Details</button>
                     ${statusHtml}
                 `;
           manufacturingProcessGrid.appendChild(div);
@@ -979,47 +1002,74 @@
 
       // --- Event Handlers ---
       submitAdminCodeButton.onclick = () => {
-        if (adminCodeInput.value === "admin505") {
-          adminAccess = true;
+        const userRole = getUserRole();
+        if (userRole === 'Admin') {
           adminAccessSection.style.display = "none";
           mainContent.style.display = "block";
-          renderIdeas(); // Initial render of ideas
-          renderManufacturingProcess(); // Initial render of manufacturing
-          renderProductions(); // Initial render of productions
-          startLoadingDotsAnimation(); // Start animation
+          fetchIdeas();
+          fetchProductions();
+          fetchManufacturing();
+          startLoadingDotsAnimation();
         } else {
-          alert("Access Denied. Incorrect code.");
+          alert("Access Denied. Only Admin users can access this section.");
         }
         adminCodeInput.value = ""; // Clear input
       };
 
-      ideasList.onclick = (event) => {
+      ideasList.onclick = async (event) => {
         const targetButton = event.target;
         if (targetButton.tagName === "BUTTON") {
-          const index = parseInt(targetButton.dataset.index);
+          const id = targetButton.dataset.id;
           const action = targetButton.dataset.action;
 
           if (action === "reject") {
-            ideas = ideas.filter((_, i) => i !== index);
-            renderIdeas();
+            try {
+              const response = await fetch(`/api/introduction/ideas/${id}`, {
+                method: "DELETE",
+              });
+              if (response.ok) {
+                fetchIdeas();
+              } else {
+                console.error("Failed to reject idea.");
+              }
+            } catch (error) {
+              console.error("Error rejecting idea:", error);
+            }
           } else if (action === "approve") {
-            const approvedIdea = {
-              ...ideas[index],
-              manufacturingSite: "",
-              batchSize: "",
-              productionDate: "",
-              expectedOutput: "",
-              formulationType: "",
-              testResults: "",
-              regulatoryApproval: "",
-            };
-            selectedIdeaForManufacturing = [
-              ...selectedIdeaForManufacturing,
-              approvedIdea,
-            ];
-            ideas = ideas.filter((_, i) => i !== index);
-            renderIdeas();
-            renderManufacturingProcess();
+            const ideaToApprove = ideas.find(idea => idea._id === id);
+            if (ideaToApprove) {
+              try {
+                const response = await fetch("/api/introduction/manufacturing", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    title: ideaToApprove.title,
+                    description: ideaToApprove.description,
+                    source: ideaToApprove.source,
+                    testResults: "",
+                    regulatoryApproval: "",
+                    manufacturingSite: "",
+                    batchSize: "",
+                    productionDate: "",
+                    expectedOutput: "",
+                    formulationType: "",
+                  }),
+                });
+                if (response.ok) {
+                  await fetch(`/api/introduction/ideas/${id}`, {
+                    method: "DELETE",
+                  });
+                  fetchIdeas();
+                  fetchManufacturing();
+                } else {
+                  console.error("Failed to approve idea.");
+                }
+              } catch (error) {
+                console.error("Error approving idea:", error);
+              }
+            }
           }
         }
       };
@@ -1031,74 +1081,130 @@
         openModal(addIdeaModal);
       };
 
-      saveNewIdeaButton.onclick = () => {
+      saveNewIdeaButton.onclick = async () => {
         const title = newIdeaTitleInput.value.trim();
         const description = newIdeaDescriptionInput.value.trim();
         const source = newIdeaSourceInput.value.trim();
 
         if (title && description && source) {
-          ideas = [...ideas, { title, description, source }];
-          renderIdeas();
-          closeModal(addIdeaModal);
+          try {
+            const response = await fetch("/api/introduction/ideas", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ title, description, source }),
+            });
+            if (response.ok) {
+              fetchIdeas();
+              closeModal(addIdeaModal);
+            } else {
+              console.error("Failed to add new idea.");
+            }
+          } catch (error) {
+            console.error("Error adding new idea:", error);
+          }
         } else {
           alert("Please fill in all idea details.");
         }
       };
 
-      function handleManufacturingSelectChange(event) {
-        const index = parseInt(event.target.dataset.index);
+      async function handleManufacturingSelectChange(event) {
+        const id = event.target.dataset.id;
         const field = event.target.classList.contains("test-results-select")
           ? "testResults"
           : "regulatoryApproval";
         const value = event.target.value;
 
-        const updated = [...selectedIdeaForManufacturing];
-        updated[index][field] = value;
-        selectedIdeaForManufacturing = updated;
-        renderManufacturingProcess(); // Re-render to update status
+        try {
+          const response = await fetch(`/api/introduction/manufacturing/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ [field]: value }),
+          });
+          if (response.ok) {
+            fetchManufacturing(); // Re-fetch to update UI
+          } else {
+            console.error("Failed to update manufacturing data.");
+          }
+        } catch (error) {
+          console.error("Error updating manufacturing data:", error);
+        }
       }
 
       function handleOpenManufacturingDetailsModal(event) {
-        currentManufacturingIdeaIndex = parseInt(event.target.dataset.index);
-        const idea =
-          selectedIdeaForManufacturing[currentManufacturingIdeaIndex];
+        const id = event.target.dataset.id;
+        currentManufacturingIdeaIndex = id; // Store the _id
+        const idea = manufacturing.find(item => item._id === id);
 
-        manufacturingSiteInput.value = idea.manufacturingSite || "";
-        batchSizeInput.value = idea.batchSize || "";
-        productionDateInput.value = idea.productionDate || "";
-        expectedOutputInput.value = idea.expectedOutput || "";
-        formulationTypeInput.value = idea.formulationType || "";
+        if (idea) {
+          manufacturingSiteInput.value = idea.manufacturingSite || "";
+          batchSizeInput.value = idea.batchSize || "";
+          productionDateInput.value = idea.productionDate || "";
+          expectedOutputInput.value = idea.expectedOutput || "";
+          formulationTypeInput.value = idea.formulationType || "";
 
-        openModal(addManufacturingDetailsModal);
+          openModal(addManufacturingDetailsModal);
+        }
       }
 
-      saveManufacturingDetailsButton.onclick = () => {
-        if (currentManufacturingIdeaIndex !== -1) {
-          const updated = [...selectedIdeaForManufacturing];
-          updated[currentManufacturingIdeaIndex] = {
-            ...updated[currentManufacturingIdeaIndex],
+      saveManufacturingDetailsButton.onclick = async () => {
+        if (currentManufacturingIdeaIndex) {
+          const updatedDetails = {
             manufacturingSite: manufacturingSiteInput.value.trim(),
             batchSize: batchSizeInput.value.trim(),
             productionDate: productionDateInput.value.trim(),
             expectedOutput: expectedOutputInput.value.trim(),
             formulationType: formulationTypeInput.value.trim(),
           };
-          selectedIdeaForManufacturing = updated;
-          renderManufacturingProcess();
-          closeModal(addManufacturingDetailsModal);
+          try {
+            const response = await fetch(`/api/introduction/manufacturing/${currentManufacturingIdeaIndex}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedDetails),
+            });
+            if (response.ok) {
+              fetchManufacturing(); // Re-fetch to update UI
+              closeModal(addManufacturingDetailsModal);
+            } else {
+              console.error("Failed to update manufacturing details.");
+            }
+          } catch (error) {
+            console.error("Error updating manufacturing details:", error);
+          }
         }
       };
 
-      function handleApproveProduction(event) {
-        const index = parseInt(event.target.dataset.index);
-        const ideaToProduce = selectedIdeaForManufacturing[index];
+      async function handleApproveProduction(event) {
+        const id = event.target.dataset.id;
+        const ideaToProduce = manufacturing.find(item => item._id === id);
 
-        productions = [...productions, ideaToProduce];
-        selectedIdeaForManufacturing = selectedIdeaForManufacturing.filter(
-          (_, i) => i !== index
-        );
-        renderManufacturingProcess();
-        renderProductions();
+        if (ideaToProduce) {
+          try {
+            const response = await fetch("/api/introduction/productions", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(ideaToProduce),
+            });
+            if (response.ok) {
+              await fetch(`/api/introduction/manufacturing/${id}`, {
+                method: "DELETE",
+              });
+              fetchManufacturing();
+              fetchProductions();
+            } else {
+              console.error("Failed to approve production.");
+            }
+          } catch (error) {
+            console.error("Error approving production:", error);
+          }
+        }
       }
 
       // --- Loading Dots Animation ---
@@ -1133,6 +1239,11 @@
       document.addEventListener("DOMContentLoaded", () => {
         // Initially, only the admin access section is visible.
         // Main content and other sections will be rendered/shown after successful login.
+        if (adminAccess) {
+          fetchIdeas();
+          fetchProductions();
+          fetchManufacturing();
+        }
       });
     </script>
   </body>

@@ -859,56 +859,13 @@
     "></div>
 
     <script>
-        // --- Global State (using localStorage for persistence) ---
-        const LS_PREFIX = 'supply_chain_app_';
-
-        function useLocalStorage(key, initialValue) {
-            const storedItem = localStorage.getItem(LS_PREFIX + key);
-            let value;
-            try {
-                value = storedItem ? JSON.parse(storedItem) : initialValue;
-            } catch (error) {
-                console.error("Error parsing localStorage item:", error);
-                value = initialValue;
-            }
-
-            const setValue = (newValue) => {
-                const valueToStore = typeof newValue === 'function' ? newValue(value) : newValue;
-                value = valueToStore; // Update the 'value' local to this specific call of useLocalStorage
-                localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
-                return valueToStore;
-            };
-
-            return [value, setValue];
-        }
-
-        let [adminAccess, setAdminAccess] = useLocalStorage("adminAccess", false);
-        let [shipmentData, setShipmentData] = useLocalStorage("shipmentData", [
-            { id: "SHP001", origin: "Lahore", destination: "Karachi", status: "In Transit" },
-            { id: "SHP002", origin: "Islamabad", destination: "Lahore", status: "Delivered" },
-            { id: "SHP003", origin: "Quetta", destination: "Peshawar", status: "Pending" },
-        ]);
-        let [inventory, setInventory] = useLocalStorage("inventory", [
-            { item: "Paracetamol", quantity: 1200, location: "Warehouse A" },
-            { item: "Ibuprofen", quantity: 800, location: "Warehouse B" },
-            { item: "Amoxicillin", quantity: 1500, location: "Warehouse A" },
-            { item: "Cough Syrup", quantity: 500, location: "Warehouse C" },
-        ]);
-        let [supplyManagement, setSupplyManagement] = useLocalStorage("supplyManagement", [
-            { supplier: "PharmaLink", product: "Prozac", contact: "0300-1234567" },
-            { supplier: "MediPlus", product: "Zoloft", contact: "0321-7654321" },
-            { supplier: "HealthSupply Co.", product: "Lipitor", contact: "0333-9876543" },
-        ]);
-        let [warehouseLocations, setWarehouseLocations] = useLocalStorage("warehouseLocations", [
-            { name: "Warehouse A", city: "Lahore", capacity: "80%" },
-            { name: "Warehouse B", city: "Karachi", capacity: "65%" },
-            { name: "Warehouse C", city: "Multan", capacity: "90%" },
-        ]);
-        let [supplyReports, setSupplyReports] = useLocalStorage("supplyReports", [
-            { date: "2025-06-01", summary: "Monthly supply chain review completed." },
-            { date: "2025-05-15", summary: "Inventory restocked for Q2." },
-            { date: "2025-04-20", summary: "New supplier 'HealthSupply Co.' onboarded." },
-        ]);
+        // --- Global State ---
+        let adminAccess = false;
+        let shipmentData = [];
+        let inventory = [];
+        let supplyManagement = [];
+        let warehouseLocations = [];
+        let supplyReports = [];
 
         // --- DOM Element References ---
         const adminAccessSection = document.getElementById('admin-access-section');
@@ -960,6 +917,62 @@
         const supplyReportsTableBody = document.getElementById('supply-reports-table-body');
 
         const customToast = document.getElementById('custom-toast');
+
+        // --- API Fetch Functions ---
+        async function fetchShipments() {
+          try {
+            const response = await fetch("/api/supply/shipments");
+            shipmentData = await response.json();
+            renderShipmentTable();
+            renderOverviewCounts();
+            renderShipmentChart();
+          } catch (error) {
+            console.error("Error fetching shipments:", error);
+          }
+        }
+
+        async function fetchInventory() {
+          try {
+            const response = await fetch("/api/supply/inventory");
+            inventory = await response.json();
+            renderInventoryTable();
+            renderOverviewCounts();
+            renderInventoryChart();
+          } catch (error) {
+            console.error("Error fetching inventory:", error);
+          }
+        }
+
+        async function fetchSuppliers() {
+          try {
+            const response = await fetch("/api/supply/suppliers");
+            supplyManagement = await response.json();
+            renderSupplyManagementTable();
+            renderOverviewCounts();
+          } catch (error) {
+            console.error("Error fetching suppliers:", error);
+          }
+        }
+
+        async function fetchWarehouses() {
+          try {
+            const response = await fetch("/api/supply/warehouses");
+            warehouseLocations = await response.json();
+            renderWarehouseTable();
+          } catch (error) {
+            console.error("Error fetching warehouses:", error);
+          }
+        }
+
+        async function fetchSupplyReports() {
+          try {
+            const response = await fetch("/api/supply/reports");
+            supplyReports = await response.json();
+            renderReportsTable();
+          } catch (error) {
+            console.error("Error fetching supply reports:", error);
+          }
+        }
 
         // --- Helper Functions ---
         function showToast(message, type = 'success') {
@@ -1193,18 +1206,15 @@
         // Admin Login
         submitAdminCodeButton.addEventListener('click', () => {
             if (adminCodeInput.value === "admin505") {
-                adminAccess = setAdminAccess(true); // Update state and localStorage
+                adminAccess = true; // Update state and localStorage
                 adminAccessSection.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 // Initial render for all visible components after login
-                renderOverviewCounts();
-                renderInventoryChart();
-                renderShipmentChart();
-                renderShipmentTable();
-                renderInventoryTable();
-                renderSupplyManagementTable();
-                renderWarehouseTable();
-                renderReportsTable();
+                fetchShipments();
+                fetchInventory();
+                fetchSuppliers();
+                fetchWarehouses();
+                fetchSupplyReports();
                 showToast("Admin access granted!", "success");
             } else {
                 showToast("Access Denied. Incorrect code.", "error");
@@ -1226,26 +1236,26 @@
 
                 // Re-render specific sections if needed when tab changes
                 if (targetTabId === 'overview') {
-                    renderOverviewCounts();
-                    renderInventoryChart();
-                    renderShipmentChart();
+                    fetchShipments();
+                    fetchInventory();
+                    fetchSuppliers();
                 } else if (targetTabId === 'shipment') {
-                    renderShipmentTable();
+                    fetchShipments();
                 } else if (targetTabId === 'inventory') {
-                    renderInventoryTable();
+                    fetchInventory();
                 } else if (targetTabId === 'management') {
-                    renderSupplyManagementTable();
+                    fetchSuppliers();
                 } else if (targetTabId === 'warehouses') {
-                    renderWarehouseTable();
+                    fetchWarehouses();
                 } else if (targetTabId === 'reports') {
-                    renderReportsTable();
+                    fetchSupplyReports();
                 }
             });
         });
 
         // Add Shipment
         addShipmentBtn.addEventListener('click', () => openModal(addShipmentModal));
-        addShipmentForm.addEventListener('submit', (e) => {
+        addShipmentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newShipment = {
                 id: document.getElementById('shipment-id').value,
@@ -1253,74 +1263,144 @@
                 destination: document.getElementById('shipment-destination').value,
                 status: document.getElementById('shipment-status-hidden-input').value, // Get from hidden input
             };
-            shipmentData = setShipmentData(prev => [...prev, newShipment]); // Update state and localStorage
-            showToast("New shipment added!", "success");
-            closeModal(addShipmentModal);
-            renderShipmentTable(); // Re-render table
-            renderOverviewCounts(); // Update overview counts
-            renderShipmentChart(); // Update chart
+            try {
+                const response = await fetch('/api/supply/shipments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newShipment),
+                });
+                if (response.ok) {
+                    showToast("New shipment added!", "success");
+                    closeModal(addShipmentModal);
+                    fetchShipments(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add shipment.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding shipment:", error);
+                showToast("Error adding shipment.", "error");
+            }
         });
 
         // Add Inventory
         addInventoryBtn.addEventListener('click', () => openModal(addInventoryModal));
-        addInventoryForm.addEventListener('submit', (e) => {
+        addInventoryForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newItem = {
                 item: document.getElementById('inventory-item').value,
                 quantity: parseInt(document.getElementById('inventory-quantity').value),
                 location: document.getElementById('inventory-location').value,
             };
-            inventory = setInventory(prev => [...prev, newItem]); // Update state and localStorage
-            showToast("New inventory item added!", "success");
-            closeModal(addInventoryModal);
-            renderInventoryTable(); // Re-render table
-            renderOverviewCounts(); // Update overview counts
-            renderInventoryChart(); // Update chart
+            try {
+                const response = await fetch('/api/supply/inventory', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newItem),
+                });
+                if (response.ok) {
+                    showToast("New inventory item added!", "success");
+                    closeModal(addInventoryModal);
+                    fetchInventory(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add inventory item.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding inventory item:", error);
+                showToast("Error adding inventory item.", "error");
+            }
         });
 
         // Add Supplier
         addSupplierBtn.addEventListener('click', () => openModal(addSupplierModal));
-        addSupplierForm.addEventListener('submit', (e) => {
+        addSupplierForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newSupplier = {
                 supplier: document.getElementById('supplier-name').value,
                 product: document.getElementById('supplier-product').value,
                 contact: document.getElementById('supplier-contact').value,
             };
-            supplyManagement = setSupplyManagement(prev => [...prev, newSupplier]); // Update state and localStorage
-            showToast("New supplier added!", "success");
-            closeModal(addSupplierModal);
-            renderSupplyManagementTable(); // Re-render table
-            renderOverviewCounts(); // Update overview counts
+            try {
+                const response = await fetch('/api/supply/suppliers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newSupplier),
+                });
+                if (response.ok) {
+                    showToast("New supplier added!", "success");
+                    closeModal(addSupplierModal);
+                    fetchSuppliers(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add supplier.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding supplier:", error);
+                showToast("Error adding supplier.", "error");
+            }
         });
 
         // Add Warehouse
         addWarehouseBtn.addEventListener('click', () => openModal(addWarehouseModal));
-        addWarehouseForm.addEventListener('submit', (e) => {
+        addWarehouseForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newWarehouse = {
                 name: document.getElementById('warehouse-name').value,
                 city: document.getElementById('warehouse-city').value,
                 capacity: document.getElementById('warehouse-capacity').value,
             };
-            warehouseLocations = setWarehouseLocations(prev => [...prev, newWarehouse]); // Update state and localStorage
-            showToast("New warehouse added!", "success");
-            closeModal(addWarehouseModal);
-            renderWarehouseTable(); // Re-render table
+            try {
+                const response = await fetch('/api/supply/warehouses', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newWarehouse),
+                });
+                if (response.ok) {
+                    showToast("New warehouse added!", "success");
+                    closeModal(addWarehouseModal);
+                    fetchWarehouses(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add warehouse.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding warehouse:", error);
+                showToast("Error adding warehouse.", "error");
+            }
         });
 
         // Add Report
         addReportBtn.addEventListener('click', () => openModal(addReportModal));
-        addReportForm.addEventListener('submit', (e) => {
+        addReportForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newReport = {
                 date: document.getElementById('report-date').value,
                 summary: document.getElementById('report-summary').value,
             };
-            supplyReports = setSupplyReports(prev => [...prev, newReport]); // Update state and localStorage
-            showToast("New report added!", "success");
-            closeModal(addReportModal);
-            renderReportsTable(); // Re-render table
+            try {
+                const response = await fetch('/api/supply/reports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newReport),
+                });
+                if (response.ok) {
+                    showToast("New report added!", "success");
+                    closeModal(addReportModal);
+                    fetchSupplyReports(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add report.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding report:", error);
+                showToast("Error adding report.", "error");
+            }
         });
 
         // Close Modal Buttons (General)
@@ -1348,14 +1428,11 @@
                 adminAccessSection.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 // Initial render for all visible components after login
-                renderOverviewCounts();
-                renderInventoryChart();
-                renderShipmentChart();
-                renderShipmentTable();
-                renderInventoryTable();
-                renderSupplyManagementTable();
-                renderWarehouseTable();
-                renderReportsTable();
+                fetchShipments();
+                fetchInventory();
+                fetchSuppliers();
+                fetchWarehouses();
+                fetchSupplyReports();
             } else {
                 adminAccessSection.classList.remove('hidden');
                 mainContent.classList.add('hidden');

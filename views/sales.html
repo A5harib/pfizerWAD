@@ -457,44 +457,10 @@
     "></div>
 
     <script>
-        // --- Global State (using localStorage for persistence) ---
-        const LS_PREFIX = 'sales_app_';
-
-        function useLocalStorage(key, initialValue) {
-            const storedItem = localStorage.getItem(LS_PREFIX + key);
-            let value;
-            try {
-                value = storedItem ? JSON.parse(storedItem) : initialValue;
-            } catch (error) {
-                console.error("Error parsing localStorage item:", error);
-                value = initialValue;
-            }
-
-            const setValue = (newValue) => {
-                const valueToStore = typeof newValue === 'function' ? newValue(value) : newValue;
-                value = valueToStore; // Update the 'value' local to this specific call of useLocalStorage
-                localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
-                return valueToStore;
-            };
-
-            return [value, setValue];
-        }
-
-        let [adminAccess, setAdminAccess] = useLocalStorage("adminAccess", false);
-        let [strategies, setStrategies] = useLocalStorage("strategies", [
-            { title: "Social Media Campaign", description: "Leverage platforms like Instagram and Facebook to reach a wider audience with targeted ads.", effectiveness: "High" },
-            { title: "Doctor Outreach", description: "Engage healthcare professionals through webinars and sample distribution.", effectiveness: "Medium" },
-            { title: "Pharmacy Partnerships", description: "Collaborate with pharmacies for in-store promotions and bundled offers.", effectiveness: "Medium" },
-            { title: "Patient Education", description: "Host online seminars and distribute informative brochures to educate patients.", effectiveness: "High" },
-        ]);
-        let [salesData, setSalesData] = useLocalStorage("salesData", [
-            { month: "Jan", sales: 120 },
-            { month: "Feb", sales: 180 },
-            { month: "Mar", sales: 250 },
-            { month: "Apr", sales: 300 },
-            { month: "May", sales: 400 },
-            { month: "Jun", sales: 420 },
-        ]);
+        // --- Global State ---
+        let adminAccess = false;
+        let strategies = [];
+        let salesData = [];
 
         // --- DOM Element References ---
         const adminAccessSection = document.getElementById('admin-access-section');
@@ -514,6 +480,27 @@
         const salesControlsGrid = document.getElementById('sales-controls-grid');
 
         const customToast = document.getElementById('custom-toast');
+
+        // --- API Fetch Functions ---
+        async function fetchStrategies() {
+          try {
+            const response = await fetch("/api/sales/strategies");
+            strategies = await response.json();
+            renderStrategies();
+          } catch (error) {
+            console.error("Error fetching strategies:", error);
+          }
+        }
+
+        async function fetchSalesData() {
+          try {
+            const response = await fetch("/api/sales/data");
+            salesData = await response.json();
+            renderSalesData();
+          } catch (error) {
+            console.error("Error fetching sales data:", error);
+          }
+        }
 
         // --- Helper Functions ---
         function showToast(message, type = 'success') {
@@ -553,14 +540,14 @@
 
         function renderSalesData() {
             salesControlsGrid.innerHTML = ''; // Clear existing
-            salesData.forEach((entry, idx) => {
+            salesData.forEach((entry) => {
                 const div = document.createElement('div');
                 div.className = 'sales-control-item';
                 div.innerHTML = `
                     <span class="month">${entry.month}</span>
-                    <button class="minus" data-idx="${idx}">-</button>
-                    <input type="number" min="0" value="${entry.sales}" data-idx="${idx}" class="sales-input" />
-                    <button class="plus" data-idx="${idx}">+</button>
+                    <button class="minus" data-id="${entry._id}">-</button>
+                    <input type="number" min="0" value="${entry.sales}" data-id="${entry._id}" class="sales-input" />
+                    <button class="plus" data-id="${entry._id}">+</button>
                 `;
                 salesControlsGrid.appendChild(div);
             });
@@ -614,13 +601,13 @@
         submitAdminCodeButton.addEventListener('click', () => {
             if (adminCodeInput.value === "admin505") {
                 // Correctly update the adminAccess variable with the new value from setAdminAccess
-                adminAccess = setAdminAccess(true);
+                adminAccess = true;
                 adminAccessSection.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 addStrategyForm.classList.remove('hidden'); // Show admin-only forms
                 adjustSalesSection.classList.remove('hidden');
-                renderStrategies();
-                renderSalesData(); // This will also call renderBarChart
+                fetchStrategies();
+                fetchSalesData();
                 showToast("Admin access granted!", "success");
             } else {
                 showToast("Access Denied. Incorrect code.", "error");
@@ -629,7 +616,7 @@
         });
 
         // Add Strategy
-        addStrategyButton.addEventListener('click', () => {
+        addStrategyButton.addEventListener('click', async () => {
             const title = newStrategyTitleInput.value.trim();
             const description = newStrategyDescriptionTextarea.value.trim();
             const effectiveness = newStrategyEffectivenessSelect.value;
@@ -639,43 +626,83 @@
                 return;
             }
 
-            // Correctly update the strategies variable with the new value from setStrategies
-            strategies = setStrategies(prev => [...prev, { title, description, effectiveness }]);
-            newStrategyTitleInput.value = "";
-            newStrategyDescriptionTextarea.value = "";
-            newStrategyEffectivenessSelect.value = "Medium";
-            renderStrategies();
-            showToast("Strategy added successfully!", "success");
+            try {
+                const response = await fetch('/api/sales/strategies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, description, effectiveness }),
+                });
+                if (response.ok) {
+                    showToast("Strategy added successfully!", "success");
+                    newStrategyTitleInput.value = "";
+                    newStrategyDescriptionTextarea.value = "";
+                    newStrategyEffectivenessSelect.value = "Medium";
+                    fetchStrategies(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to add strategy.", "error");
+                }
+            } catch (error) {
+                console.error("Error adding strategy:", error);
+                showToast("Error adding strategy.", "error");
+            }
         });
 
         // Sales Adjustment Handlers
-        function handleSalesChange(idx, delta) {
-            // Correctly update the salesData variable with the new value from setSalesData
-            salesData = setSalesData(prevSalesData =>
-                prevSalesData.map((entry, i) =>
-                    i === idx
-                        ? { ...entry, sales: Math.max(0, entry.sales + delta) }
-                        : entry
-                )
+        async function handleSalesChange(idx, delta) {
+            const updatedSales = salesData.map((entry, i) =>
+                i === idx
+                    ? { ...entry, sales: Math.max(0, entry.sales + delta) }
+                    : entry
             );
-            renderSalesData(); // Re-render to reflect changes and update chart
+            try {
+                const response = await fetch(`/api/sales/data/${salesData[idx]._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedSales[idx]),
+                });
+                if (response.ok) {
+                    fetchSalesData(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to update sales data.", "error");
+                }
+            } catch (error) {
+                console.error("Error updating sales data:", error);
+                showToast("Error updating sales data.", "error");
+            }
         }
 
-        function handleSalesInput(idx, value) {
+        async function handleSalesInput(idx, value) {
             const num = parseInt(value, 10);
             if (isNaN(num) || num < 0) {
                 showToast("Please enter a valid positive number for sales.", "warning");
                 return;
             }
-            // Correctly update the salesData variable with the new value from setSalesData
-            salesData = setSalesData(prevSalesData =>
-                prevSalesData.map((entry, i) =>
-                    i === idx
-                        ? { ...entry, sales: num }
-                        : entry
-                )
+            const updatedSales = salesData.map((entry, i) =>
+                i === idx
+                    ? { ...entry, sales: num }
+                    : entry
             );
-            renderSalesData(); // Re-render to reflect changes and update chart
+            try {
+                const response = await fetch(`/api/sales/data/${salesData[idx]._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedSales[idx]),
+                });
+                if (response.ok) {
+                    fetchSalesData(); // Re-fetch to update UI
+                } else {
+                    showToast("Failed to update sales data.", "error");
+                }
+            } catch (error) {
+                console.error("Error updating sales data:", error);
+                showToast("Error updating sales data.", "error");
+            }
         }
 
         // --- Initial Setup ---
@@ -686,8 +713,8 @@
                 mainContent.classList.remove('hidden');
                 addStrategyForm.classList.remove('hidden');
                 adjustSalesSection.classList.remove('hidden');
-                renderStrategies();
-                renderSalesData(); // This will also call renderBarChart
+                fetchStrategies();
+                fetchSalesData();
             } else {
                 adminAccessSection.classList.remove('hidden');
                 mainContent.classList.add('hidden');

@@ -1,20 +1,130 @@
-<html>
-    <body>
-        <h1>New User Form</h1>
-        <form method="post" action="/api/user/new" enctype="multipart/form-data, application/x-www-form-urlencoded">
-            <label>Name: </label><input type="text" name="name"><br>
-            <label>Email: </label><input type="email" name="email"><br>
-            <label>Password: </label><input type="password" name="password"><br>
-            <label>Role: </label>
-            <select name="role">
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-                <option value="guest">Guest</option>
-            </select>
-            <br>
-            <label>Picture</label><input type="file" name="picture"><br>
-            <br>
-            <input   type="submit" value="Signup">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <div id="error-message" class="error-message"></div>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="name">Username:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role">
+                    <option value="Student">Student</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sign Up">
+            </div>
         </form>
-    </body>
+        <p>Already have an account? <a href="/user-login.html">Login</a></p>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const errorMessageDiv = document.getElementById('error-message');
+
+            errorMessageDiv.textContent = ''; // Clear previous errors
+
+            try {
+                const response = await fetch('/api/user/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, password, role }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store token (e.g., in localStorage or a cookie, depending on your setup)
+                    
+
+                    window.location.href = '/'; // Redirect to home page or dashboard
+                } else {
+                    errorMessageDiv.textContent = data.message || 'Signup failed';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessageDiv.textContent = 'An error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
 </html>

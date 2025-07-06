@@ -530,6 +530,11 @@
         <!-- Current Products Section -->
         <div class="card-container">
             <div class="card-header-title">Current Products</div>
+            <div class="p-4">
+                <button id="addProductTrigger" class="px-4 py-2 rounded-md bg-indigo-500 text-white hover:bg-indigo-600 transition font-medium shadow-sm mb-4 w-full">
+                    Add New Product
+                </button>
+            </div>
             <div id="products-grid" class="product-grid">
                 <!-- Products will be rendered here by JavaScript -->
             </div>
@@ -553,6 +558,41 @@
     </div>
 
     <!-- Modals -->
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" data-modal="addProductModal">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Product</h2>
+            </div>
+            <div class="modal-body-form">
+                <div class="space-y-1">
+                    <label>Product Name</label>
+                    <input type="text" id="newProductName" placeholder="Enter product name" />
+                </div>
+                <div class="space-y-1">
+                    <label>Description</label>
+                    <textarea id="newProductDescription" placeholder="Enter product description" rows="3"></textarea>
+                </div>
+                <div class="space-y-1">
+                    <label>Effectiveness</label>
+                    <div class="custom-select-wrapper">
+                        <div class="custom-select-trigger" id="newProductEffectivenessSelectTrigger">Select Effectiveness</div>
+                        <div class="custom-select-content" id="newProductEffectivenessSelectContent">
+                            <div class="custom-select-item" data-value="High">High</div>
+                            <div class="custom-select-item" data-value="Medium">Medium</div>
+                            <div class="custom-select-item" data-value="Low">Low</div>
+                        </div>
+                        <input type="hidden" id="newProductEffectivenessHiddenInput" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="saveNewProductButton">Save Product</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Quality Check Modal -->
     <div id="qualityCheckModal" class="modal">
         <div class="modal-content">
@@ -620,41 +660,10 @@
     "></div>
 
     <script>
-        // --- Global State (using localStorage for persistence) ---
-        const LS_PREFIX = 'quality_app_';
-
-        function useLocalStorage(key, initialValue) {
-            const storedItem = localStorage.getItem(LS_PREFIX + key);
-            let value;
-            try {
-                value = storedItem ? JSON.parse(storedItem) : initialValue;
-            } catch (error) {
-                console.error("Error parsing localStorage item:", error);
-                value = initialValue;
-            }
-
-            const setValue = (newValue) => {
-                const valueToStore = typeof newValue === 'function' ? newValue(value) : newValue;
-                value = valueToStore;
-                localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
-                return valueToStore;
-            };
-
-            return [value, setValue];
-        }
-
-        let [products, setProducts] = useLocalStorage("products", [
-            { name: "prozac", description: "antidepressant", lastChecked: "2024-05-12", effectiveness: "High" },
-            { name: "zoloft", description: "antidepressant", lastChecked: "2024-04-28", effectiveness: "Medium" },
-            { name: "paracetamol", description: "pain reliever", lastChecked: "2024-06-01", effectiveness: "High" },
-            { name: "ibuprofen", description: "anti-inflammatory", lastChecked: "2024-05-20", effectiveness: "Medium" },
-            { name: "amoxicillin", description: "antibiotic", lastChecked: "2024-03-15", effectiveness: "High" },
-            { name: "metformin", description: "diabetes medication", lastChecked: "2024-05-30", effectiveness: "Medium" },
-            { name: "lisinopril", description: "blood pressure medication", lastChecked: "2024-04-10", effectiveness: "High" },
-            { name: "atorvastatin", description: "cholesterol medication", lastChecked: "2024-05-05", effectiveness: "Medium" },
-        ]);
-        let [qualityChecks, setQualityChecks] = useLocalStorage("qualityChecks", []);
-        let [adminAccess, setAdminAccess] = useLocalStorage("adminAccess", false);
+        // --- Global State ---
+        let products = [];
+        let qualityChecks = [];
+        let adminAccess = false;
 
         let currentProductForCheck = null; // To store the product name for the currently open quality check modal
 
@@ -682,7 +691,39 @@
         const resultHiddenInput = document.getElementById('resultHiddenInput');
         const saveQualityDataButton = document.getElementById('saveQualityDataButton');
 
+        // Add Product Modal Elements
+        const addProductModal = document.getElementById('addProductModal');
+        const addProductTrigger = document.getElementById('addProductTrigger');
+        const newProductNameInput = document.getElementById('newProductName');
+        const newProductDescriptionTextarea = document.getElementById('newProductDescription');
+        const newProductEffectivenessSelectTrigger = document.getElementById('newProductEffectivenessSelectTrigger');
+        const newProductEffectivenessSelectContent = document.getElementById('newProductEffectivenessSelectContent');
+        const newProductEffectivenessHiddenInput = document.getElementById('newProductEffectivenessHiddenInput');
+        const saveNewProductButton = document.getElementById('saveNewProductButton');
+
         const customToast = document.getElementById('custom-toast');
+
+        // --- API Fetch Functions ---
+        async function fetchProducts() {
+          try {
+            const response = await fetch("/api/quality/products");
+            products = await response.json();
+            renderProducts();
+            renderQualityCheckButtons();
+          } catch (error) {
+            console.error("Error fetching products:", error);
+          }
+        }
+
+        async function fetchQualityChecks() {
+          try {
+            const response = await fetch("/api/quality/checks");
+            qualityChecks = await response.json();
+            renderQualityCheckSummary();
+          } catch (error) {
+            console.error("Error fetching quality checks:", error);
+          }
+        }
 
         // --- Helper Functions ---
         function showToast(message, type = 'success') {
@@ -771,8 +812,9 @@
                 button.className = 'px-4 py-2 rounded-md bg-indigo-100 text-indigo-700 hover:bg-indigo-200 transition font-medium shadow-sm';
                 button.textContent = product.name.charAt(0).toUpperCase() + product.name.slice(1);
                 button.dataset.productName = product.name;
+                button.dataset.productId = product._id; // Store product _id
                 button.addEventListener('click', () => {
-                    currentProductForCheck = product.name;
+                    currentProductForCheck = product._id; // Use _id
                     qualityCheckModalTitle.textContent = `New Quality Check: ${product.name.charAt(0).toUpperCase() + product.name.slice(1)}`;
 
                     // Populate modal fields with existing check data if available
@@ -835,12 +877,12 @@
         // Admin Login
         submitAdminCodeButton.addEventListener('click', () => {
             if (adminCodeInput.value === "admin505") {
-                setAdminAccess(true);
+                // Correctly update the adminAccess variable with the new value from setAdminAccess
+                adminAccess = true;
                 adminAccessSection.classList.add('hidden');
                 mainContent.classList.remove('hidden');
-                renderProducts();
-                renderQualityCheckButtons();
-                renderQualityCheckSummary();
+                fetchProducts();
+                fetchQualityChecks();
                 showToast("Admin access granted!", "success");
             } else {
                 showToast("Access Denied. Incorrect code.", "error");
@@ -848,18 +890,86 @@
             adminCodeInput.value = "";
         });
 
-        // Update Quality Check Data (called from modal input/select changes)
-        function updateCheck(productName, field, value) {
-            setQualityChecks(prev => {
-                const existingIndex = prev.findIndex(item => item.productName === productName);
-                if (existingIndex !== -1) {
-                    const updated = [...prev];
-                    updated[existingIndex][field] = value;
-                    return updated;
+        // Add Product
+        addProductTrigger.addEventListener('click', () => {
+            newProductNameInput.value = '';
+            newProductDescriptionTextarea.value = '';
+            newProductEffectivenessHiddenInput.value = '';
+            newProductEffectivenessSelectTrigger.textContent = 'Select Effectiveness';
+            Array.from(newProductEffectivenessSelectContent.children).forEach(item => item.classList.remove('selected'));
+            openModal(addProductModal);
+        });
+
+        saveNewProductButton.addEventListener('click', async () => {
+            const name = newProductNameInput.value.trim();
+            const description = newProductDescriptionTextarea.value.trim();
+            const effectiveness = newProductEffectivenessHiddenInput.value;
+
+            if (!name || !description || !effectiveness) {
+                showToast("Please fill in all product details.", "error");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/quality/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, description, effectiveness, lastChecked: new Date().toISOString().slice(0, 10) }),
+                });
+                if (response.ok) {
+                    showToast("Product added successfully!", "success");
+                    fetchProducts(); // Re-fetch products to update UI
+                    closeModal(addProductModal);
                 } else {
-                    return [...prev, { productName, [field]: value }];
+                    showToast("Failed to add product.", "error");
                 }
-            });
+            } catch (error) {
+                console.error("Error adding product:", error);
+                showToast("Error adding product.", "error");
+            }
+        });
+
+        // Update Quality Check Data (called from modal input/select changes)
+        async function updateCheck(productId, field, value) {
+            const existingCheck = qualityChecks.find(item => item.productId === productId);
+            let updatedCheck = {};
+
+            if (existingCheck) {
+                updatedCheck = { ...existingCheck, [field]: value };
+                try {
+                    const response = await fetch(`/api/quality/checks/${existingCheck._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedCheck),
+                    });
+                    if (!response.ok) {
+                        console.error('Failed to update quality check:', await response.text());
+                    }
+                } catch (error) {
+                    console.error('Error updating quality check:', error);
+                }
+            } else {
+                updatedCheck = { productId, [field]: value };
+                try {
+                    const response = await fetch('/api/quality/checks', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedCheck),
+                    });
+                    if (!response.ok) {
+                        console.error('Failed to create quality check:', await response.text());
+                    }
+                } catch (error) {
+                    console.error('Error creating quality check:', error);
+                }
+            }
+            fetchQualityChecks(); // Re-fetch to update local state and UI
         }
 
         // Modal input/textarea change listeners
@@ -875,18 +985,34 @@
         });
 
         // Save Quality Data Button
-        saveQualityDataButton.addEventListener('click', () => {
+        saveQualityDataButton.addEventListener('click', async () => {
             if (currentProductForCheck) {
-                const currentCheckData = qualityChecks.find(q => q.productName === currentProductForCheck);
+                const currentCheckData = qualityChecks.find(q => q.productId === currentProductForCheck);
                 if (currentCheckData && currentCheckData.batchNumber && currentCheckData.testType && currentCheckData.result) {
-                    // Update the lastChecked date for the product
-                    setProducts(prevProducts => prevProducts.map(p =>
-                        p.name === currentProductForCheck ? { ...p, lastChecked: new Date().toISOString().slice(0, 10) } : p
-                    ));
-                    renderProducts(); // Re-render products to show updated lastChecked date
-                    renderQualityCheckSummary(); // Re-render summary to show latest data
-                    closeModal(qualityCheckModal);
-                    showToast(`Quality data saved for ${currentProductForCheck.charAt(0).toUpperCase() + currentProductForCheck.slice(1)}!`, "success");
+                    // Update the lastChecked date for the product via API
+                    try {
+                        const productToUpdate = products.find(p => p._id === currentProductForCheck);
+                        if (productToUpdate) {
+                            const response = await fetch(`/api/quality/products/${productToUpdate._id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ lastChecked: new Date().toISOString().slice(0, 10) }),
+                            });
+                            if (response.ok) {
+                                showToast(`Quality data saved for ${productToUpdate.name.charAt(0).toUpperCase() + productToUpdate.name.slice(1)}!`, "success");
+                                fetchProducts(); // Re-fetch products to update UI
+                                fetchQualityChecks(); // Re-fetch quality checks to update UI
+                                closeModal(qualityCheckModal);
+                            } else {
+                                showToast("Failed to save quality data.", "error");
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error saving quality data:", error);
+                        showToast("Error saving quality data.", "error");
+                    }
                 } else {
                     showToast("Please fill all required fields (Batch Number, Test Type, Result).", "error");
                 }
@@ -913,14 +1039,14 @@
             // Setup custom selects
             setupCustomSelect(testTypeSelectTrigger, testTypeSelectContent, testTypeHiddenInput);
             setupCustomSelect(resultSelectTrigger, resultSelectContent, resultHiddenInput);
+            setupCustomSelect(newProductEffectivenessSelectTrigger, newProductEffectivenessSelectContent, newProductEffectivenessHiddenInput);
 
             // Check admin access on load
             if (adminAccess) {
                 adminAccessSection.classList.add('hidden');
                 mainContent.classList.remove('hidden');
-                renderProducts();
-                renderQualityCheckButtons();
-                renderQualityCheckSummary();
+                fetchProducts();
+                fetchQualityChecks();
             } else {
                 adminAccessSection.classList.remove('hidden');
                 mainContent.classList.add('hidden');

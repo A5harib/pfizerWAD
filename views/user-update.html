@@ -1,39 +1,52 @@
-<h2>Update User</h2>
+<html>
+  <body>
+    <h1>Update or Delete User</h1>
+    <form id="updateForm">
+      <label>User ID:</label>
+      <input type="text" id="userId" /><br />
 
-<form id="updateForm">
-  <input type="email" id="updateEmail" placeholder="Enter User Email" required>
-  <input type="text" id="updateName" placeholder="New Name">
-  <input type="password" id="updatePassword" placeholder="New Password">
-  <button type="submit">Update User</button>
-</form>
+      <label>New Name:</label>
+      <input type="text" id="newName" /><br />
 
-<script>
-document.getElementById("updateForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+      <label>New Role:</label>
+      <select id="newRole">
+        <option value="Student">Student</option>
+        <option value="Admin">Admin</option>
+      </select><br />
 
-  const email = document.getElementById("updateEmail").value.trim();
-  const name = document.getElementById("updateName").value.trim();
-  const password = document.getElementById("updatePassword").value.trim();
+      <label>New Password:</label>
+      <input type="password" id="newPassword" /><br />
 
-  if (!email) {
-    alert("Email is required!");
-    return;
-  }
+      <button type="button" onclick="updateUser()">Update</button>
+      <button type="button" onclick="deleteUser()">Delete</button>
+    </form>
 
-  fetch(`/api/user/update/${encodeURIComponent(email)}`, {   <!-- FIXED here -->
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, password })
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
-    alert("User updated successfully!");
-    document.getElementById("updateForm").reset(); // optional: clear form
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Error updating user.");
-  });
-});
-</script>
+    <script>
+      function updateUser() {
+        const id = document.getElementById("userId").value;
+        fetch(`/api/education/users/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: document.getElementById("newName").value,
+            role: document.getElementById("newRole").value,
+            password: document.getElementById("newPassword").value,
+          }),
+        })
+          .then(res => res.json())
+          .then(data => alert("User Updated!"))
+          .catch(err => alert("Update failed"));
+      }
+
+      function deleteUser() {
+        const id = document.getElementById("userId").value;
+        fetch(`/api/education/users/${id}`, {
+          method: "DELETE",
+        })
+          .then(res => res.json())
+          .then(data => alert("User Deleted!"))
+          .catch(err => alert("Delete failed"));
+      }
+    </script>
+  </body>
+</html>

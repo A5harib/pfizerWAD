@@ -3,49 +3,27 @@
 const express = require('express');
 const UserRouter  = express.Router();
 const {
-    GetOneUserSearch,
-    OneUserSearch, 
-    AllUserView, 
-    PostDeleteUserByEmail, 
-    GetUserHtmlForm, 
-    PostSaveNewUser, 
-    GetAllUser, 
-    deleteUserByEmail, 
-    updateUserByEmail,
-    GetDeleteUserByEmail,
-    GetUpdateUserByEmail,
-    GetUserLogin,
-    PostUserLogin,
-    UpdatePassword
+    signup,
+    login,
+    updateUser,
+    getAllUsers,
+    deleteUser,
 }  = require('../controllers/UserController.js');
 const { verifyToken, isAdmin } = require('../middlewares/auth');
 
-//User Rouutes with Controllers
-UserRouter.get('/api/user/new', GetUserHtmlForm);                   // HTML UI FORM
-UserRouter.post('/api/user/new', PostSaveNewUser);
-UserRouter.get('/api/user/all', verifyToken, isAdmin, GetAllUser);
+// User Authentication Routes
+UserRouter.post('/api/user/signup', signup);
+UserRouter.post('/api/user/login', login);
 
-//Delete User by email
-UserRouter.delete("/api/user/delete/:email", verifyToken, isAdmin, deleteUserByEmail);
-UserRouter.get("/api/user/delete/", GetDeleteUserByEmail);          // HTML UI FORM
-UserRouter.post("/api/user/delete/", PostDeleteUserByEmail);        // via POST Method
+// Protected User Routes (example: only authenticated users can access)
+UserRouter.get('/api/user/all', verifyToken, isAdmin, getAllUsers); // Admin only
+UserRouter.put('/api/user/:name', verifyToken, updateUser); // Authenticated user can update their own profile, admin can update any
+UserRouter.delete('/api/user/:name', verifyToken, isAdmin, deleteUser); // Admin only
 
-//Upate User by email
-UserRouter.put("/api/user/update/:email", updateUserByEmail);
-UserRouter.get("/api/user/update", GetUpdateUserByEmail);          // HTML UI FORM
-
-UserRouter.get("/api/user/ui/all", AllUserView);          // ALL USER HTML UI FORM
-
-// For Search User by email
-UserRouter.post("/api/user/search", OneUserSearch);          // ALL USER HTML UI FORM
-UserRouter.get("/api/user/search", GetOneUserSearch);          // ALL USER HTML UI FORM
-
-//User Authentication
-UserRouter.get('/api/user/login', GetUserLogin);
-UserRouter.post('/api/user/login', PostUserLogin);
-UserRouter.put('/api/user/update-password', verifyToken, UpdatePassword);
+// Logout route (client-side clears token, server-side clears httpOnly cookie)
 UserRouter.post('/api/user/logout', (req, res) => {
     res.clearCookie('token');
     res.json({ message: 'Logged out successfully' });
 });
+
 module.exports = {UserRouter};

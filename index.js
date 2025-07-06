@@ -1,5 +1,7 @@
 const express = require("express");
-dotenv = require("dotenv").config(); // Load environment variables from .env file
+require("dotenv").config(); // Load environment variables from .env file as early as possible
+console.log('JWT_SECRET:', process.env.JWT_SECRET); // Log JWT_SECRET to verify
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = 5000;
@@ -14,13 +16,16 @@ db_connection();
 // Routers Import
 const { BPERouter } = require("./routes/BPERoutes.js");
 const { router } = require("./routes/BPEApiRoutes.js");
+const { UserRouter } = require("./routes/UserRouter.js"); // Import UserRouter
 
 //Middleware
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded data (form data)
 app.use(express.json());
 app.use(bodyParser.json()); // Parse JSON data
+app.use(cookieParser()); // Add cookie-parser middleware
 app.use("/", BPERouter);
 app.use("/", router);
+app.use("/", UserRouter); // Use UserRouter
 
 // Serve static files for uploaded images
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -29,6 +34,14 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // This route serves the index.html file located in the views directory
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./views/index.html"));
+});
+
+app.get("/user-login.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "./views/user-login.html"));
+});
+
+app.get("/user-signup.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "./views/user-signup.html"));
 });
 
 app.get("/secure-route", IsSecureUrl, (req, res) => {

@@ -999,54 +999,14 @@
     <div id="custom-toast"></div>
 
     <script>
-      // --- Global State (using localStorage for persistence) ---
-      const LS_PREFIX = "clinical_study_";
-
-      function useLocalStorage(key, initialValue) {
-        const storedItem = localStorage.getItem(LS_PREFIX + key);
-        let value;
-        try {
-          value = storedItem ? JSON.parse(storedItem) : initialValue;
-        } catch (error) {
-          console.error("Error parsing localStorage item:", error);
-          value = initialValue;
-        }
-
-        // Function to update the value and localStorage
-        const setValue = (newValue) => {
-          const valueToStore =
-            typeof newValue === "function" ? newValue(value) : newValue;
-          value = valueToStore;
-          localStorage.setItem(LS_PREFIX + key, JSON.stringify(valueToStore));
-          return valueToStore;
-        };
-
-        return [value, setValue];
-      }
-
-      let [siteReports, setSiteReports] = useLocalStorage("siteReports", []);
-      let [complianceChecks, setComplianceChecks] = useLocalStorage(
-        "complianceChecks",
-        []
-      );
-      let [adminUnlockedRegulatory, setAdminUnlockedRegulatory] =
-        useLocalStorage("adminUnlockedRegulatory", false);
-      let [complianceStatus, setComplianceStatus] = useLocalStorage(
-        "complianceStatus",
-        ""
-      );
-      let [regulatoryAuditLog, setRegulatoryAuditLog] = useLocalStorage(
-        "regulatoryAuditLog",
-        []
-      );
-      let [regulatoryDocuments, setRegulatoryDocuments] = useLocalStorage(
-        "regulatoryDocuments",
-        []
-      );
-      let [regulatoryMilestones, setRegulatoryMilestones] = useLocalStorage(
-        "regulatoryMilestones",
-        []
-      );
+      // --- Global State ---
+      let siteReports = [];
+      let complianceChecks = [];
+      let adminUnlockedRegulatory = false;
+      let complianceStatus = "";
+      let regulatoryAuditLog = [];
+      let regulatoryDocuments = [];
+      let regulatoryMilestones = [];
 
       // --- DOM Elements ---
       const loginContainer = document.getElementById("login-container");
@@ -1160,7 +1120,66 @@
         "no-audit-entries-message"
       );
 
+      // --- API Fetch Functions ---
+      async function fetchSiteReports() {
+        try {
+          const response = await fetch("/api/oversight/site-reports");
+          siteReports = await response.json();
+          renderSiteReports();
+        } catch (error) {
+          console.error("Error fetching site reports:", error);
+        }
+      }
+
+      async function fetchComplianceChecks() {
+        try {
+          const response = await fetch("/api/oversight/compliance-checks");
+          complianceChecks = await response.json();
+          renderComplianceChecks();
+        } catch (error) {
+          console.error("Error fetching compliance checks:", error);
+        }
+      }
+
+      async function fetchRegulatoryDocuments() {
+        try {
+          const response = await fetch("/api/oversight/regulatory-documents");
+          regulatoryDocuments = await response.json();
+          renderRegulatoryDocuments();
+        } catch (error) {
+          console.error("Error fetching regulatory documents:", error);
+        }
+      }
+
+      async function fetchRegulatoryMilestones() {
+        try {
+          const response = await fetch("/api/oversight/regulatory-milestones");
+          regulatoryMilestones = await response.json();
+          renderRegulatoryMilestones();
+        } catch (error) {
+          console.error("Error fetching regulatory milestones:", error);
+        }
+      }
+
+      async function fetchRegulatoryAuditLogs() {
+        try {
+          const response = await fetch("/api/oversight/regulatory-audit-logs");
+          regulatoryAuditLog = await response.json();
+          renderAuditLog();
+        } catch (error) {
+          console.error("Error fetching regulatory audit logs:", error);
+        }
+      }
+
       // --- Helper Functions ---
+      function getToken() {
+        return localStorage.getItem('token');
+      }
+
+      function getUserRole() {
+        return localStorage.getItem('userRole');
+      }
+
       function showToast(message, type = "success") {
         customToast.textContent = message;
         customToast.style.opacity = "1";
@@ -1196,6 +1215,10 @@
         event.currentTarget.classList.add("active");
         if (targetTabId === "regulatory") {
           renderRegulatoryDashboard();
+        } else if (targetTabId === "clinical") {
+          fetchSiteReports();
+        } else if (targetTabId === "cra") {
+          fetchComplianceChecks();
         }
       }
 
@@ -1421,12 +1444,17 @@
       // Main Admin Login
       loginButton.addEventListener("click", () => {
         if (adminCodeInput.value === "admin505") {
-          localStorage.setItem(LS_PREFIX + "mainAdminAccess", "true");
+          adminAccess = true;
           loginContainer.classList.add("hidden");
           appContainer.classList.remove("hidden");
           handleTabClick({
             currentTarget: document.getElementById("tab-clinical"),
           });
+          fetchSiteReports();
+          fetchComplianceChecks();
+          fetchRegulatoryDocuments();
+          fetchRegulatoryMilestones();
+          fetchRegulatoryAuditLogs();
           showToast("Welcome to Clinical Study Oversight!", "success");
         } else {
           showToast("Access Denied. Incorrect code.", "error");
@@ -1449,7 +1477,7 @@
         openModal(siteReportModal);
       });
 
-      saveSiteReportButton.addEventListener("click", () => {
+      saveSiteReportButton.addEventListener("click", async () => {
         const siteName = siteNameInput.value.trim();
         const investigator = investigatorInput.value.trim();
         const notes = notesTextarea.value.trim();
@@ -1463,26 +1491,51 @@
         }
 
         if (editingSiteReportId) {
-          setSiteReports((prev) =>
-            prev.map((report) =>
-              report.id === editingSiteReportId
-                ? { ...report, siteName, investigator, notes }
-                : report
-            )
-          );
-          showToast("Site report updated successfully!", "success");
+          try {
+            const response = await fetch(
+              `/api/oversight/site-reports/${editingSiteReportId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ siteName, investigator, notes }),
+              }
+            );
+            if (response.ok) {
+              showToast("Site report updated successfully!", "success");
+              fetchSiteReports(); // Re-fetch to update UI
+            } else {
+              showToast("Failed to update site report.", "error");
+            }
+          } catch (error) {
+            console.error("Error updating site report:", error);
+            showToast("Error updating site report.", "error");
+          }
         } else {
-          setSiteReports((prev) => [
-            ...prev,
-            { id: Date.now(), siteName, investigator, notes },
-          ]);
-          showToast("Site report submitted successfully!", "success");
+          try {
+            const response = await fetch("/api/oversight/site-reports", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ siteName, investigator, notes }),
+            });
+            if (response.ok) {
+              showToast("Site report submitted successfully!", "success");
+              fetchSiteReports(); // Re-fetch to update UI
+            } else {
+              showToast("Failed to submit site report.", "error");
+            }
+          } catch (error) {
+            console.error("Error submitting site report:", error);
+            showToast("Error submitting site report.", "error");
+          }
         }
         closeModal(siteReportModal);
-        renderSiteReports();
       });
 
-      siteReportsTbody.addEventListener("click", (event) => {
+      siteReportsTbody.addEventListener("click", async (event) => {
         const target = event.target.closest("button");
         if (!target) return;
 
@@ -1511,9 +1564,23 @@
               `Are you sure you want to delete the report for ${report.siteName}?`
             )
           ) {
-            setSiteReports((prev) => prev.filter((r) => r.id !== id));
-            showToast("Site report deleted successfully!", "info");
-            renderSiteReports();
+            try {
+              const response = await fetch(
+                `/api/oversight/site-reports/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (response.ok) {
+                showToast("Site report deleted successfully!", "info");
+                fetchSiteReports(); // Re-fetch to update UI
+              } else {
+                showToast("Failed to delete site report.", "error");
+              }
+            } catch (error) {
+              console.error("Error deleting site report:", error);
+              showToast("Error deleting site report.", "error");
+            }
           }
         }
       });
@@ -1521,7 +1588,7 @@
       siteSearchInput.addEventListener("input", renderSiteReports);
 
       // CRA Tab Handlers
-      submitCraSummaryButton.addEventListener("click", () => {
+      submitCraSummaryButton.addEventListener("click", async () => {
         const summaryText = craSummaryTextarea.value.trim();
         const category = craCategorySelect.value;
 
@@ -1531,30 +1598,55 @@
         }
 
         if (editingCraSummaryId) {
-          setComplianceChecks((prev) =>
-            prev.map((check) =>
-              check.id === editingCraSummaryId
-                ? { ...check, text: summaryText, category: category }
-                : check
-            )
-          );
-          showToast("Compliance summary updated.", "success");
-          editingCraSummaryId = null;
-          submitCraSummaryButton.innerHTML =
-            '<i class="fas fa-paper-plane mr-2"></i> Submit Summary';
+          try {
+            const response = await fetch(
+              `/api/oversight/compliance-checks/${editingCraSummaryId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ text: summaryText, category: category }),
+              }
+            );
+            if (response.ok) {
+              showToast("Compliance summary updated.", "success");
+              fetchComplianceChecks();
+              editingCraSummaryId = null;
+              submitCraSummaryButton.innerHTML =
+                '<i class="fas fa-paper-plane mr-2"></i> Submit Summary';
+            } else {
+              showToast("Failed to update compliance summary.", "error");
+            }
+          } catch (error) {
+            console.error("Error updating compliance summary:", error);
+            showToast("Error updating compliance summary.", "error");
+          }
         } else {
-          setComplianceChecks((prev) => [
-            ...prev,
-            { id: Date.now(), text: summaryText, category: category },
-          ]);
-          showToast("Data review summary submitted.", "success");
+          try {
+            const response = await fetch("/api/oversight/compliance-checks", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ text: summaryText, category: category }),
+            });
+            if (response.ok) {
+              showToast("Data review summary submitted.", "success");
+              fetchComplianceChecks();
+            } else {
+              showToast("Failed to submit data review summary.", "error");
+            }
+          } catch (error) {
+            console.error("Error submitting data review summary:", error);
+            showToast("Error submitting data review summary.", "error");
+          }
         }
         craSummaryTextarea.value = "";
         craCategorySelect.value = "general";
-        renderComplianceChecks();
       });
 
-      complianceChecksList.addEventListener("click", (event) => {
+      complianceChecksList.addEventListener("click", async (event) => {
         const target = event.target.closest("button");
         if (!target) return;
 
@@ -1572,9 +1664,23 @@
             '<i class="fas fa-save mr-2"></i> Update Summary';
         } else if (action === "delete") {
           if (confirm(`Are you sure you want to delete this summary?`)) {
-            setComplianceChecks((prev) => prev.filter((c) => c.id !== id));
-            showToast("Compliance summary deleted.", "info");
-            renderComplianceChecks();
+            try {
+              const response = await fetch(
+                `/api/oversight/compliance-checks/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (response.ok) {
+                showToast("Compliance summary deleted.", "info");
+                fetchComplianceChecks();
+              } else {
+                showToast("Failed to delete compliance summary.", "error");
+              }
+            } catch (error) {
+              console.error("Error deleting compliance summary:", error);
+              showToast("Error deleting compliance summary.", "error");
+            }
           }
         }
       });
@@ -1597,61 +1703,96 @@
         renderRegulatoryDashboard();
       });
 
-      saveComplianceStatusButton.addEventListener("click", () => {
+      saveComplianceStatusButton.addEventListener("click", async () => {
         const status = complianceStatusSelect.value;
         if (status) {
-          setComplianceStatus(status);
-          const newLogEntry = {
-            type: "status_change",
-            status: status,
-            timestamp: new Date().toLocaleString(),
-            notes: `Compliance status updated to: ${status.replace(
-              /-/g,
-              " "
-            )}.`,
-          };
-          setRegulatoryAuditLog((prev) => [...prev, newLogEntry]);
-          showToast(
-            `Compliance marked as: ${status.replace(/-/g, " ")}`,
-            "success"
-          );
-          updateComplianceStatusDisplay();
-          renderAuditLog();
+          try {
+            const response = await fetch("/api/oversight/regulatory-milestones", { // Using regulatory-milestones as a placeholder for status update
+              method: "POST", // Assuming a POST to update status or a PUT to a specific status endpoint
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ status: status }),
+            });
+            if (response.ok) {
+              const newLogEntry = {
+                type: "status_change",
+                status: status,
+                timestamp: new Date().toLocaleString(),
+                notes: `Compliance status updated to: ${status.replace(
+                  /-/g,
+                  " "
+                )}.`,
+              };
+              // Assuming audit logs are also managed via API
+              await fetch("/api/oversight/regulatory-audit-logs", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newLogEntry),
+              });
+              showToast(
+                `Compliance marked as: ${status.replace(/-/g, " ")}`,
+                "success"
+              );
+              updateComplianceStatusDisplay();
+              fetchRegulatoryAuditLogs(); // Re-fetch audit logs
+            } else {
+              showToast("Failed to update compliance status.", "error");
+            }
+          } catch (error) {
+            console.error("Error updating compliance status:", error);
+            showToast("Error updating compliance status.", "error");
+          }
         } else {
           showToast("Please select a compliance status.", "warning");
         }
       });
 
-      addDocumentButton.addEventListener("click", () => {
+      addDocumentButton.addEventListener("click", async () => {
         const name = docNameInput.value.trim();
         const link = docLinkInput.value.trim();
         if (name) {
-          const newDoc = {
-            id: Date.now(),
-            name: name,
-            link: link,
-            uploadedAt: new Date().toLocaleString(),
-          };
-          setRegulatoryDocuments((prev) => [...prev, newDoc]);
-          setRegulatoryAuditLog((prev) => [
-            ...prev,
-            {
-              type: "document_added",
-              timestamp: new Date().toLocaleString(),
-              notes: `Document added: "${newDoc.name}".`,
-            },
-          ]);
-          showToast("Document added successfully!", "success");
-          docNameInput.value = "";
-          docLinkInput.value = "";
-          renderRegulatoryDocuments();
-          renderAuditLog();
+          try {
+            const response = await fetch("/api/oversight/regulatory-documents", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name, link, uploadedAt: new Date().toLocaleString() }),
+            });
+            if (response.ok) {
+              const newLogEntry = {
+                type: "document_added",
+                timestamp: new Date().toLocaleString(),
+                notes: `Document added: "${name}".`,
+              };
+              await fetch("/api/oversight/regulatory-audit-logs", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newLogEntry),
+              });
+              showToast("Document added successfully!", "success");
+              docNameInput.value = "";
+              docLinkInput.value = "";
+              fetchRegulatoryDocuments();
+              fetchRegulatoryAuditLogs();
+            } else {
+              showToast("Failed to add document.", "error");
+            }
+          } catch (error) {
+            console.error("Error adding document:", error);
+            showToast("Error adding document.", "error");
+          }
         } else {
           showToast("Document name is required.", "error");
         }
       });
 
-      regulatoryDocumentsTbody.addEventListener("click", (event) => {
+      regulatoryDocumentsTbody.addEventListener("click", async (event) => {
         const target = event.target.closest("button");
         if (!target) return;
 
@@ -1667,50 +1808,84 @@
               }"?`
             )
           ) {
-            setRegulatoryDocuments((prev) =>
-              prev.filter((doc) => doc.id !== id)
-            );
-            setRegulatoryAuditLog((prev) => [
-              ...prev,
-              {
-                type: "document_deleted",
-                timestamp: new Date().toLocaleString(),
-                notes: `Document deleted: "${
-                  deletedDoc?.name || "Unknown Document"
-                }".`,
-              },
-            ]);
-            showToast("Document deleted successfully!", "info");
-            renderRegulatoryDocuments();
-            renderAuditLog();
+            try {
+              const response = await fetch(
+                `/api/oversight/regulatory-documents/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (response.ok) {
+                const newLogEntry = {
+                  type: "document_deleted",
+                  timestamp: new Date().toLocaleString(),
+                  notes: `Document deleted: "${
+                    deletedDoc?.name || "Unknown Document"
+                  }".`,
+                };
+                await fetch("/api/oversight/regulatory-audit-logs", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newLogEntry),
+                });
+                showToast("Document deleted successfully!", "info");
+                fetchRegulatoryDocuments();
+                fetchRegulatoryAuditLogs();
+              } else {
+                showToast("Failed to delete document.", "error");
+              }
+            } catch (error) {
+              console.error("Error deleting document:", error);
+              showToast("Error deleting document.", "error");
+            }
           }
         }
       });
 
-      addMilestoneButton.addEventListener("click", () => {
+      addMilestoneButton.addEventListener("click", async () => {
         const description = milestoneDescInput.value.trim();
         const dueDate = milestoneDateInput.value.trim();
         if (description && dueDate) {
           const newMilestone = {
-            id: Date.now(),
             description: description,
             dueDate: dueDate,
             completed: false,
           };
-          setRegulatoryMilestones((prev) => [...prev, newMilestone]);
-          setRegulatoryAuditLog((prev) => [
-            ...prev,
-            {
-              type: "milestone_added",
-              timestamp: new Date().toLocaleString(),
-              notes: `Milestone added: "${newMilestone.description}" due by ${newMilestone.dueDate}.`,
-            },
-          ]);
-          showToast("Milestone added successfully!", "success");
-          milestoneDescInput.value = "";
-          milestoneDateInput.value = "";
-          renderRegulatoryMilestones();
-          renderAuditLog();
+          try {
+            const response = await fetch("/api/oversight/regulatory-milestones", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newMilestone),
+            });
+            if (response.ok) {
+              const newLogEntry = {
+                type: "milestone_added",
+                timestamp: new Date().toLocaleString(),
+                notes: `Milestone added: "${newMilestone.description}" due by ${newMilestone.dueDate}.`,
+              };
+              await fetch("/api/oversight/regulatory-audit-logs", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newLogEntry),
+              });
+              showToast("Milestone added successfully!", "success");
+              milestoneDescInput.value = "";
+              milestoneDateInput.value = "";
+              fetchRegulatoryMilestones();
+              fetchRegulatoryAuditLogs();
+            } else {
+              showToast("Failed to add milestone.", "error");
+            }
+          } catch (error) {
+            console.error("Error adding milestone:", error);
+            showToast("Error adding milestone.", "error");
+          }
         } else {
           showToast(
             "Milestone description and due date are required.",
@@ -1719,7 +1894,7 @@
         }
       });
 
-      regulatoryMilestonesTbody.addEventListener("click", (event) => {
+      regulatoryMilestonesTbody.addEventListener("click", async (event) => {
         const target = event.target.closest("button");
         if (!target) return;
 
@@ -1730,49 +1905,85 @@
         if (!toggledMilestone) return;
 
         if (action === "toggle-milestone") {
-          setRegulatoryMilestones((prev) =>
-            prev.map((m) =>
-              m.id === id ? { ...m, completed: !m.completed } : m
-            )
-          );
-          setRegulatoryAuditLog((prev) => [
-            ...prev,
-            {
-              type: toggledMilestone.completed
-                ? "milestone_reopened"
-                : "milestone_completed",
-              timestamp: new Date().toLocaleString(),
-              notes: `Milestone "${toggledMilestone.description}" marked as ${
-                toggledMilestone.completed ? "reopened" : "completed"
-              }.`,
-            },
-          ]);
-          showToast(
-            `Milestone "${toggledMilestone.description}" marked as ${
-              toggledMilestone.completed ? "reopened" : "completed"
-            }.`,
-            "info"
-          );
-          renderRegulatoryMilestones();
-          renderAuditLog();
+          try {
+            const response = await fetch(
+              `/api/oversight/regulatory-milestones/${id}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ completed: !toggledMilestone.completed }),
+              }
+            );
+            if (response.ok) {
+              const newLogEntry = {
+                type: toggledMilestone.completed
+                  ? "milestone_reopened"
+                  : "milestone_completed",
+                timestamp: new Date().toLocaleString(),
+                notes: `Milestone "${toggledMilestone.description}" marked as ${
+                  toggledMilestone.completed ? "reopened" : "completed"
+                }.`,
+              };
+              await fetch("/api/oversight/regulatory-audit-logs", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newLogEntry),
+              });
+              showToast(
+                `Milestone "${toggledMilestone.description}" marked as ${
+                  toggledMilestone.completed ? "reopened" : "completed"
+                }.`,
+                "info"
+              );
+              fetchRegulatoryMilestones();
+              fetchRegulatoryAuditLogs();
+            } else {
+              showToast("Failed to update milestone.", "error");
+            }
+          } catch (error) {
+            console.error("Error updating milestone:", error);
+            showToast("Error updating milestone.", "error");
+          }
         } else if (action === "delete-milestone") {
           if (
             confirm(
               `Are you sure you want to delete milestone "${toggledMilestone.description}"?`
             )
           ) {
-            setRegulatoryMilestones((prev) => prev.filter((m) => m.id !== id));
-            setRegulatoryAuditLog((prev) => [
-              ...prev,
-              {
-                type: "milestone_deleted",
-                timestamp: new Date().toLocaleString(),
-                notes: `Milestone deleted: "${toggledMilestone.description}".`,
-              },
-            ]);
-            showToast("Milestone deleted successfully!", "info");
-            renderRegulatoryMilestones();
-            renderAuditLog();
+            try {
+              const response = await fetch(
+                `/api/oversight/regulatory-milestones/${id}`,
+                {
+                  method: "DELETE",
+                }
+              );
+              if (response.ok) {
+                const newLogEntry = {
+                  type: "milestone_deleted",
+                  timestamp: new Date().toLocaleString(),
+                  notes: `Milestone deleted: "${toggledMilestone.description}".`,
+                };
+                await fetch("/api/oversight/regulatory-audit-logs", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(newLogEntry),
+                });
+                showToast("Milestone deleted successfully!", "info");
+                fetchRegulatoryMilestones();
+                fetchRegulatoryAuditLogs();
+              } else {
+                showToast("Failed to delete milestone.", "error");
+              }
+            } catch (error) {
+              console.error("Error deleting milestone:", error);
+              showToast("Error deleting milestone.", "error");
+            }
           }
         }
       });
@@ -1795,7 +2006,7 @@
       // --- Initial Render on Load ---
       document.addEventListener("DOMContentLoaded", () => {
         // Check main admin access
-        if (localStorage.getItem(LS_PREFIX + "mainAdminAccess") === "true") {
+        if (adminAccess) {
           loginContainer.classList.add("hidden");
           appContainer.classList.remove("hidden");
           // Call handleTabClick to set the initial active tab and render its content
@@ -1808,8 +2019,11 @@
         }
 
         // Initial render for all sections (these will be called again by handleTabClick for the active tab)
-        renderSiteReports();
-        renderComplianceChecks();
+        fetchSiteReports();
+        fetchComplianceChecks();
+        fetchRegulatoryDocuments();
+        fetchRegulatoryMilestones();
+        fetchRegulatoryAuditLogs();
         renderRegulatoryDashboard(); // This will handle its
       });
     </script>
