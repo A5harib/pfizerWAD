@@ -1,714 +1,836 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Introduction & Manufacturing</title>
     <style>
-        /* Import Google Font - Inter */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+      /* Import Google Font - Inter */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
-        /* Base Styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom right, #e0f2fe, #e9d5ff); /* from-indigo-100 via-blue-50 to-indigo-200 */
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align to top */
-            padding: 1.5rem; /* p-6 */
-            box-sizing: border-box;
-            color: #333;
-        }
+      /* Base Styles */
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(
+          to bottom right,
+          #e0f2fe,
+          #e9d5ff
+        ); /* from-indigo-100 via-blue-50 to-indigo-200 */
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start; /* Align to top */
+        padding: 1.5rem; /* p-6 */
+        box-sizing: border-box;
+        color: #333;
+      }
 
-        /* Admin Access Section */
-        .admin-access-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem; /* gap-3 */
-            background-color: white;
-            padding: 1.5rem; /* p-6 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
-            width: 100%;
-            max-width: 28rem; /* max-w-md */
-            margin: 5rem auto; /* Centering for the admin access screen */
-        }
+      /* Admin Access Section */
+      .admin-access-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* gap-3 */
+        background-color: white;
+        padding: 1.5rem; /* p-6 */
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
+        width: 100%;
+        max-width: 28rem; /* max-w-md */
+        margin: 5rem auto; /* Centering for the admin access screen */
+      }
 
-        .admin-access-container p {
-            color: #4b5563; /* text-gray-700 */
-            text-align: center;
-            font-size: 1.125rem; /* text-lg */
-            font-weight: 500; /* font-medium */
-        }
+      .admin-access-container p {
+        color: #4b5563; /* text-gray-700 */
+        text-align: center;
+        font-size: 1.125rem; /* text-lg */
+        font-weight: 500; /* font-medium */
+      }
 
-        .admin-access-container input {
-            padding: 0.5rem; /* p-2 */
-            border: 1px solid #c7d2fe; /* border border-indigo-200 */
-            border-radius: 0.375rem; /* rounded-md */
-            width: 100%;
-            box-sizing: border-box;
-            outline: none;
-        }
+      .admin-access-container input {
+        padding: 0.5rem; /* p-2 */
+        border: 1px solid #c7d2fe; /* border border-indigo-200 */
+        border-radius: 0.375rem; /* rounded-md */
+        width: 100%;
+        box-sizing: border-box;
+        outline: none;
+      }
 
-        .admin-access-container input:focus {
-            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
-            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
-        }
+      .admin-access-container input:focus {
+        border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
+      }
 
-        .admin-access-container button {
-            background-color: #6366f1; /* bg-indigo-500 */
-            color: white;
-            padding: 0.5rem 1rem; /* py-2 */
-            border-radius: 0.375rem; /* rounded-md */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            border: none;
-            font-weight: 600;
-        }
+      .admin-access-container button {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding: 0.5rem 1rem; /* py-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border: none;
+        font-weight: 600;
+      }
 
-        .admin-access-container button:hover {
-            background-color: #4f46e5; /* hover:bg-indigo-600 */
-        }
+      .admin-access-container button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
 
-        /* Main Content Area */
-        .main-content-container {
-            width: 100%;
-            max-width: 72rem; /* max-w-6xl */
-            margin: 0 auto;
-            display: none; /* Hidden by default, shown after admin login */
-        }
+      /* Main Content Area */
+      .main-content-container {
+        width: 100%;
+        max-width: 72rem; /* max-w-6xl */
+        margin: 0 auto;
+        display: none; /* Hidden by default, shown after admin login */
+      }
 
-        h1.main-title {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 800; /* font-extrabold */
-            color: #4338ca; /* text-indigo-800 */
-            text-align: center;
-            margin-bottom: 2rem; /* mb-8 */
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* drop-shadow */
-            letter-spacing: -0.025em; /* tracking-tight */
-        }
+      h1.main-title {
+        font-size: 2.25rem; /* text-4xl */
+        font-weight: 800; /* font-extrabold */
+        color: #4338ca; /* text-indigo-800 */
+        text-align: center;
+        margin-bottom: 2rem; /* mb-8 */
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* drop-shadow */
+        letter-spacing: -0.025em; /* tracking-tight */
+      }
 
-        /* Flex Container for Sections */
+      /* Flex Container for Sections */
+      .flex-sections-container {
+        display: flex;
+        flex-direction: column; /* flex-col */
+        gap: 2rem; /* gap-8 */
+        margin-bottom: 2rem; /* mb-8 */
+      }
+
+      @media (min-width: 768px) {
+        /* md breakpoint */
         .flex-sections-container {
-            display: flex;
-            flex-direction: column; /* flex-col */
-            gap: 2rem; /* gap-8 */
-            margin-bottom: 2rem; /* mb-8 */
+          flex-direction: row; /* md:flex-row */
         }
+      }
 
-        @media (min-width: 768px) { /* md breakpoint */
-            .flex-sections-container {
-                flex-direction: row; /* md:flex-row */
-            }
+      /* Card Styles (Ideas, Production) */
+      .card {
+        flex: 1; /* flex-1 */
+        background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
+        border-radius: 1.5rem; /* rounded-3xl */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border for depth */
+      }
+
+      .card-header {
+        background: linear-gradient(
+          to right,
+          #6366f1,
+          #3b82f6
+        ); /* bg-gradient-to-r from-indigo-500 to-blue-500 */
+        color: white;
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 700; /* font-bold */
+        padding: 1.25rem; /* p-5 */
+        text-align: center;
+      }
+
+      .card-content {
+        padding: 1.5rem; /* p-6 */
+      }
+
+      /* Ideas List */
+      .ideas-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* space-y-4 */
+      }
+
+      .idea-item {
+        background-color: #eef2ff; /* bg-indigo-50 */
+        border-radius: 0.75rem; /* rounded-xl */
+        padding: 1rem; /* p-4 */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; /* gap-2 */
+      }
+
+      .idea-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .idea-title {
+        font-weight: 700; /* font-bold */
+        font-size: 1.125rem; /* text-lg */
+        color: #4f46e5; /* text-indigo-700 */
+      }
+
+      .idea-source {
+        font-size: 0.75rem; /* text-xs */
+        background-color: #c7d2fe; /* bg-indigo-200 */
+        color: #312e81; /* text-indigo-800 */
+        padding: 0.25rem 0.5rem; /* px-2 py-1 */
+        border-radius: 0.25rem; /* rounded */
+      }
+
+      .idea-description {
+        color: #4b5563; /* text-gray-700 */
+        font-size: 0.9375rem; /* slightly larger than text-sm */
+        line-height: 1.5;
+      }
+
+      .idea-actions {
+        display: flex;
+        gap: 0.5rem; /* gap-2 */
+        margin-top: 0.5rem; /* mt-2 */
+      }
+
+      .idea-actions button {
+        padding: 0.25rem 0.75rem; /* px-3 py-1 */
+        border-radius: 0.25rem; /* rounded */
+        color: white;
+        transition: background-color 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+      }
+
+      .idea-actions .btn-reject {
+        background-color: #ef4444; /* bg-red-500 */
+      }
+
+      .idea-actions .btn-reject:hover {
+        background-color: #dc2626; /* hover:bg-red-600 */
+      }
+
+      .idea-actions .btn-approve {
+        background-color: #22c55e; /* bg-green-500 */
+      }
+
+      .idea-actions .btn-approve:hover {
+        background-color: #16a34a; /* hover:bg-green-600 */
+      }
+
+      /* Add Idea Button */
+      .add-idea-button {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: #e0e7ff; /* text-indigo-100 */
+        cursor: pointer;
+        border: 2px solid #6366f1; /* border-2 border-indigo-500 */
+        transition: all 0.3s ease; /* transition-all duration-300 */
+        width: fit-content; /* w-fit */
+        padding: 0.5rem 1rem; /* p-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        margin-top: 1rem; /* my-2 */
+        font-weight: 600; /* font-semibold */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
+      }
+
+      .add-idea-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+        transform: scale(1.05); /* hover:scale-105 */
+      }
+
+      /* Production Section */
+      .production-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .production-item {
+        margin-bottom: 1rem; /* mb-2 */
+      }
+
+      .production-item strong {
+        font-size: 1.25rem; /* text-xl */
+      }
+
+      .loading-dots {
+        font-size: 1.5rem; /* text-2xl */
+        color: #6366f1;
+        display: inline-block;
+        vertical-align: middle;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
-
-        /* Card Styles (Ideas, Production) */
-        .card {
-            flex: 1; /* flex-1 */
-            background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
-            border-radius: 1.5rem; /* rounded-3xl */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border for depth */
+        50% {
+          opacity: 0.5;
         }
+      }
 
-        .card-header {
-            background: linear-gradient(to right, #6366f1, #3b82f6); /* bg-gradient-to-r from-indigo-500 to-blue-500 */
-            color: white;
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            padding: 1.25rem; /* p-5 */
-            text-align: center;
-        }
+      .no-content-message {
+        text-align: center;
+        color: #9ca3af; /* text-gray-400 */
+        font-style: italic;
+        padding: 1rem 0;
+      }
 
-        .card-content {
-            padding: 1.5rem; /* p-6 */
-        }
+      /* Manufacturing Process Section */
+      .manufacturing-process-section {
+        background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
+        border-radius: 1.5rem; /* rounded-3xl */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+          0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
+        overflow: hidden;
+        margin-top: 1rem; /* mt-4 */
+        border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border for depth */
+      }
 
-        /* Ideas List */
-        .ideas-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem; /* space-y-4 */
-        }
+      .manufacturing-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* grid-cols-1 */
+        gap: 1.5rem; /* gap-6 */
+        padding: 1.5rem; /* p-6 */
+      }
 
-        .idea-item {
-            background-color: #eef2ff; /* bg-indigo-50 */
-            border-radius: 0.75rem; /* rounded-xl */
-            padding: 1rem; /* p-4 */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem; /* gap-2 */
-        }
-
-        .idea-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .idea-title {
-            font-weight: 700; /* font-bold */
-            font-size: 1.125rem; /* text-lg */
-            color: #4f46e5; /* text-indigo-700 */
-        }
-
-        .idea-source {
-            font-size: 0.75rem; /* text-xs */
-            background-color: #c7d2fe; /* bg-indigo-200 */
-            color: #312e81; /* text-indigo-800 */
-            padding: 0.25rem 0.5rem; /* px-2 py-1 */
-            border-radius: 0.25rem; /* rounded */
-        }
-
-        .idea-description {
-            color: #4b5563; /* text-gray-700 */
-            font-size: 0.9375rem; /* slightly larger than text-sm */
-            line-height: 1.5;
-        }
-
-        .idea-actions {
-            display: flex;
-            gap: 0.5rem; /* gap-2 */
-            margin-top: 0.5rem; /* mt-2 */
-        }
-
-        .idea-actions button {
-            padding: 0.25rem 0.75rem; /* px-3 py-1 */
-            border-radius: 0.25rem; /* rounded */
-            color: white;
-            transition: background-color 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .idea-actions .btn-reject {
-            background-color: #ef4444; /* bg-red-500 */
-        }
-
-        .idea-actions .btn-reject:hover {
-            background-color: #dc2626; /* hover:bg-red-600 */
-        }
-
-        .idea-actions .btn-approve {
-            background-color: #22c55e; /* bg-green-500 */
-        }
-
-        .idea-actions .btn-approve:hover {
-            background-color: #16a34a; /* hover:bg-green-600 */
-        }
-
-        /* Add Idea Button */
-        .add-idea-button {
-            background-color: #6366f1; /* bg-indigo-500 */
-            color: #e0e7ff; /* text-indigo-100 */
-            cursor: pointer;
-            border: 2px solid #6366f1; /* border-2 border-indigo-500 */
-            transition: all 0.3s ease; /* transition-all duration-300 */
-            width: fit-content; /* w-fit */
-            padding: 0.5rem 1rem; /* p-2 */
-            border-radius: 0.375rem; /* rounded-md */
-            margin-top: 1rem; /* my-2 */
-            font-weight: 600; /* font-semibold */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* shadow */
-        }
-
-        .add-idea-button:hover {
-            background-color: #4f46e5; /* hover:bg-indigo-600 */
-            transform: scale(1.05); /* hover:scale-105 */
-        }
-
-        /* Production Section */
-        .production-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .production-item {
-            margin-bottom: 1rem; /* mb-2 */
-        }
-
-        .production-item strong {
-            font-size: 1.25rem; /* text-xl */
-        }
-
-        .loading-dots {
-            font-size: 1.5rem; /* text-2xl */
-            color: #6366f1;
-            display: inline-block;
-            vertical-align: middle;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .no-content-message {
-            text-align: center;
-            color: #9ca3af; /* text-gray-400 */
-            font-style: italic;
-            padding: 1rem 0;
-        }
-
-        /* Manufacturing Process Section */
-        .manufacturing-process-section {
-            background-color: rgba(255, 255, 255, 0.9); /* bg-white/90 */
-            border-radius: 1.5rem; /* rounded-3xl */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* shadow-2xl */
-            overflow: hidden;
-            margin-top: 1rem; /* mt-4 */
-            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border for depth */
-        }
-
+      @media (min-width: 768px) {
+        /* md breakpoint */
         .manufacturing-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* grid-cols-1 */
-            gap: 1.5rem; /* gap-6 */
-            padding: 1.5rem; /* p-6 */
+          grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
         }
+      }
 
-        @media (min-width: 768px) { /* md breakpoint */
-            .manufacturing-grid {
-                grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
-            }
+      @media (min-width: 1024px) {
+        /* lg breakpoint */
+        .manufacturing-grid {
+          grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
         }
+      }
 
-        @media (min-width: 1024px) { /* lg breakpoint */
-            .manufacturing-grid {
-                grid-template-columns: repeat(3, 1fr); /* lg:grid-cols-3 */
-            }
-        }
+      .manufacturing-item {
+        background-color: #eef2ff; /* bg-indigo-50 */
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+        padding: 1.25rem; /* p-5 */
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem; /* gap-3 */
+      }
 
-        .manufacturing-item {
-            background-color: #eef2ff; /* bg-indigo-50 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
-            padding: 1.25rem; /* p-5 */
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem; /* gap-3 */
-        }
+      .manufacturing-item strong {
+        font-size: 1.25rem; /* text-xl */
+        color: #4f46e5; /* text-indigo-700 */
+      }
 
-        .manufacturing-item strong {
-            font-size: 1.25rem; /* text-xl */
-            color: #4f46e5; /* text-indigo-700 */
-        }
+      .manufacturing-item select {
+        border: 1px solid #d1d5db; /* border-neutral-300 */
+        padding: 0.5rem; /* p-2 */
+        border-radius: 0.375rem; /* rounded-md */
+        width: 100%;
+        margin: 0.25rem 0; /* my-1 */
+        background-color: white;
+        color: #4f46e5; /* text-indigo-700 */
+        font-weight: 600; /* font-semibold */
+        outline: none;
+        transition: all 0.2s ease;
+      }
 
-        .manufacturing-item select {
-            border: 1px solid #d1d5db; /* border-neutral-300 */
-            padding: 0.5rem; /* p-2 */
-            border-radius: 0.375rem; /* rounded-md */
-            width: 100%;
-            margin: 0.25rem 0; /* my-1 */
-            background-color: white;
-            color: #4f46e5; /* text-indigo-700 */
-            font-weight: 600; /* font-semibold */
-            outline: none;
-            transition: all 0.2s ease;
-        }
+      .manufacturing-item select:focus {
+        border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
+      }
 
-        .manufacturing-item select:focus {
-            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
-            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
-        }
+      .manufacturing-item select option {
+        background-color: white;
+        color: #4b5563; /* text-gray-400 */
+      }
 
-        .manufacturing-item select option {
-            background-color: white;
-            color: #4b5563; /* text-gray-400 */
-        }
+      .manufacturing-item select option[value="Pass"],
+      .manufacturing-item select option[value="Approved"] {
+        color: #15803d; /* text-green-700 */
+        background-color: #f0fdf4; /* bg-green-50 */
+        font-weight: 700;
+      }
 
-        .manufacturing-item select option[value="Pass"],
-        .manufacturing-item select option[value="Approved"] {
-            color: #15803d; /* text-green-700 */
-            background-color: #f0fdf4; /* bg-green-50 */
-            font-weight: 700;
-        }
+      .manufacturing-item select option[value="Fail"] {
+        color: #b91c1c; /* text-red-700 */
+        background-color: #fef2f2; /* bg-red-50 */
+        font-weight: 700;
+      }
 
-        .manufacturing-item select option[value="Fail"] {
-            color: #b91c1c; /* text-red-700 */
-            background-color: #fef2f2; /* bg-red-50 */
-            font-weight: 700;
-        }
+      .manufacturing-item select option[value="Pending"] {
+        color: #b45309; /* text-yellow-700 */
+        background-color: #fffbeb; /* bg-yellow-50 */
+        font-weight: 700;
+      }
 
-        .manufacturing-item select option[value="Pending"] {
-            color: #b45309; /* text-yellow-700 */
-            background-color: #fffbeb; /* bg-yellow-50 */
-            font-weight: 700;
-        }
+      .manufacturing-details-display {
+        font-size: 0.875rem; /* text-sm */
+        color: #4b5563; /* text-gray-700 */
+        line-height: 1.4;
+        margin-top: 0.5rem; /* space-y-1 */
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
 
-        .manufacturing-details-display {
-            font-size: 0.875rem; /* text-sm */
-            color: #4b5563; /* text-gray-700 */
-            line-height: 1.4;
-            margin-top: 0.5rem; /* space-y-1 */
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
+      .manufacturing-details-display strong {
+        font-size: 0.875rem; /* Reset strong font size */
+        color: #333;
+      }
 
-        .manufacturing-details-display strong {
-            font-size: 0.875rem; /* Reset strong font size */
-            color: #333;
-        }
+      /* Status and Approve Button */
+      .status-area {
+        display: flex;
+        gap: 0.5rem; /* gap-2 */
+        align-items: center;
+        margin-top: 0.5rem; /* mt-2 */
+      }
 
-        /* Status and Approve Button */
-        .status-area {
-            display: flex;
-            gap: 0.5rem; /* gap-2 */
-            align-items: center;
-            margin-top: 0.5rem; /* mt-2 */
-        }
+      .status-message {
+        font-weight: 500; /* font-medium */
+      }
 
-        .status-message {
-            font-weight: 500; /* font-medium */
-        }
+      .status-ready {
+        color: #16a34a; /* text-green-600 */
+      }
 
-        .status-ready {
-            color: #16a34a; /* text-green-600 */
-        }
+      .status-pending {
+        color: #dc2626; /* text-red-500 */
+      }
 
-        .status-pending {
-            color: #dc2626; /* text-red-500 */
-        }
+      .status-approve-button {
+        background-color: #22c55e; /* bg-green-500 */
+        color: white;
+        padding: 0.25rem 0.75rem; /* px-3 py-1 */
+        border-radius: 0.25rem; /* rounded */
+        transition: background-color 0.2s ease;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+      }
 
-        .status-approve-button {
-            background-color: #22c55e; /* bg-green-500 */
-            color: white;
-            padding: 0.25rem 0.75rem; /* px-3 py-1 */
-            border-radius: 0.25rem; /* rounded */
-            transition: background-color 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
+      .status-approve-button:hover {
+        background-color: #16a34a; /* hover:bg-green-600 */
+      }
 
-        .status-approve-button:hover {
-            background-color: #16a34a; /* hover:bg-green-600 */
-        }
+      .col-span-full {
+        grid-column: span 1 / span 1; /* Default for mobile */
+        text-align: center;
+        color: #9ca3af; /* text-gray-400 */
+        font-style: italic;
+      }
 
+      @media (min-width: 768px) {
         .col-span-full {
-            grid-column: span 1 / span 1; /* Default for mobile */
-            text-align: center;
-            color: #9ca3af; /* text-gray-400 */
-            font-style: italic;
+          grid-column: span 2 / span 2; /* md:col-span-2 */
         }
+      }
 
-        @media (min-width: 768px) {
-            .col-span-full {
-                grid-column: span 2 / span 2; /* md:col-span-2 */
-            }
+      @media (min-width: 1024px) {
+        .col-span-full {
+          grid-column: span 3 / span 3; /* lg:col-span-3 */
         }
+      }
 
-        @media (min-width: 1024px) {
-            .col-span-full {
-                grid-column: span 3 / span 3; /* lg:col-span-3 */
-            }
-        }
+      /* Modal Styles */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+        display: flex; /* Use flex to center content */
+        align-items: center;
+        justify-content: center;
+      }
 
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
-            display: flex; /* Use flex to center content */
-            align-items: center;
-            justify-content: center;
-        }
+      .modal-content {
+        background-color: #fefefe;
+        padding: 1.5rem; /* p-6 */
+        border-radius: 1rem; /* rounded-2xl */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-xl */
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        animation: fadeInScale 0.3s ease-out;
+      }
 
-        .modal-content {
-            background-color: #fefefe;
-            padding: 1.5rem; /* p-6 */
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); /* shadow-xl */
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            animation: fadeInScale 0.3s ease-out;
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
         }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
 
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
+      .modal-header {
+        padding-bottom: 1rem; /* pb-4 */
+        border-bottom: 1px solid #e5e7eb; /* border-b */
+        margin-bottom: 1rem; /* mb-4 */
+      }
 
-        .modal-header {
-            padding-bottom: 1rem; /* pb-4 */
-            border-bottom: 1px solid #e5e7eb; /* border-b */
-            margin-bottom: 1rem; /* mb-4 */
-        }
+      .modal-header h2 {
+        margin: 0;
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 700; /* font-bold */
+        color: #333;
+      }
 
-        .modal-header h2 {
-            margin: 0;
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 700; /* font-bold */
-            color: #333;
-        }
+      .modal-description {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem; /* gap-3 */
+      }
 
-        .modal-description {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem; /* gap-3 */
-        }
+      .modal-input {
+        border: 1px solid #d1d5db; /* border-neutral-300 */
+        padding: 0.75rem; /* p-3 */
+        border-radius: 0.375rem; /* rounded-md */
+        width: 100%;
+        box-sizing: border-box;
+        outline: none;
+      }
 
-        .modal-input {
-            border: 1px solid #d1d5db; /* border-neutral-300 */
-            padding: 0.75rem; /* p-3 */
-            border-radius: 0.375rem; /* rounded-md */
-            width: 100%;
-            box-sizing: border-box;
-            outline: none;
-        }
+      .modal-input:focus {
+        border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
+      }
 
-        .modal-input:focus {
-            border-color: #818cf8; /* focus:ring-2 focus:ring-indigo-400 */
-            box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.5);
-        }
+      .modal-save-button {
+        background-color: #6366f1; /* bg-indigo-500 */
+        color: white;
+        padding: 0.75rem 1rem; /* p-2 */
+        border-radius: 0.375rem; /* rounded */
+        font-weight: 600; /* font-semibold */
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border: none;
+        margin-top: 0.5rem;
+      }
 
-        .modal-save-button {
-            background-color: #6366f1; /* bg-indigo-500 */
-            color: white;
-            padding: 0.75rem 1rem; /* p-2 */
-            border-radius: 0.375rem; /* rounded */
-            font-weight: 600; /* font-semibold */
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            border: none;
-            margin-top: 0.5rem;
-        }
+      .modal-save-button:hover {
+        background-color: #4f46e5; /* hover:bg-indigo-600 */
+      }
 
-        .modal-save-button:hover {
-            background-color: #4f46e5; /* hover:bg-indigo-600 */
-        }
+      .close-button {
+        position: absolute;
+        top: 0.75rem; /* top-3 */
+        right: 0.75rem; /* right-3 */
+        font-size: 1.5rem; /* text-xl */
+        font-weight: bold;
+        color: #9ca3af; /* text-gray-400 */
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
 
-        .close-button {
-            position: absolute;
-            top: 0.75rem; /* top-3 */
-            right: 0.75rem; /* right-3 */
-            font-size: 1.5rem; /* text-xl */
-            font-weight: bold;
-            color: #9ca3af; /* text-gray-400 */
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
+      .close-button:hover {
+        color: #6b7280; /* hover:text-gray-600 */
+      }
 
-        .close-button:hover {
-            color: #6b7280; /* hover:text-gray-600 */
-        }
+      /* Tooltip Styles */
+      .custom-tooltip {
+        position: absolute;
+        background-color: #333;
+        color: white;
+        padding: 0.5rem 0.75rem; /* p-2 text-sm */
+        border-radius: 0.375rem; /* rounded-md */
+        font-size: 0.875rem; /* text-sm */
+        white-space: nowrap;
+        z-index: 1001; /* Above modals */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+        pointer-events: none; /* Allows clicks to pass through */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        line-height: 1.4;
+      }
 
-        /* Tooltip Styles */
-        .custom-tooltip {
-            position: absolute;
-            background-color: #333;
-            color: white;
-            padding: 0.5rem 0.75rem; /* p-2 text-sm */
-            border-radius: 0.375rem; /* rounded-md */
-            font-size: 0.875rem; /* text-sm */
-            white-space: nowrap;
-            z-index: 1001; /* Above modals */
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease, visibility 0.2s ease;
-            pointer-events: none; /* Allows clicks to pass through */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            line-height: 1.4;
-        }
+      .custom-tooltip.show {
+        opacity: 1;
+        visibility: visible;
+      }
 
-        .custom-tooltip.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .custom-tooltip strong {
-            color: #a78bfa; /* Light purple for emphasis */
-        }
+      .custom-tooltip strong {
+        color: #a78bfa; /* Light purple for emphasis */
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Admin Access Section -->
     <div id="admin-access-section" class="admin-access-container">
-        <p>Enter admin access code to proceed:</p>
-        <input type="password" id="adminCodeInput" placeholder="Enter admin code" class="admin-code-input" />
-        <button id="submitAdminCode" class="admin-submit-button">Submit</button>
+      <p>Enter admin access code to proceed:</p>
+      <input
+        type="password"
+        id="adminCodeInput"
+        placeholder="Enter admin code"
+        class="admin-code-input" />
+      <button id="submitAdminCode" class="admin-submit-button">Submit</button>
     </div>
 
     <!-- Main Content (Hidden by default) -->
     <div id="main-content" class="main-content-container">
-        <h1 class="main-title">Product Introduction & Manufacturing</h1>
+      <h1 class="main-title">Product Introduction & Manufacturing</h1>
 
-        <div class="flex-sections-container">
-            <!-- Ideas Section -->
-            <div class="card">
-                <div class="card-header">Current Ideas Proposed</div>
-                <div class="card-content">
-                    <ul id="ideasList" class="ideas-list">
-                        <!-- Ideas will be rendered here by JavaScript -->
-                    </ul>
-                    <button id="addIdeaTrigger" class="add-idea-button">Add Idea</button>
-                </div>
-            </div>
-
-            <!-- Production Section -->
-            <div class="card">
-                <div class="card-header">Current Production</div>
-                <div class="card-content">
-                    <div id="productionList" class="production-list">
-                        <div class="no-content-message" id="noProductionsMessage">No productions yet.</div>
-                        <!-- Productions will be rendered here by JavaScript -->
-                    </div>
-                </div>
-            </div>
+      <div class="flex-sections-container">
+        <!-- Ideas Section -->
+        <div class="card">
+          <div class="card-header">Current Ideas Proposed</div>
+          <div class="card-content">
+            <ul id="ideasList" class="ideas-list">
+              <!-- Ideas will be rendered here by JavaScript -->
+            </ul>
+            <button id="addIdeaTrigger" class="add-idea-button">
+              Add Idea
+            </button>
+          </div>
         </div>
 
-        <!-- Manufacturing Process Section -->
-        <div class="manufacturing-process-section">
-            <div class="card-header">Manufacturing Process</div>
-            <div class="manufacturing-grid" id="manufacturingProcessGrid">
-                <div class="col-span-full no-content-message" id="noManufacturingIdeasMessage">
-                    No ideas selected for manufacturing yet.
-                </div>
-                <!-- Manufacturing ideas will be rendered here by JavaScript -->
+        <!-- Production Section -->
+        <div class="card">
+          <div class="card-header">Current Production</div>
+          <div class="card-content">
+            <div id="productionList" class="production-list">
+              <div class="no-content-message" id="noProductionsMessage">
+                No productions yet.
+              </div>
+              <!-- Productions will be rendered here by JavaScript -->
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Manufacturing Process Section -->
+      <div class="manufacturing-process-section">
+        <div class="card-header">Manufacturing Process</div>
+        <div class="manufacturing-grid" id="manufacturingProcessGrid">
+          <div
+            class="col-span-full no-content-message"
+            id="noManufacturingIdeasMessage">
+            No ideas selected for manufacturing yet.
+          </div>
+          <!-- Manufacturing ideas will be rendered here by JavaScript -->
+        </div>
+      </div>
     </div>
 
     <!-- Modals -->
     <!-- Add Idea Modal -->
-    <div id="addIdeaModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-button" data-modal="addIdeaModal">&times;</span>
-            <div class="modal-header">
-                <h2>Enter Idea Details</h2>
-            </div>
-            <div class="modal-description">
-                <input type="text" id="newIdeaTitle" placeholder="Idea Title" class="modal-input" />
-                <input type="text" id="newIdeaDescription" placeholder="Idea Description" class="modal-input" />
-                <input type="text" id="newIdeaSource" placeholder="Idea Source" class="modal-input" />
-                <button id="saveNewIdeaButton" class="modal-save-button">Save</button>
-            </div>
+    <div id="addIdeaModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-button" data-modal="addIdeaModal">&times;</span>
+        <div class="modal-header">
+          <h2>Enter Idea Details</h2>
         </div>
+        <div class="modal-description">
+          <input
+            type="text"
+            id="newIdeaTitle"
+            placeholder="Idea Title"
+            class="modal-input" />
+          <input
+            type="text"
+            id="newIdeaDescription"
+            placeholder="Idea Description"
+            class="modal-input" />
+          <input
+            type="text"
+            id="newIdeaSource"
+            placeholder="Idea Source"
+            class="modal-input" />
+          <button id="saveNewIdeaButton" class="modal-save-button">Save</button>
+        </div>
+      </div>
     </div>
 
     <!-- Add Manufacturing Details Modal -->
-    <div id="addManufacturingDetailsModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-button" data-modal="addManufacturingDetailsModal">&times;</span>
-            <div class="modal-header">
-                <h2>Enter Manufacturing Details</h2>
-            </div>
-            <div class="modal-description">
-                <input type="text" id="manufacturingSiteInput" placeholder="Manufacturing Site" class="modal-input" />
-                <input type="text" id="batchSizeInput" placeholder="Batch Size" class="modal-input" />
-                <input type="text" id="productionDateInput" placeholder="Production Date" class="modal-input" />
-                <input type="text" id="expectedOutputInput" placeholder="Expected Output" class="modal-input" />
-                <input type="text" id="formulationTypeInput" placeholder="Formulation Type" class="modal-input" />
-                <button id="saveManufacturingDetailsButton" class="modal-save-button">Save</button>
-            </div>
+    <div id="addManufacturingDetailsModal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span class="close-button" data-modal="addManufacturingDetailsModal"
+          >&times;</span
+        >
+        <div class="modal-header">
+          <h2>Enter Manufacturing Details</h2>
         </div>
+        <div class="modal-description">
+          <input
+            type="text"
+            id="manufacturingSiteInput"
+            placeholder="Manufacturing Site"
+            class="modal-input" />
+          <input
+            type="text"
+            id="batchSizeInput"
+            placeholder="Batch Size"
+            class="modal-input" />
+          <input
+            type="text"
+            id="productionDateInput"
+            placeholder="Production Date"
+            class="modal-input" />
+          <input
+            type="text"
+            id="expectedOutputInput"
+            placeholder="Expected Output"
+            class="modal-input" />
+          <input
+            type="text"
+            id="formulationTypeInput"
+            placeholder="Formulation Type"
+            class="modal-input" />
+          <button id="saveManufacturingDetailsButton" class="modal-save-button">
+            Save
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Custom Tooltip Element -->
     <div id="customTooltip" class="custom-tooltip"></div>
 
     <script>
-        // --- Global State (equivalent to React's useState) ---
-        let adminAccess = false;
-        let ideas = [
-            { title: "NanoVax", description: "A nanoparticle-based vaccine for rapid response to emerging viral infections.", source: "University Student" },
-            { title: "GlucoGuard", description: "A smart insulin patch that automatically adjusts dosage based on real-time glucose monitoring.", source: "Medical Researcher" },
-            { title: "NeuroRelief", description: "A non-invasive wearable device for early detection and intervention in neurodegenerative diseases.", source: "Healthcare Startup" },
-            { title: "CardioClean", description: "An oral medication that targets and dissolves arterial plaque to prevent heart attacks.", source: "Pharmaceutical Company" },
-            { title: "OncoDetect", description: "A blood test kit for early cancer detection using AI-driven biomarker analysis.", source: "Biotech Firm" }
-        ];
-        let loadingDotIndex = 0;
-        let loadingIntervalId;
-        const loadingDotsArray = ["", ".", "..", "..."];
-        let selectedIdeaForManufacturing = []; // Ideas approved for manufacturing process
-        let productions = []; // Ideas that have completed manufacturing and are approved for production
+      let adminAccess = false;
+      let ideas = [
+        {
+          title: "NanoVax",
+          description:
+            "A nanoparticle-based vaccine for rapid response to emerging viral infections.",
+          source: "University Student",
+        },
+        {
+          title: "GlucoGuard",
+          description:
+            "A smart insulin patch that automatically adjusts dosage based on real-time glucose monitoring.",
+          source: "Medical Researcher",
+        },
+        {
+          title: "NeuroRelief",
+          description:
+            "A non-invasive wearable device for early detection and intervention in neurodegenerative diseases.",
+          source: "Healthcare Startup",
+        },
+        {
+          title: "CardioClean",
+          description:
+            "An oral medication that targets and dissolves arterial plaque to prevent heart attacks.",
+          source: "Pharmaceutical Company",
+        },
+        {
+          title: "OncoDetect",
+          description:
+            "A blood test kit for early cancer detection using AI-driven biomarker analysis.",
+          source: "Biotech Firm",
+        },
+      ];
+      let loadingDotIndex = 0;
+      let loadingIntervalId;
+      const loadingDotsArray = ["", ".", "..", "..."];
+      let selectedIdeaForManufacturing = []; // Ideas approved for manufacturing process
+      let productions = []; // Ideas that have completed manufacturing and are approved for production
 
-        let currentManufacturingIdeaIndex = -1; // Used to track which idea is being edited in manufacturing modal
+      let currentManufacturingIdeaIndex = -1; // Used to track which idea is being edited in manufacturing modal
 
-        // --- DOM Element References ---
-        const adminAccessSection = document.getElementById('admin-access-section');
-        const mainContent = document.getElementById('main-content');
-        const adminCodeInput = document.getElementById('adminCodeInput');
-        const submitAdminCodeButton = document.getElementById('submitAdminCode');
+      // --- DOM Element References ---
+      const adminAccessSection = document.getElementById(
+        "admin-access-section"
+      );
+      const mainContent = document.getElementById("main-content");
+      const adminCodeInput = document.getElementById("adminCodeInput");
+      const submitAdminCodeButton = document.getElementById("submitAdminCode");
 
-        const ideasList = document.getElementById('ideasList');
-        const addIdeaTrigger = document.getElementById('addIdeaTrigger');
-        const productionList = document.getElementById('productionList');
-        const noProductionsMessage = document.getElementById('noProductionsMessage');
-        const manufacturingProcessGrid = document.getElementById('manufacturingProcessGrid');
-        const noManufacturingIdeasMessage = document.getElementById('noManufacturingIdeasMessage');
+      const ideasList = document.getElementById("ideasList");
+      const addIdeaTrigger = document.getElementById("addIdeaTrigger");
+      const productionList = document.getElementById("productionList");
+      const noProductionsMessage = document.getElementById(
+        "noProductionsMessage"
+      );
+      const manufacturingProcessGrid = document.getElementById(
+        "manufacturingProcessGrid"
+      );
+      const noManufacturingIdeasMessage = document.getElementById(
+        "noManufacturingIdeasMessage"
+      );
 
-        // Modals
-        const addIdeaModal = document.getElementById('addIdeaModal');
-        const newIdeaTitleInput = document.getElementById('newIdeaTitle');
-        const newIdeaDescriptionInput = document.getElementById('newIdeaDescription');
-        const newIdeaSourceInput = document.getElementById('newIdeaSource');
-        const saveNewIdeaButton = document.getElementById('saveNewIdeaButton');
+      // Modals
+      const addIdeaModal = document.getElementById("addIdeaModal");
+      const newIdeaTitleInput = document.getElementById("newIdeaTitle");
+      const newIdeaDescriptionInput =
+        document.getElementById("newIdeaDescription");
+      const newIdeaSourceInput = document.getElementById("newIdeaSource");
+      const saveNewIdeaButton = document.getElementById("saveNewIdeaButton");
 
-        const addManufacturingDetailsModal = document.getElementById('addManufacturingDetailsModal');
-        const manufacturingSiteInput = document.getElementById('manufacturingSiteInput');
-        const batchSizeInput = document.getElementById('batchSizeInput');
-        const productionDateInput = document.getElementById('productionDateInput');
-        const expectedOutputInput = document.getElementById('expectedOutputInput');
-        const formulationTypeInput = document.getElementById('formulationTypeInput');
-        const saveManufacturingDetailsButton = document.getElementById('saveManufacturingDetailsButton');
+      const addManufacturingDetailsModal = document.getElementById(
+        "addManufacturingDetailsModal"
+      );
+      const manufacturingSiteInput = document.getElementById(
+        "manufacturingSiteInput"
+      );
+      const batchSizeInput = document.getElementById("batchSizeInput");
+      const productionDateInput = document.getElementById(
+        "productionDateInput"
+      );
+      const expectedOutputInput = document.getElementById(
+        "expectedOutputInput"
+      );
+      const formulationTypeInput = document.getElementById(
+        "formulationTypeInput"
+      );
+      const saveManufacturingDetailsButton = document.getElementById(
+        "saveManufacturingDetailsButton"
+      );
 
-        // Tooltip
-        const customTooltip = document.getElementById('customTooltip');
+      // Tooltip
+      const customTooltip = document.getElementById("customTooltip");
 
-        // --- Helper Functions ---
-        function openModal(modalElement) {
-            modalElement.style.display = 'flex'; // Use flex to center
+      // --- Helper Functions ---
+      function openModal(modalElement) {
+        modalElement.style.display = "flex"; // Use flex to center
+      }
+
+      function closeModal(modalElement) {
+        modalElement.style.display = "none";
+      }
+
+      function showTooltip(event, content) {
+        customTooltip.innerHTML = content;
+        customTooltip.classList.add("show");
+        // Position the tooltip near the mouse, with a slight offset
+        customTooltip.style.left = `${event.clientX + 15}px`;
+        customTooltip.style.top = `${event.clientY + 15}px`;
+      }
+
+      function hideTooltip() {
+        customTooltip.classList.remove("show");
+      }
+
+      // --- Render Functions ---
+      function renderIdeas() {
+        ideasList.innerHTML = ""; // Clear current list
+        if (ideas.length === 0) {
+          ideasList.innerHTML =
+            '<div class="no-content-message">No ideas proposed yet.</div>';
+          return;
         }
 
-        function closeModal(modalElement) {
-            modalElement.style.display = 'none';
-        }
-
-        function showTooltip(event, content) {
-            customTooltip.innerHTML = content;
-            customTooltip.classList.add('show');
-            // Position the tooltip near the mouse, with a slight offset
-            customTooltip.style.left = `${event.clientX + 15}px`;
-            customTooltip.style.top = `${event.clientY + 15}px`;
-        }
-
-        function hideTooltip() {
-            customTooltip.classList.remove('show');
-        }
-
-        // --- Render Functions ---
-        function renderIdeas() {
-            ideasList.innerHTML = ''; // Clear current list
-            if (ideas.length === 0) {
-                ideasList.innerHTML = '<div class="no-content-message">No ideas proposed yet.</div>';
-                return;
-            }
-
-            ideas.forEach((idea, index) => {
-                const li = document.createElement('li');
-                li.className = 'idea-item';
-                li.innerHTML = `
+        ideas.forEach((idea, index) => {
+          const li = document.createElement("li");
+          li.className = "idea-item";
+          li.innerHTML = `
                     <div class="idea-header">
                         <span class="idea-title">${idea.title}</span>
                         <span class="idea-source">${idea.source}</span>
@@ -719,36 +841,45 @@
                         <button class="btn-approve" data-index="${index}" data-action="approve">Approve</button>
                     </div>
                 `;
-                ideasList.appendChild(li);
-            });
+          ideasList.appendChild(li);
+        });
+      }
+
+      function renderManufacturingProcess() {
+        manufacturingProcessGrid.innerHTML = ""; // Clear current grid
+        if (selectedIdeaForManufacturing.length === 0) {
+          noManufacturingIdeasMessage.style.display = "block";
+          manufacturingProcessGrid.appendChild(noManufacturingIdeasMessage);
+          return;
+        } else {
+          noManufacturingIdeasMessage.style.display = "none";
         }
 
-        function renderManufacturingProcess() {
-            manufacturingProcessGrid.innerHTML = ''; // Clear current grid
-            if (selectedIdeaForManufacturing.length === 0) {
-                noManufacturingIdeasMessage.style.display = 'block';
-                manufacturingProcessGrid.appendChild(noManufacturingIdeasMessage);
-                return;
-            } else {
-                noManufacturingIdeasMessage.style.display = 'none';
-            }
+        selectedIdeaForManufacturing.forEach((idea, index) => {
+          const div = document.createElement("div");
+          div.className = "manufacturing-item";
 
-            selectedIdeaForManufacturing.forEach((idea, index) => {
-                const div = document.createElement('div');
-                div.className = 'manufacturing-item';
-
-                const testResultsOptions = `
+          const testResultsOptions = `
                     <option value="">Select Test Result</option>
-                    <option value="Pass" ${idea.testResults === 'Pass' ? 'selected' : ''}>Pass</option>
-                    <option value="Fail" ${idea.testResults === 'Fail' ? 'selected' : ''}>Fail</option>
+                    <option value="Pass" ${
+                      idea.testResults === "Pass" ? "selected" : ""
+                    }>Pass</option>
+                    <option value="Fail" ${
+                      idea.testResults === "Fail" ? "selected" : ""
+                    }>Fail</option>
                 `;
-                const regulatoryApprovalOptions = `
+          const regulatoryApprovalOptions = `
                     <option value="">Select Regulatory Approval</option>
-                    <option value="Approved" ${idea.regulatoryApproval === 'Approved' ? 'selected' : ''}>Approved</option>
-                    <option value="Pending" ${idea.regulatoryApproval === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Approved" ${
+                      idea.regulatoryApproval === "Approved" ? "selected" : ""
+                    }>Approved</option>
+                    <option value="Pending" ${
+                      idea.regulatoryApproval === "Pending" ? "selected" : ""
+                    }>Pending</option>
                 `;
 
-                const manufacturingDetailsHtml = idea.manufacturingSite ? `
+          const manufacturingDetailsHtml = idea.manufacturingSite
+            ? `
                     <div class="manufacturing-details-display">
                         <div><strong>Manufacturing Site:</strong> ${idea.manufacturingSite}</div>
                         <div><strong>Batch Size:</strong> ${idea.batchSize}</div>
@@ -756,65 +887,82 @@
                         <div><strong>Expected Output:</strong> ${idea.expectedOutput}</div>
                         <div><strong>Formulation Type:</strong> ${idea.formulationType}</div>
                     </div>
-                ` : '';
+                `
+            : "";
 
-                const isReadyForProduction = idea.testResults === "Pass" && idea.regulatoryApproval === "Approved" && idea.manufacturingSite;
-                const statusHtml = isReadyForProduction ? `
+          const isReadyForProduction =
+            idea.testResults === "Pass" &&
+            idea.regulatoryApproval === "Approved" &&
+            idea.manufacturingSite;
+          const statusHtml = isReadyForProduction
+            ? `
                     <div class="status-area">
                         <div class="status-message status-ready"><strong>Status:</strong> Ready for Production</div>
                         <button class="status-approve-button" data-index="${index}" data-action="approve-production">Approve</button>
                     </div>
-                ` : `
+                `
+            : `
                     <div class="status-message status-pending"><strong>Status:</strong> Pending Approval or Manufacturing Details</div>
                 `;
 
-                div.innerHTML = `
-                    <strong class="text-xl text-indigo-700">${index + 1}. ${idea.title}</strong>
+          div.innerHTML = `
+                    <strong class="text-xl text-indigo-700">${index + 1}. ${
+            idea.title
+          }</strong>
                     <select class="test-results-select" data-index="${index}">${testResultsOptions}</select>
                     <select class="regulatory-approval-select" data-index="${index}">${regulatoryApprovalOptions}</select>
                     ${manufacturingDetailsHtml}
                     <button class="add-manufacturing-details-trigger add-idea-button" data-index="${index}">Add Manufacturing Details</button>
                     ${statusHtml}
                 `;
-                manufacturingProcessGrid.appendChild(div);
-            });
+          manufacturingProcessGrid.appendChild(div);
+        });
 
-            // Attach event listeners for dynamically created elements
-            document.querySelectorAll('.test-results-select').forEach(select => {
-                select.onchange = handleManufacturingSelectChange;
-            });
-            document.querySelectorAll('.regulatory-approval-select').forEach(select => {
-                select.onchange = handleManufacturingSelectChange;
-            });
-            document.querySelectorAll('.add-manufacturing-details-trigger').forEach(button => {
-                button.onclick = handleOpenManufacturingDetailsModal;
-            });
-            document.querySelectorAll('.status-approve-button').forEach(button => {
-                button.onclick = handleApproveProduction;
-            });
+        // Attach event listeners for dynamically created elements
+        document.querySelectorAll(".test-results-select").forEach((select) => {
+          select.onchange = handleManufacturingSelectChange;
+        });
+        document
+          .querySelectorAll(".regulatory-approval-select")
+          .forEach((select) => {
+            select.onchange = handleManufacturingSelectChange;
+          });
+        document
+          .querySelectorAll(".add-manufacturing-details-trigger")
+          .forEach((button) => {
+            button.onclick = handleOpenManufacturingDetailsModal;
+          });
+        document
+          .querySelectorAll(".status-approve-button")
+          .forEach((button) => {
+            button.onclick = handleApproveProduction;
+          });
+      }
+
+      function renderProductions() {
+        productionList.innerHTML = ""; // Clear current list
+        if (productions.length === 0) {
+          noProductionsMessage.style.display = "block";
+          productionList.appendChild(noProductionsMessage);
+          return;
+        } else {
+          noProductionsMessage.style.display = "none";
         }
 
-        function renderProductions() {
-            productionList.innerHTML = ''; // Clear current list
-            if (productions.length === 0) {
-                noProductionsMessage.style.display = 'block';
-                productionList.appendChild(noProductionsMessage);
-                return;
-            } else {
-                noProductionsMessage.style.display = 'none';
-            }
-
-            productions.forEach((production, index) => {
-                const div = document.createElement('div');
-                div.className = 'production-item';
-                div.innerHTML = `
+        productions.forEach((production, index) => {
+          const div = document.createElement("div");
+          div.className = "production-item";
+          div.innerHTML = `
                     <div class="flex items-center gap-2 mb-2">
                         <strong class="text-xl">${production.title}</strong>
                         <span class="loading-dots"></span>
                     </div>
                 `;
-                // Attach tooltip events
-                div.onmouseover = (event) => showTooltip(event, `
+          // Attach tooltip events
+          div.onmouseover = (event) =>
+            showTooltip(
+              event,
+              `
                     <strong>Description:</strong> ${production.description} <br />
                     <strong>Source:</strong> ${production.source} <br />
                     <strong>Manufacturing Site:</strong> ${production.manufacturingSite} <br />
@@ -822,161 +970,170 @@
                     <strong>Production Date:</strong> ${production.productionDate} <br />
                     <strong>Expected Output:</strong> ${production.expectedOutput} <br />
                     <strong>Formulation Type:</strong> ${production.formulationType}
-                `);
-                div.onmouseout = hideTooltip;
-                productionList.appendChild(div);
-            });
+                `
+            );
+          div.onmouseout = hideTooltip;
+          productionList.appendChild(div);
+        });
+      }
+
+      // --- Event Handlers ---
+      submitAdminCodeButton.onclick = () => {
+        if (adminCodeInput.value === "admin505") {
+          adminAccess = true;
+          adminAccessSection.style.display = "none";
+          mainContent.style.display = "block";
+          renderIdeas(); // Initial render of ideas
+          renderManufacturingProcess(); // Initial render of manufacturing
+          renderProductions(); // Initial render of productions
+          startLoadingDotsAnimation(); // Start animation
+        } else {
+          alert("Access Denied. Incorrect code.");
         }
+        adminCodeInput.value = ""; // Clear input
+      };
 
-        // --- Event Handlers ---
-        submitAdminCodeButton.onclick = () => {
-            if (adminCodeInput.value === "admin505") {
-                adminAccess = true;
-                adminAccessSection.style.display = 'none';
-                mainContent.style.display = 'block';
-                renderIdeas(); // Initial render of ideas
-                renderManufacturingProcess(); // Initial render of manufacturing
-                renderProductions(); // Initial render of productions
-                startLoadingDotsAnimation(); // Start animation
-            } else {
-                alert("Access Denied. Incorrect code.");
-            }
-            adminCodeInput.value = ""; // Clear input
-        };
+      ideasList.onclick = (event) => {
+        const targetButton = event.target;
+        if (targetButton.tagName === "BUTTON") {
+          const index = parseInt(targetButton.dataset.index);
+          const action = targetButton.dataset.action;
 
-        ideasList.onclick = (event) => {
-            const targetButton = event.target;
-            if (targetButton.tagName === 'BUTTON') {
-                const index = parseInt(targetButton.dataset.index);
-                const action = targetButton.dataset.action;
-
-                if (action === 'reject') {
-                    ideas = ideas.filter((_, i) => i !== index);
-                    renderIdeas();
-                } else if (action === 'approve') {
-                    const approvedIdea = {
-                        ...ideas[index],
-                        manufacturingSite: "",
-                        batchSize: "",
-                        productionDate: "",
-                        expectedOutput: "",
-                        formulationType: "",
-                        testResults: "",
-                        regulatoryApproval: ""
-                    };
-                    selectedIdeaForManufacturing = [...selectedIdeaForManufacturing, approvedIdea];
-                    ideas = ideas.filter((_, i) => i !== index);
-                    renderIdeas();
-                    renderManufacturingProcess();
-                }
-            }
-        };
-
-        addIdeaTrigger.onclick = () => {
-            newIdeaTitleInput.value = '';
-            newIdeaDescriptionInput.value = '';
-            newIdeaSourceInput.value = '';
-            openModal(addIdeaModal);
-        };
-
-        saveNewIdeaButton.onclick = () => {
-            const title = newIdeaTitleInput.value.trim();
-            const description = newIdeaDescriptionInput.value.trim();
-            const source = newIdeaSourceInput.value.trim();
-
-            if (title && description && source) {
-                ideas = [...ideas, { title, description, source }];
-                renderIdeas();
-                closeModal(addIdeaModal);
-            } else {
-                alert("Please fill in all idea details.");
-            }
-        };
-
-        function handleManufacturingSelectChange(event) {
-            const index = parseInt(event.target.dataset.index);
-            const field = event.target.classList.contains('test-results-select') ? 'testResults' : 'regulatoryApproval';
-            const value = event.target.value;
-
-            const updated = [...selectedIdeaForManufacturing];
-            updated[index][field] = value;
-            selectedIdeaForManufacturing = updated;
-            renderManufacturingProcess(); // Re-render to update status
-        }
-
-        function handleOpenManufacturingDetailsModal(event) {
-            currentManufacturingIdeaIndex = parseInt(event.target.dataset.index);
-            const idea = selectedIdeaForManufacturing[currentManufacturingIdeaIndex];
-
-            manufacturingSiteInput.value = idea.manufacturingSite || '';
-            batchSizeInput.value = idea.batchSize || '';
-            productionDateInput.value = idea.productionDate || '';
-            expectedOutputInput.value = idea.expectedOutput || '';
-            formulationTypeInput.value = idea.formulationType || '';
-
-            openModal(addManufacturingDetailsModal);
-        }
-
-        saveManufacturingDetailsButton.onclick = () => {
-            if (currentManufacturingIdeaIndex !== -1) {
-                const updated = [...selectedIdeaForManufacturing];
-                updated[currentManufacturingIdeaIndex] = {
-                    ...updated[currentManufacturingIdeaIndex],
-                    manufacturingSite: manufacturingSiteInput.value.trim(),
-                    batchSize: batchSizeInput.value.trim(),
-                    productionDate: productionDateInput.value.trim(),
-                    expectedOutput: expectedOutputInput.value.trim(),
-                    formulationType: formulationTypeInput.value.trim()
-                };
-                selectedIdeaForManufacturing = updated;
-                renderManufacturingProcess();
-                closeModal(addManufacturingDetailsModal);
-            }
-        };
-
-        function handleApproveProduction(event) {
-            const index = parseInt(event.target.dataset.index);
-            const ideaToProduce = selectedIdeaForManufacturing[index];
-
-            productions = [...productions, ideaToProduce];
-            selectedIdeaForManufacturing = selectedIdeaForManufacturing.filter((_, i) => i !== index);
-            renderManufacturingProcess();
-            renderProductions();
-        }
-
-        // --- Loading Dots Animation ---
-        function updateLoadingDots() {
-            loadingDotIndex = (loadingDotIndex + 1) % loadingDotsArray.length;
-            document.querySelectorAll('.loading-dots').forEach(span => {
-                span.textContent = loadingDotsArray[loadingDotIndex];
-            });
-        }
-
-        function startLoadingDotsAnimation() {
-            if (loadingIntervalId) clearInterval(loadingIntervalId); // Clear any existing interval
-            loadingIntervalId = setInterval(updateLoadingDots, 400);
-        }
-
-        // --- Close Modal Buttons ---
-        document.querySelectorAll('.close-button').forEach(button => {
-            button.onclick = (event) => {
-                const modalId = event.target.dataset.modal;
-                closeModal(document.getElementById(modalId));
+          if (action === "reject") {
+            ideas = ideas.filter((_, i) => i !== index);
+            renderIdeas();
+          } else if (action === "approve") {
+            const approvedIdea = {
+              ...ideas[index],
+              manufacturingSite: "",
+              batchSize: "",
+              productionDate: "",
+              expectedOutput: "",
+              formulationType: "",
+              testResults: "",
+              regulatoryApproval: "",
             };
-        });
+            selectedIdeaForManufacturing = [
+              ...selectedIdeaForManufacturing,
+              approvedIdea,
+            ];
+            ideas = ideas.filter((_, i) => i !== index);
+            renderIdeas();
+            renderManufacturingProcess();
+          }
+        }
+      };
 
-        // Close modal if clicking outside
-        window.onclick = (event) => {
-            if (event.target.classList.contains('modal')) {
-                closeModal(event.target);
-            }
+      addIdeaTrigger.onclick = () => {
+        newIdeaTitleInput.value = "";
+        newIdeaDescriptionInput.value = "";
+        newIdeaSourceInput.value = "";
+        openModal(addIdeaModal);
+      };
+
+      saveNewIdeaButton.onclick = () => {
+        const title = newIdeaTitleInput.value.trim();
+        const description = newIdeaDescriptionInput.value.trim();
+        const source = newIdeaSourceInput.value.trim();
+
+        if (title && description && source) {
+          ideas = [...ideas, { title, description, source }];
+          renderIdeas();
+          closeModal(addIdeaModal);
+        } else {
+          alert("Please fill in all idea details.");
+        }
+      };
+
+      function handleManufacturingSelectChange(event) {
+        const index = parseInt(event.target.dataset.index);
+        const field = event.target.classList.contains("test-results-select")
+          ? "testResults"
+          : "regulatoryApproval";
+        const value = event.target.value;
+
+        const updated = [...selectedIdeaForManufacturing];
+        updated[index][field] = value;
+        selectedIdeaForManufacturing = updated;
+        renderManufacturingProcess(); // Re-render to update status
+      }
+
+      function handleOpenManufacturingDetailsModal(event) {
+        currentManufacturingIdeaIndex = parseInt(event.target.dataset.index);
+        const idea =
+          selectedIdeaForManufacturing[currentManufacturingIdeaIndex];
+
+        manufacturingSiteInput.value = idea.manufacturingSite || "";
+        batchSizeInput.value = idea.batchSize || "";
+        productionDateInput.value = idea.productionDate || "";
+        expectedOutputInput.value = idea.expectedOutput || "";
+        formulationTypeInput.value = idea.formulationType || "";
+
+        openModal(addManufacturingDetailsModal);
+      }
+
+      saveManufacturingDetailsButton.onclick = () => {
+        if (currentManufacturingIdeaIndex !== -1) {
+          const updated = [...selectedIdeaForManufacturing];
+          updated[currentManufacturingIdeaIndex] = {
+            ...updated[currentManufacturingIdeaIndex],
+            manufacturingSite: manufacturingSiteInput.value.trim(),
+            batchSize: batchSizeInput.value.trim(),
+            productionDate: productionDateInput.value.trim(),
+            expectedOutput: expectedOutputInput.value.trim(),
+            formulationType: formulationTypeInput.value.trim(),
+          };
+          selectedIdeaForManufacturing = updated;
+          renderManufacturingProcess();
+          closeModal(addManufacturingDetailsModal);
+        }
+      };
+
+      function handleApproveProduction(event) {
+        const index = parseInt(event.target.dataset.index);
+        const ideaToProduce = selectedIdeaForManufacturing[index];
+
+        productions = [...productions, ideaToProduce];
+        selectedIdeaForManufacturing = selectedIdeaForManufacturing.filter(
+          (_, i) => i !== index
+        );
+        renderManufacturingProcess();
+        renderProductions();
+      }
+
+      // --- Loading Dots Animation ---
+      function updateLoadingDots() {
+        loadingDotIndex = (loadingDotIndex + 1) % loadingDotsArray.length;
+        document.querySelectorAll(".loading-dots").forEach((span) => {
+          span.textContent = loadingDotsArray[loadingDotIndex];
+        });
+      }
+
+      function startLoadingDotsAnimation() {
+        if (loadingIntervalId) clearInterval(loadingIntervalId); // Clear any existing interval
+        loadingIntervalId = setInterval(updateLoadingDots, 400);
+      }
+
+      // --- Close Modal Buttons ---
+      document.querySelectorAll(".close-button").forEach((button) => {
+        button.onclick = (event) => {
+          const modalId = event.target.dataset.modal;
+          closeModal(document.getElementById(modalId));
         };
+      });
 
-        // --- Initial Setup ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initially, only the admin access section is visible.
-            // Main content and other sections will be rendered/shown after successful login.
-        });
+      // Close modal if clicking outside
+      window.onclick = (event) => {
+        if (event.target.classList.contains("modal")) {
+          closeModal(event.target);
+        }
+      };
+
+      // --- Initial Setup ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Initially, only the admin access section is visible.
+        // Main content and other sections will be rendered/shown after successful login.
+      });
     </script>
-</body>
+  </body>
 </html>
